@@ -1,3 +1,4 @@
+#N과 M(3)
 from itertools import product
 import sys
 input = lambda :sys.stdin.readline().rstrip()

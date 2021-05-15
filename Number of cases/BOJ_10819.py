@@ -1,4 +1,4 @@
-#모든순열
+#차이를 최대로
 from itertools import permutations
 import sys
 input = lambda :sys.stdin.readline().rstrip()

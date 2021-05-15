@@ -1,3 +1,4 @@
+#컵홀더
 n=int(input())
 data_input=input()
 s_cnt=data_input.count('S')

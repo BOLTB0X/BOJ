@@ -1,16 +1,17 @@
+#한윤정이 이탈리아에 가서 아이스크림을 사먹는데
 from itertools import combinations
 import sys
-input = lambda :sys.stdin.readline().rstrip()
+input=lambda :sys.stdin.readline().rstrip()
 n,m=map(int,input().split())
-ice=list(combinations(range(1,n+1),3))
-no_mat = [[0] * (n+1) for _ in range(n+1)]
-cnt=0
-for _ in range(m):
+ice=list(combinations(range(1,n+1),m))
+mat=[[0]*(n+1) for _ in range(n+1)]
+for i in range(m):
     x,y=map(int,input().split())
-    no_mat[x][y]=1
-    no_mat[y][x]=1
-for i in ice:
-    if no_mat[i[0]][i[1]] or no_mat[i[0]][i[2]] or no_mat[i[1]][i[2]]:
+    mat[x][y]=1
+    mat[y][x]=1
+ans=0
+for x in ice:
+    if mat[x[0]][x[1]] or mat[x[0]][x[2]] or mat[x[1]][x[2]]:
         continue
-    cnt += 1
-print(cnt)
+    ans+=1
+print(ans)

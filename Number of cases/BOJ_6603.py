@@ -1,3 +1,4 @@
+#로또
 from itertools import combinations
 import sys
 input = lambda :sys.stdin.readline().rstrip()

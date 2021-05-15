@@ -1,4 +1,3 @@
-#N과M (7)
 from itertools import product
 import sys
 input = lambda :sys.stdin.readline().rstrip()

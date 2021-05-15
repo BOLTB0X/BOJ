@@ -1,3 +1,4 @@
+#n과m(5)
 from itertools import permutations
 import sys
 input=lambda : sys.stdin.readline().rstrip()

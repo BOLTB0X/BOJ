@@ -1,3 +1,4 @@
+#모든순열
 from itertools import permutations
 import sys
 input = lambda :sys.stdin.readline().rstrip()

@@ -1,3 +1,4 @@
+#운동
 import sys
 input=lambda :sys.stdin.readline().rstrip()
 N,m,M,T,R=map(int,input().split()) #N은 운동시간, m은 초기맥박

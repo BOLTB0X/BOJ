@@ -1,3 +1,4 @@
+#동전O
 n,k=map(int,input().split())
 coin_type=[]
 min_cnt=0

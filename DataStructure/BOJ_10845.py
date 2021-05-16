@@ -1,4 +1,4 @@
-#큐 10845
+#큐 10845 
 import queue
 import sys
 q=queue.Queue()

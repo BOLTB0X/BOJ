@@ -41,7 +41,7 @@ print('khunlee0508')
 a,b=map(int,input().split())
 c=int(input())
 if (b+c)>=60:
-    a+=(b+c)//60
+    a+=(b+c)//60 
     if a>23:
         a-=24
     b=(b+c)%60

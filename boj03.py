@@ -27,7 +27,7 @@ for num in totli:
 print(tot//10)
 print(mxnum)
 
-#2711
+#2711 
 for i in range(int(input())):
     a,b=map(str,input().split())
     a=int(a)

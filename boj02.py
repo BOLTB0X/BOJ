@@ -31,7 +31,7 @@ h1,m1,s1=map(int,input().split(':'))
 h2,m2,s2=map(int,input().split(':'))
 if (h2-h1)<=0:
     if (h2-h1)==0:
-
+ 
 print((h2-h1),(m2-m1),(s2-s1),sep=':')
 
 #10984

@@ -458,6 +458,7 @@ if t!=0:
     print(-1)
 else:
     print(a,b,c)
+    
 #10103번 주사위 게임
 n=int(input())
 x=y=100
@@ -555,22 +556,19 @@ while True:
     else:
         print(n,'is NOT perfect.')
 
-#1789
-n=int(input())
-tot=0
+#1789 수들의 합
+n= int(input()) 
 cnt=0
-for i in range(1,n+1):
-    tot+=i
-    cnt=i
-    if tot > n:
-        tot-=i
-        cnt=i-1
-        break
-    elif tot ==n:
-        break
-print(cnt)
+sum=0
+while True: #수열의 공식 (n(n+1))/2 이용
+    cnt+=1 
+    sample1=(cnt*(cnt+1))/2
+    sample2=((cnt+1)*(cnt+2))/2
+    if sample1<=n and sample2>n:  #최대값은 이 범위에 해당
+        break  
+print(i) 
 
-#2476
+#2476 주사위 게임
 money=[]
 for _ in range(int(input())):
     a,b,c=map(int,input().split())
@@ -585,7 +583,8 @@ for _ in range(int(input())):
     else:
         money.append(max(a,b,c)*100)
 print(max(money))
-3009
+
+#3009 네번째 집
 x_=[]
 y_=[]
 for i in range(3):

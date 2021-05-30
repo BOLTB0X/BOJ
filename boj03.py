@@ -393,3 +393,4 @@ for ch in alp:
 alp=list(range(97,123))
 for _ in range(int(input())):
     s1,s2=input().split()
+ 

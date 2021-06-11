@@ -5,4 +5,4 @@ while n!=1:
         n/=i
         print(i)
     else:
-        i+=1
+        i+=1 

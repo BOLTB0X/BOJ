@@ -32,7 +32,7 @@ for i in range(n):
 # 10699 오늘 날짜
 from datetime import datetime
 print(datetime.today().strftime("%Y-%m-%d"))
-
+ 
 # 7287 등록
 print('42')
 print('khunlee0508')

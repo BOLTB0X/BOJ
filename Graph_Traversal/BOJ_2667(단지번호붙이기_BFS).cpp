@@ -2,57 +2,62 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <queue>
-
+#include <queue> //bfsë¥¼ ì‚¬ìš©í•˜ê¸° ë•Œë¬¸
 using namespace std;
 
 int n;
-int cnt = 0; //°¢ ÃÑ´ÜÁö ¼ö
+int cnt; //ë‹¨ì§€ë‚´ì˜ ì•„íŒŒíŠ¸ ê°¯ìˆ˜
+string graph[26];
+queue< pair<int, int> > que;
+vector<int> answer;
+bool visited[26][26];
 int dx[4] = { -1,1,0,0 };
 int dy[4] = { 0,0,-1,1 };
-string graph[26];
-vector<int> answer; //¾ÆÆÄÆ® ´ÜÁöº° Ä«¿îÆ®¿ë º¤ÅÍ
-bool visited[26][26];
 
 void bfs(int x, int y) {
-	queue< pair<int, int> > que;
 	que.push(make_pair(x, y));
 	visited[x][y] = true;
 	while (!que.empty()) {
-		cnt += 1;
-		int a = que.front().first;
-		int b = que.front().second;
+		int temp_x = que.front().first;
+		int temp_y = que.front().second;
 		que.pop();
+		cnt++; //popë§ˆë‹¤ ë‹¨ì§€ë‚´ ì•„íŒŒíŠ¸ ìˆ˜ ì¹´ìš´íŠ¸
 		for (int i = 0; i < 4; i++) {
-			int nx = a + dx[i];
-			int ny = b + dy[i];
-			if (0 <= nx && nx < n && 0 <= ny && ny < n) { //¹üÀ§ ³»¿¡ ÀÖ°í
-				if (graph[nx][ny] == '1' && visited[nx][ny] == false) { //¾ÆÁ÷ ¹æ¹®ÇÏÁö ¾ÊÀº Áı
+			int nx = temp_x + dx[i];
+			int ny = temp_y + dy[i];
+			if (nx >= 0 && nx < n && ny >= 0 && ny < n) {
+				if (graph[nx][ny] == '1' && visited[nx][ny] == false) {
 					que.push(make_pair(nx, ny));
-					visited[nx][ny] = true;
+					visited[nx][ny] = true; //ë°©ë¬¸ì²˜ë¦¬
 				}
 			}
 		}
 	}
 }
 
-int main(void) {
+void solution(void) {
 	cin >> n;
-	for (int i = 0; i < n; i++)
+	for (int i = 0; i < n; i++) {
 		cin >> graph[i];
-	for (int i = 0; i < n; i++)
-		for (int j = 0; j < n; j++)
-		{
-			if (graph[i][j] == '1' && visited[i][j] == false)
-			{
-				cnt = 0;
+	}
+
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			if (graph[i][j] == '1' && !visited[i][j]) {
+				cnt = 0; //ë‹¨ì§€ ìŠ¤íƒ€íŠ¸
 				bfs(i, j);
 				answer.push_back(cnt);
 			}
 		}
+	}
 	sort(answer.begin(), answer.end());
-	cout << answer.size() << endl;
-	for (int i = 0; i < answer.size(); i++)
-		cout << answer[i] << endl;
+	cout << answer.size() << '\n';
+	for (int i = 0; i < answer.size(); i++) {
+		cout << answer[i] << '\n';
+	}
+}
+
+int main(void) {
+	solution();
 	return 0;
 }

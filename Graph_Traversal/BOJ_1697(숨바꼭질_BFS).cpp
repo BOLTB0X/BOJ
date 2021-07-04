@@ -1,39 +1,43 @@
-#include<iostream>
-#include<queue>
+#include <iostream>
+#include <queue>
 using namespace std;
 #define MAX 100001
 
-int n, k;
-int cnt[MAX] = {0,};
+int n, k; //n은 수빈이 위치 , k는 동생위치== 타겟
+int t[MAX] = { 0, };
+queue<int> que;
 
-int bfs() {
-	queue<int> que;
-	que.push(n);
-	cnt[n] = 1;
+int BFS(int n,int k) {
+	que.push(n); //
+	t[n] = 1; //방문처리
 	while (!que.empty()) {
-		int step = que.front();
+		int x = que.front();
 		que.pop();
 
-		if (step == k) {
-			return cnt[step]-1;
+		if (x == k) return (t[x] - 1); //동생위치에 간다면
+
+		if (x + 1 < MAX && x + 1 >= 0 && t[x + 1] == 0) { //범위에 해당하고 미 방문이면
+			que.push(x + 1);
+			t[x + 1] = t[x] + 1;
 		}
-		if (step + 1 < MAX && cnt[step + 1] == 0) {
-			que.push(step + 1);
-			cnt[step + 1] = cnt[step] + 1;
+
+		if (x - 1 < MAX && x - 1 >= 0 && t[x - 1] == 0) { //범위에 해당하고 미 방문이면
+			que.push(x - 1);
+			t[x - 1] = t[x] + 1;
 		}
-		if (step - 1 < MAX && cnt[step - 1]==0) {
-			que.push(step - 1);
-			cnt[step - 1] = cnt[step] + 1;
-		}
-		if (step * 2 < MAX && cnt[step * 2] == 0) {
-			que.push(step * 2);
-			cnt[step * 2] = cnt[step] + 1;
+
+		if (x * 2 < MAX && x * 2 >= 0 && t[x * 2] == 0) { //범위에 해당하고 미 방문이면
+			que.push(x * 2);
+			t[x * 2] = t[x] + 1;
 		}
 	}
 }
 
-int main() {
+int main(void) {
 	cin >> n >> k;
-	int answer = bfs();
-	cout << answer;
+	
+	int answer = BFS(n, k);
+
+	cout << answer << '\n';
+	return 0;
 }

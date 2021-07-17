@@ -15,4 +15,4 @@ for i in range(len(bar_razor)):
             stack.pop()
             answer+=1 #하나만 잘림
 
-print(answer)
+print(answer) 

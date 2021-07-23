@@ -1,23 +1,14 @@
 #include <iostream>
 using namespace std;
 
-// ¾Õ¼­ °è»êµÈ °á°ú¸¦ ÀúÀåÇÏ±â À§ÇÑ DP Å×ÀÌºí ÃÊ±âÈ­
-int d[41];
+// ì•ì„œ ê³„ì‚°ëœ ê²°ê³¼ë¥¼ ì €ì¥í•˜ê¸° ìœ„í•œ DP í…Œì´ë¸”
+int Zero_dp[41] = { 1 }, One_dp[41] = {0,1};
 
-int fibonacci(int n) {
-	if (n == 0) {
-		d[0] = 0;
-		return 0;
+void fibonacci(int n) {
+	for (int n = 2; n <= 40; n++) {
+		Zero_dp[n] = Zero_dp[n - 1] + Zero_dp[n - 2];
+		One_dp[n] = One_dp[n - 1] + One_dp[n - 2];
 	}
-	else if (n == 1) {
-		d[1] = 1;
-		return 1;
-	}
-	if (d[n] != 0) {
-		//°è»êµÈ °ª
-		return d[n];
-	} 
-	else return d[n]= fibonacci(n - 1) + fibonacci(n - 2);
 }
 
 int main(void) {
@@ -26,12 +17,9 @@ int main(void) {
 	for (int i = 1; i <= T; i++) {
 		int n;
 		cin >> n;
-		if (n == 0) cout << 1 << ' ' << 0 << endl;
-		else if (n == 1) cout << 0 << ' ' << 1 << endl;
-		else {
-			fibonacci(n);
-			cout << d[n - 1] << ' ' << d[n] << endl;
-		}
+	
+		fibonacci(n);
+		cout << Zero_dp[n] << ' ' << One_dp[n] << endl;
 	}
 	return 0;
 }

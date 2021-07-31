@@ -1,28 +1,34 @@
 #include <iostream>
-#include <vector>
-#include <algorithm>
 using namespace std;
-vector<int> t;
-vector<int> p;
-vector<int> dp;
 
-int main(void) {
-	int n;
+int n;
+int dp[1001] = { 0, };
+int T[1001] = {0, };
+int P[1001] = {0, };
+
+int max(int value1, int value2) {
+	return value1 > value2 ? value1 : value2;
+}
+
+int solution() {
 	cin >> n;
 	for (int i = 0; i < n; i++) {
-		int value1,value2;
-		cin >> value1 >> value2;
-		t.push_back(value1);
-		p.push_back(value2);
-		dp.push_back(value2);
+		cin >> T[i] >> P[i];
 	}
-	dp.push_back(0);
 	
+	dp[n] = 0;
 	for (int i = n - 1; i >= 0; i--) {
-		if (t[i] + i > n) //데드라인이 기한을 넘어가는경우
+		int next = i + T[i];
+
+		if (next > n)
 			dp[i] = dp[i + 1];
 		else
-			dp[i] = max(dp[i + 1], p[i] + dp[i + t[i]]);
+			dp[i] = max(dp[i+1],dp[next]+P[i]);
 	}
-	cout << dp[0] << '\n';
+	return dp[0];
+}
+
+int main(void) {
+	cout << solution() << endl;
+	return 0;
 }

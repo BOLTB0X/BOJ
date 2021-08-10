@@ -29,23 +29,24 @@ void merge(int left, int right) {
 		arr[l] = arr2[l];
 }
 
-void partition(int left, int right) {
+void merge_sort(int left, int right) {
 	int mid;
 	if (left < right) {
 		mid = (left + right) / 2;
-		partition(left, mid);
-		partition(mid + 1, right);
-		merge(left, right);
+		merge_sort(left, mid); //분할
+		merge_sort(mid + 1, right); //분할
+		merge(left, right); //정복
 	}
 }
 
 int main(void) {
 	scanf("%d", &n);
 	arr2 = new int[n];
+
 	for (int i = 0; i < n; i++) {
 		scanf("%d", &arr[i]);
 	}
-	partition(0, n - 1);
+	merge_sort(0, n - 1);
 
 	for (int i = 0; i < n; i++) {
 		printf("%d\n", arr[i]);

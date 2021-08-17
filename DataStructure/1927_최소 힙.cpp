@@ -24,9 +24,8 @@ int main(void) {
 			if (pq.empty())
 				printf("0\n");
 			else {
-				int p = pq.top();
+				printf("%d\n", pq.top());
 				pq.pop();
-				printf("%d\n", p);
 			}
 		}
 		else {

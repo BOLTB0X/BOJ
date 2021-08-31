@@ -3,23 +3,22 @@
 
 using namespace std;
 
-
 string solution(int n, int b) {
 	string answer = "";
 	string tmp_answer = "";
 	
-	//Áø¹ıº¯È¯ ½ÃÀÛ
+	//ì§„ë²•ë³€í™˜ ì‹œì‘
 	while (n >= 1) {
 		int r = n % b;
-		//Áï ¾ËÆÄºªÀÌ ÇÊ¿ä¾ø´Â °æ¿ì
+		//ì¦‰ ì•ŒíŒŒë²³ì´ í•„ìš”ì—†ëŠ” ê²½ìš°
 		if (r < 10)
 			tmp_answer += (char)(r + '0');
-		//10ÃÊ°ú½Ã
+		//10ì´ˆê³¼ì‹œ
 		else
 			tmp_answer += (char)(r - 10 + 'A');
 		n /= b;
 	}
-	//tmp_answer¿¡ Áø¹ıº¯È¯ÇÑ °ÍÀÌ µÚÁı¾îÁ®ÀÖ±â¿¡
+	//tmp_answerì— ì§„ë²•ë³€í™˜í•œ ê²ƒì´ ë’¤ì§‘ì–´ì ¸ìˆê¸°ì—
 	for (int i = tmp_answer.length() - 1; i >= 0; i--) {
 		answer += tmp_answer[i];
 	}

@@ -1,43 +1,51 @@
 #include <iostream>
 #include <queue>
 using namespace std;
-#define MAX 100001
 
-int n, k; //n은 수빈이 위치 , k는 동생위치== 타겟
-int t[MAX] = { 0, };
-queue<int> que;
+int n, k;
+int dp[100001] = { 0, };
 
-int BFS(int n,int k) {
-	que.push(n); //
-	t[n] = 1; //방문처리
-	while (!que.empty()) {
-		int x = que.front();
-		que.pop();
+bool is_range(int x) {
+	if (x < 0 || x>100000) 
+		return false;
+	return true;
+}
 
-		if (x == k) return (t[x] - 1); //동생위치에 간다면
+int BFS(int start, int target) {
+	queue<int> q;
+	dp[n] = 1; //위치 방문처리
+	q.push(n);
 
-		if (x + 1 < MAX && x + 1 >= 0 && t[x + 1] == 0) { //범위에 해당하고 미 방문이면
-			que.push(x + 1);
-			t[x + 1] = t[x] + 1;
+	while (!q.empty()) {
+		int cur = q.front();
+		q.pop();
+
+		if (cur == k) {
+			return dp[cur]-1;
 		}
-
-		if (x - 1 < MAX && x - 1 >= 0 && t[x - 1] == 0) { //범위에 해당하고 미 방문이면
-			que.push(x - 1);
-			t[x - 1] = t[x] + 1;
+		//범위 체크 및 그 곳이 미방문일 경우
+		if (is_range(cur-1) && dp[cur - 1] == 0) {
+			dp[cur - 1] = dp[cur] + 1;
+			q.push(cur - 1);
 		}
-
-		if (x * 2 < MAX && x * 2 >= 0 && t[x * 2] == 0) { //범위에 해당하고 미 방문이면
-			que.push(x * 2);
-			t[x * 2] = t[x] + 1;
+		if (is_range(cur + 1) && dp[cur + 1] == 0) {
+			dp[cur + 1] = dp[cur] + 1;
+			q.push(cur + 1);
+		}
+		if (is_range(cur * 2) &&  dp[cur * 2] == 0) {
+			dp[cur * 2] = dp[cur] + 1;
+			q.push(cur * 2);
 		}
 	}
 }
 
 int main(void) {
-	cin >> n >> k;
-	
-	int answer = BFS(n, k);
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
 
-	cout << answer << '\n';
+	cin >> n >> k;
+	int ret = BFS(n, k);
+	cout << ret << '\n';
 	return 0;
 }

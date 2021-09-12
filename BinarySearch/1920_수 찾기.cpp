@@ -1,24 +1,61 @@
 #include <iostream>
-#include <algorithm>
 using namespace std;
 
-int arr[100001];
+int n,m;
+int arr[100000];
 
-int BinarySearch(int *arr, int target, int start, int end) {
+void swap(int* a, int* b) {
+	int tmp = *a;
+	*a = *b;
+	*b = tmp;
+}
+
+void quick_sort(int start, int end) {
+	//ì›ì†Œê°€ í•œê°œì¸ ê²½ìš°
+	if (start >= end)
+		return;
+	int pivot = start;
+	int left = start + 1;
+	int right = end;
+
+	while (left <= right) {
+		//í”¼ë²—ë³´ë‹¤ í° ë°ì´í„°ë¥¼ ì°¾ì„ ë•Œê¹Œì§€ ë°˜ë³µ
+		while (left <= end && arr[left] <= arr[pivot])
+			left++;
+		//í”¼ë²„ì†Œë‹¤ ì‘ì€ ë°ì´í„°ë¥¼ ì°¾ì„ ë–„ê¹Œì§€ ë°˜ë³µ
+		while (right > start && arr[right] >= arr[pivot])
+			right--;
+		//ì—‡ê°ˆë ·ë‹¤ë©´
+		if (left > right) {
+			//êµì²´ ì‘ì€ ë°ì´í„°ì™€ êµì²´
+			swap(arr[pivot], arr[right]);
+		}
+		else {
+			//í°ë°ì´í„°ì™€ ì‘ì€ ë°ì´í„° êµì²´
+			swap(arr[left], arr[right]);
+		}
+	}
+	quick_sort(start, right - 1);
+	quick_sort(right + 1, end);
+}
+
+bool binary_search(int target, int start, int end) {
 	while (start <= end) {
 		int mid = (start + end) / 2;
-		// Ã£Àº °æ¿ì Áß°£Á¡ ÀÎµ¦½º ¹İÈ¯
+
+		//ì°¾ì€ ê²½ìš°
 		if (arr[mid] == target)
-			return 1;
-		// Áß°£Á¡ÀÇ °ªº¸´Ù Ã£°íÀÚ ÇÏ´Â °ªÀÌ ÀÛÀº °æ¿ì ¿ŞÂÊ È®ÀÎ
-		else if (arr[mid] > target)
+			return true;
+		//íƒ€ê²Ÿì´ ì‘ë‹¤ë©´ ì²«~ì¤‘ê°„ìœ¼ë¡œ ë²”ìœ„ë¥¼ ì¤„ì„
+		else if (arr[mid] > target) {
 			end = mid - 1;
-		// Áß°£Á¡ÀÇ °ªº¸´Ù Ã£°íÀÚ ÇÏ´Â °ªÀÌ Å« °æ¿ì ¿À¸¥ÂÊ È®ÀÎ
-		else
+		}
+		//íƒ€ê²Ÿì´ í¬ë‹¤ë©´ ì¤‘ê°„~ëìœ¼ë¡œ ë²”ìœ„ë¥¼ ì¤„ì„
+		else if (arr[mid] < target) {
 			start = mid + 1;
+		}
 	}
-	//¸øÃ£Àº °æ¿ì
-	return 0;
+	return false;
 }
 
 int main(void) {
@@ -26,18 +63,15 @@ int main(void) {
 	cin.tie(0);
 	cout.tie(0);
 
-	int n, m;
 	cin >> n;
-	for (int i = 0; i < n; i++) {
+	for (int i = 0; i < n; i++) 
 		cin >> arr[i];
-	}
+	quick_sort(0,n-1);
 	cin >> m;
-	sort(arr, arr + n);
 	for (int i = 0; i < m; i++) {
-		int target;
-		cin >> target;
-		int ret = BinarySearch(arr, target, 0, n-1);
-		cout << ret << '\n';
+		int value;
+		cin >> value;
+		cout << binary_search(value, 0, n - 1) << '\n';
 	}
 	return 0;
 }

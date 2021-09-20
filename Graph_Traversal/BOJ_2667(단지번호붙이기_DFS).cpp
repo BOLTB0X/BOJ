@@ -1,48 +1,82 @@
-#include <iostream>
-#include <string>
+#define _CRT_SECURE_NO_WARNINGS
+#include <cstdio>
 #include <vector>
-#include <algorithm>
 
 using namespace std;
 
-int n;
-int cnt=0; //°¢ ÃÑ´ÜÁö ¼ö
-int dx[4] = { -1,1,0,0 };
-int dy[4] = { 0,0,-1,1 };
-string graph[26];
-vector<int> answer; //¾ÆÆÄÆ® ´ÜÁöº° Ä«¿îÆ®¿ë º¤ÅÍ
-bool visited[26][26];
+int n, cnt = 0;
+int map[25][25];
+bool visited[25][25];
 
-void dfs(int x, int y) {
-    cnt++; //´ÜÁö ³» ÁýÀÇ ¼ö¸¦ ¼¾´Ù
-    visited[x][y] = true;
-    for (int i = 0; i < 4; i++)
-    {
-        int nx = x + dx[i];
-        int ny = y + dy[i];
-        if (0 <= nx && nx < n && 0 <= ny && ny < n) //¹üÀ§ ³»¿¡ ÀÖ°í
-            if (graph[nx][ny] == '1' && visited[nx][ny] == false) //¾ÆÁ÷ ¹æ¹®ÇÏÁö ¾ÊÀº Áý
-                dfs(nx, ny);
-    }
+//ì´ë™ë°©í–¥ ì„œë‚¨ë™ë¶
+const int dy[4] = { -1,0,1,0 };
+const int dx[4] = { 0,1,0,-1 };
+
+void swap(int* a, int* b) {
+	int* tmp = a;
+	a = b;
+	b = tmp;
+}
+
+void quicksort(vector<int> &arr, int start, int end) {
+	if (start >= end)
+		return;
+	int pivot = start;
+	int left = start + 1;
+	int right = end;
+	while (left <= right) {
+		while (left <= end && arr[left] <= arr[pivot])
+			left++;
+		while (right > start && arr[right] >= arr[pivot])
+			right--;
+		if (left > right)
+			swap(arr[pivot], arr[right]);
+		else
+			swap(arr[left], arr[right]);
+	}
+	quicksort(arr, start, right - 1);
+	quicksort(arr, right + 1, end);
+	return;
+}
+
+void DFS(int r, int c) {
+	visited[r][c] = true;
+	cnt++;
+	for (int i = 0; i < 4; i++) {
+		int ny = r + dy[i];
+		int nx = c + dx[i];
+		if (ny < 0 || nx < 0 || ny >= n || nx >= n)
+			continue;
+		if (visited[ny][nx] || map[ny][nx] == 0)
+			continue;
+		DFS(ny, nx);
+	}
+	return;
 }
 
 int main(void) {
-    cin >> n;
-    for (int i = 0; i < n; i++)
-        cin >> graph[i];
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < n; j++)
-        {
-            if (graph[i][j] == '1' && visited[i][j] == false)
-            {
-                cnt = 0;
-                dfs(i, j);
-                answer.push_back(cnt);
-            }
-        }
-    sort(answer.begin(), answer.end());
-    cout << answer.size() << endl;
-    for (int i = 0; i < answer.size(); i++)
-        cout << answer[i] << endl;
-    return 0;
+	scanf("%d", &n);
+	for (int y = 0; y < n; y++) {
+		for (int x = 0; x < n; x++) {
+			scanf("%1d", &map[y][x]);
+		}
+	}
+
+	vector<int> arr;
+	for (int y = 0; y < n; y++) {
+		for (int x = 0; x < n; x++) {
+			if (map[y][x] == 1 &&!visited[y][x]) {
+				cnt = 0;
+				DFS(y, x);
+				arr.push_back(cnt);
+			}
+		}
+	}
+	quicksort(arr, 0, arr.size() - 1);
+	printf("%d\n", arr.size());
+	for (int i = 0; i < arr.size(); i++) {
+		printf("%d\n", arr[i]);
+	}
+	printf("\n");
+	return 0;
 }

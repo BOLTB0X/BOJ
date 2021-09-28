@@ -1,58 +1,67 @@
 #include <iostream>
-#include <queue>
+#include <deque>
 
 using namespace std;
 
-int n, m, result;
-deque<int> dq;
+int n, m;
 
-int main(void) {
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
+int solution(void) {
+	int cnt = 0;
+	deque<int> dq;
 
-	cin >> n >> m;
-	int idx;
-	//Å¥ ¿ø¼Ò »ğÀÔ
+	//dqì— 1ë¶€í„° nê¹Œì§€ 
 	for (int i = 1; i <= n; i++) {
 		dq.push_back(i);
 	}
-	//½Ã¹°·¹ÀÌ¼Ç ½ÃÀÛ
-	result = 0;
-	while(m--) {
-		int target;
+	//ì´ì œ më²ˆ targetì„ ì°¾ê¸° ìœ„í•œ ì—°ì‚°
+	for (int i = 0; i < m; i++) {
+		int target, idx;
 		cin >> target;
-		//ÇØ´ç À§Ä¡¸¦ Ã£À½
+		
+		//targetì˜ ìœ„ì¹˜ë¥¼ ì°¾ìŒ
 		for (int i = 0; i < dq.size(); i++) {
 			if (dq[i] == target) {
 				idx = i;
 				break;
 			}
 		}
-		//idx¸¦ ±âÁØ ¿ŞÂÊÀ¸·Î µ¹¸±Áö ¿À¸¥ÂÊÀ¸·Î µ¹¸±Áö È®ÀÎ
+		//2ë²ˆí• ì§€ 3ë²ˆ í• ì§€ ê²°ì •
 		if (idx < dq.size() - idx) {
 			while (true) {
-				if (dq.front() == target) {
+				if (target == dq.front()) {
 					dq.pop_front();
 					break;
 				}
-				result++;
+				//2ë²ˆ ì—°ì‚° ìˆ˜í–‰
+				cnt++;
 				dq.push_back(dq.front());
 				dq.pop_front();
 			}
 		}
 		else {
 			while (true) {
-				if (dq.front() == target) {
+				if (target == dq.front()) {
 					dq.pop_front();
 					break;
 				}
-				result++;
+				//3ë²ˆ ì—°ì‚° ìˆ˜í–‰
+				cnt++;
 				dq.push_front(dq.back());
 				dq.pop_back();
 			}
 		}
 	}
-	cout << result << '\n';
+	return cnt;
+}
+
+int main(void) {
+	//ì´ˆê¸°í™”
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	cin >> n >> m;
+	int ret = solution();
+	cout << ret << '\n';
 	return 0;
 }

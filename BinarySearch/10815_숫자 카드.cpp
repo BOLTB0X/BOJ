@@ -35,7 +35,7 @@ int main(void) {
 		cin >> m_arr[i];
 		result[i] = 0;
 	}
-	//n_arr ¿À¸§Â÷¼øÁ¤·Ä
+	//n_arr ì˜¤ë¦„ì°¨ìˆœ ì •ë ¬
 	sort(n_arr, n_arr + n);
 	for (int i = 0; i < m; i++) {
 		bool check = binary_search(m_arr[i], 0, n - 1);

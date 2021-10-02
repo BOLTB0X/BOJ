@@ -1,33 +1,39 @@
-#define _CRT_SECURE_NO_WARNINGS
-#include <cstdio>
+#include <iostream>
 #include <vector>
+
 using namespace std;
 
-int n, m;
-bool visited[9];
 vector<int> per;
+bool visited[9] = { false, };
 
-void permutation(int n, int m, int depth) {
+//백트래킹 
+void DFS(int n, int m, int depth) {
 	if (depth == m) {
 		for (int i = 0; i < per.size(); i++) {
-			printf("%d ", per[i]);
+			cout << per[i] << ' ';
 		}
-		printf("\n");
+		cout << '\n';
 		return;
 	}
 	for (int i = 1; i <= n; i++) {
-		if (visited[i]) continue;
-
+		if (visited[i])
+			continue;
 		visited[i] = true;
 		per.push_back(i);
-		permutation(n, m, depth + 1);
+		DFS(n, m, depth + 1);
 		per.pop_back();
 		visited[i] = false;
 	}
 }
 
 int main(void) {
-	scanf("%d %d", &n, &m);
-	permutation(n, m, 0);
+	//초기화
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+	int n, m;
+
+	cin >> n >> m;
+	DFS(n, m, 0);
 	return 0;
 }

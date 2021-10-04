@@ -1,5 +1,4 @@
-#define _CRT_SECURE_NO_WARNINGS
-#include <cstdio>
+#include <iostream>
 #include <queue>
 using namespace std;
 
@@ -7,19 +6,19 @@ struct pos {
     int x, y, z;
 };
 
-
 int map[101][101][101];
 bool visited[101][101][101];
 queue<pos> q;
 int answer = -1;
 
 void BFS(int m, int n, int h) {
-    int dx[] = { -1,1,0,0,0,0 };
-    int dy[] = { 0,0,0,0,-1,1 };
-    int dz[] = { 0,0,-1,1,0,0 };
-    //Å¥°¡ ºñ¾îÁú¶§±îÁö
+    const int dx[] = { -1,1,0,0,0,0 };
+    const int dy[] = { 0,0,0,0,-1,1 };
+    const int dz[] = { 0,0,-1,1,0,0 };
+
+    //íê°€ ë¹„ì–´ì§ˆë•Œê¹Œì§€
     while (!q.empty()) {
-        //°¢ À§Ä¡¿¡¼­ Åä¸¶Åä°¡ ÀÍ¾î°¡¾ßÇÏ¹Ç·Î
+        //ê° ìœ„ì¹˜ì—ì„œ í† ë§ˆí† ê°€ ìµì–´ê°€ì•¼í•˜ë¯€ë¡œ
         int q_size = q.size();
         ++answer;
         while (q_size--) {
@@ -43,7 +42,7 @@ void BFS(int m, int n, int h) {
 }
 
 void last_check(int m, int n, int h) {
-    //¾ÈÀÍÀº Åä¸¶Åä Å½»ö
+    //ì•ˆìµì€ í† ë§ˆí†  íƒìƒ‰
     for (int k = 0; k < h; k++) {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
@@ -58,12 +57,16 @@ void last_check(int m, int n, int h) {
 }
 
 int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+
     int m, n, h;
-    scanf("%d %d %d", &m, &n, &h);
+    cin >> m >> n >> h;
     for (int k = 0; k < h; k++) {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
-                scanf("%d", &map[j][i][k]);
+                cin >> map[j][i][k];
                 if (map[j][i][k] == 1) {
                     q.push({ j,i,k });
                     visited[j][i][k] = true;
@@ -75,6 +78,6 @@ int main() {
     }
     BFS(m,n,h);
     last_check(m,n,h);
-    printf("%d", answer);
+    cout << answer << '\n';
     return 0;
 }

@@ -23,7 +23,7 @@ int main(void) {
 	cin >> n;
 	for (int i = 1; i <= n; ++i) 
 		per.push_back(i);
-	//´ÙÀ½¼ø¿­¾Ë°í¸®Áò ÀÌ¿ë
+	//ë‹¤ìŒìˆœì—´ ì•Œê³ ë¦¬ì¦˜ ì´ìš©
 	do {
 		print_vector();
 	} while (next_permutation(per.begin(), per.end()));

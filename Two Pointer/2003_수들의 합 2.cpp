@@ -1,42 +1,57 @@
 #include <iostream>
+#include <algorithm>
+
 using namespace std;
 
-int solution(int* arr, int arr_len, long long target) {
+//íˆ¬ í¬ì¸í„° ì•Œê³ ë¦¬ì¦˜
+//ìˆœì°¨ì  ë²„ì „
+int two_pointer(int* arr, int size, long long target) {
 	int start = 0;
 	int end = 0;
 	int partial_tot = 0, cnt = 0;
-	
-	//Åõ Æ÷ÀÎÅÍ ¾Ë°í¸®Áò
-	//Áï end°¡ ¹è¿­ÀÇ ±æÀÌ¸¦ µû¶óÀâ±â Àü±îÁö
-	while (end<=arr_len) {
-		//ºÎºĞÇÕÀÌ Å¸°Ù°ú °°¾ÆÁø´Ù¸é
+
+	//íˆ¬ í¬ì¸í„° ì•Œê³ ë¦¬ì¦˜
+	//ì¦‰ endê°€ ë°°ì—´ì˜ ê¸¸ì´ë¥¼ ë”°ë¼ì¡ê¸° ì „ê¹Œì§€
+	while (end <= size) {
+		//ë¶€ë¶„í•©ì´ íƒ€ê²Ÿê³¼ ê°™ì•„ì§„ë‹¤ë©´
 		if (partial_tot == target)
 			cnt++;
-		//ºÎºĞ ÇÕÀÌ Å¸°Ùmº¸´Ù ÀÛÀ¸¸é¸é arr¿¡ end¸¦
+		//ë¶€ë¶„ í•©ì´ íƒ€ê²Ÿmë³´ë‹¤ ì‘ìœ¼ë©´ë©´ arrì— endë¥¼
 		if (partial_tot < target)
 			partial_tot += arr[end++];
-		//ºÎºĞ ÇÕÀÌ Å¸°Ùmº¸´Ù Å©¸é arr¿¡ Ã³À½ºÎÅÍ
+		//ë¶€ë¶„ í•©ì´ íƒ€ê²Ÿmë³´ë‹¤ í¬ë©´ arrì— ì²˜ìŒë¶€í„°
 		else if (partial_tot >= target)
 			partial_tot -= arr[start++];
 	}
 	return cnt;
 }
 
+void solution(void) {
+	int n; 
+	long long m;
+	
+	//ì…ë ¥
+	cin >> n >> m;
+
+	//ë™ì í• ë‹¹
+	int* arr = new int[n];
+	for (int i = 0; i < n; ++i) {
+		cin >> arr[i];
+	}
+
+	int ret = two_pointer(arr, n, m);
+	cout << ret << '\n';
+	//ë©”ëª¨ë¦¬ í•´ì œ
+	delete[] arr;
+	return;
+}
+
 int main(void) {
+	//ì´ˆê¸°í™”
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
 
-	int n;
-	long long m;
-	int arr[10001];
-	
-	cin >> n >> m;
-	for (int i = 0; i < n; i++) {
-		cin >> arr[i];
-	}
-
-	int ret = solution(arr, n, m);
-	cout << ret << '\n';
+	solution();
 	return 0;
 }

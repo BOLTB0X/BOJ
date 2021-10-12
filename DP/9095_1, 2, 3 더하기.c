@@ -5,23 +5,23 @@
 int main(void) {
 	int T;
 	scanf("%d", &T);
+	
 	while (T--) {
 		int n;
 		scanf("%d", &n);
-
-		//ÀÔ·Â ¹ŞÀº n¸¸Å­ ¹è¿­ »ı¼º
-		int* dp = malloc(sizeof(int) * (n + 1));
-
+		//ë™ì í• ë‹¹ ë° ì´ˆê¸°í™”
+		int* dp = (int*)malloc(sizeof(int) * (n + 1));
+		for (int i = 0; i <= n; ++i) {
+			dp[i] = 0;
+		}
 		dp[1] = 1;
 		dp[2] = 2;
 		dp[3] = 4;
-		for (int i = 4; i <= n; i++) {
-			dp[i] = 0;
-		}
-		for (int i = 4; i <= n; i++) {
+		for (int i = 4; i <= n; ++i) {
 			dp[i] = dp[i - 1] + dp[i - 2] + dp[i - 3];
 		}
 		printf("%d\n", dp[n]);
+		free(dp);
 	}
 	return 0;
 }

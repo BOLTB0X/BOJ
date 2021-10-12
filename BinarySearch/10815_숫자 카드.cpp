@@ -1,50 +1,65 @@
 #include <iostream>
 #include <algorithm>
+
 using namespace std;
 
-int n_arr[500001];
-int m_arr[500001];
-int result[500001];
-
-bool binary_search(int target, int start, int end) {
+//이분탐색
+int binary_search(int* arr, int size, int target) {
+	int start = 0, end = size - 1;
 	while (start <= end) {
 		int mid = (start + end) / 2;
-		if (n_arr[mid] == target)
-			return true;
-		else if (n_arr[mid] > target)
+
+		if (arr[mid] == target)
+			return 1;
+		else if (arr[mid] > target) {
 			end = mid - 1;
-		else
+		}
+		else {
 			start = mid + 1;
+		}
 	}
-	return false;
+	return 0;
+}
+
+void solution(void) {
+	int n, m;
+	cin >> n;
+	int* cards = new int[n];
+
+	for (int i = 0; i < n; ++i) {
+		cin >> cards[i];
+	}
+	//이진탐색을 위한 오름차순
+	sort(cards, cards + n);
+
+	cin >> m;
+	int* result = new int[m];
+
+	for (int i = 0; i < m; ++i) {
+		int target;
+		cin >> target; 
+		int is_card = binary_search(cards, n, target);
+		result[i] = is_card;
+	}
+
+	//정답 출력
+	for (int i = 0; i < m; ++i) {
+		cout << result[i] << ' ';
+	}
+	cout << '\n';
+	//메모리 해제
+	delete[] cards;
+	delete[] result;
+
+	return;
 }
 
 int main(void) {
+	//초기화
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
 
-	int n, m;
-
-	cin >> n;
-	for (int i = 0; i < n; i++) {
-		cin >> n_arr[i];
-	}
-	cin >> m;
-	for (int i = 0; i < m; i++) {
-		cin >> m_arr[i];
-		result[i] = 0;
-	}
-	//n_arr 오름차순 정렬
-	sort(n_arr, n_arr + n);
-	for (int i = 0; i < m; i++) {
-		bool check = binary_search(m_arr[i], 0, n - 1);
-		if (check)
-			result[i] = 1;
-	}
-	for (int i = 0; i < m; i++) {
-		cout << result[i] << ' ';
-	}
-	cout << '\n';
+	solution();
 	return 0;
 }

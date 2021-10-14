@@ -3,31 +3,29 @@
 
 using namespace std;
 
-string solution(int n, int b) {
-	string answer = "";
-	string tmp_answer = "";
-	
-	//진법변환 시작
-	while (n >= 1) {
+string trans(int n, int b) {
+	string tmp = "";
+	string s = "";
+
+	while (n>=1) {
 		int r = n % b;
-		//즉 알파벳이 필요없는 경우
-		if (r < 10)
-			tmp_answer += (char)(r + '0');
-		//10초과시
+		if (r >= 10)
+			tmp += (char)(r + 'A' - 10);
 		else
-			tmp_answer += (char)(r - 10 + 'A');
+			tmp += (char)(r + '0');
+
 		n /= b;
 	}
-	//tmp_answer에 진법변환한 것이 뒤집어져있기에
-	for (int i = tmp_answer.length() - 1; i >= 0; i--) {
-		answer += tmp_answer[i];
-	}
-	return answer;
+	for (int i = tmp.length() - 1; i >= 0; i--) 
+		s += tmp[i];
+	return s;
 }
 
 int main(void) {
-	int n, b;
-	cin >> n >> b;
-	cout << solution(n, b) << '\n';
+	int N, B;
+	cin >> N >> B;
+
+	string st = trans(N, B);
+	cout << st << '\n';
 	return 0;
 }

@@ -14,29 +14,20 @@ int pow(int a, int b) {
 	return res;
 }
 
-int solution(string n, int b) {
+int main(void) {
+	string N = "";
+	int B;
 	int answer = 0;
 
-	int cnt = 0;
-	for (int i = n.length() - 1; i >= 0; i--) {
-		int tmp = n[i];
-		if (tmp >= 'A' && tmp <= 'Z')
-			answer += (tmp - 'A' + 10) * ((int)pow(b, cnt));
+	cin >> N >> B;
+
+	for (int i = N.length() - 1; i >= 0; i--) {
+		if (N[i] >= 'A' && N[i] <= 'Z')
+			answer += (N[i] - 'A' + 10) * pow(B, N.length() - 1 - i);
 		else
-			answer += (tmp - '0') * ((int)pow(b, cnt));
-		cnt++;
+			answer += (N[i] - '0') * pow(B, N.length() - 1 - i);
 	}
-	return answer;
-}
-
-int main(void) {
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
-
-	string n;
-	int b;
-	cin >> n >> b;
-	cout << solution(n, b) << '\n';
+	
+	cout << answer << '\n';
 	return 0;
 }

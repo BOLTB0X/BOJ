@@ -1,27 +1,29 @@
 #include <iostream>
 #include <string>
 #include <stack>
+
 using namespace std;
 
-string solution(string octal) {
-	stack<int> binary;
-	int len = octal.length();
-	for (int i = len - 1; i >= 0; i--) {
-		int cur = octal[i] - '0';
+string trans_bin(string X) {
+	stack<int> bin_num;
+	int size = X.length();
+	for (int i = size - 1; i >= 0; i--) {
+		int cur = X[i] - '0';
+		//3ìë¦¬ì”© ëŠìŒ
 		for (int j = 0; j < 3; j++) {
 			int r = cur % 2;
 			cur /= 2;
-			binary.push(r);
+			bin_num.push(r);
 		}
 	}
-	//8Áø¼ö Æ¯¼º»ó 1·Î ½ÃÀÛÇØ¾ßÇÔ
-	while (binary.top() != 1) {
-		binary.pop();
-	}
+	//8ì§„ìˆ˜ íŠ¹ì„±ìƒ 1ë¡œ ì‹œì‘
+	while (bin_num.top() != 1) 
+		bin_num.pop();
+	
 	string result = "";
-	while (!binary.empty()) {
-		result += to_string(binary.top());
-		binary.pop();
+	while (!bin_num.empty()) {
+		result += to_string(bin_num.top());
+		bin_num.pop();
 	}
 	return result;
 }
@@ -31,13 +33,15 @@ int main(void) {
 	cin.tie(0);
 	cout.tie(0);
 
-	string octal;
-	cin >> octal;
-	if (octal == "0") {
+	string X;
+	cin >> X;
+
+	if (X == "0") {
 		cout << 0 << '\n';
 		return 0;
 	}
-	string ret = solution(octal);
+	
+	string ret = trans_bin(X);
 	cout << ret << '\n';
 	return 0;
 }

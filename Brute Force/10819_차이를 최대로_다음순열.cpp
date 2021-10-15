@@ -4,6 +4,14 @@
 
 using namespace std;
 
+int result = -1;
+
+//ìµœëŒ“ê°’ ë¹„êµ
+int max(int a, int b) {
+	return a > b ? a : b;
+}
+
+//ì°¨ì´ê°’ ë°˜í™˜
 int get_difference_value(vector<int>& v, int n) {
 	int tot = 0;
 	for (int i = 0; i < n - 1; i++) {
@@ -12,48 +20,31 @@ int get_difference_value(vector<int>& v, int n) {
 	return tot;
 }
 
-//ÀÔ·Â
-void vector_input(int n, vector<int>& v) {
-	for (int i = 0; i < n; ++i) {
-		int value;
-		cin >> value;
-		v.push_back(value);
-	}
+void solution(void) {
+	int n;
+	cin >> n;
+	vector<int> per(n);
+
+	for (int i = 0; i < n; ++i)
+		cin >> per[i];
+	
+	//ì˜¤ë¦„ì°¨ìˆœ ì •ë ¬
+	sort(per.begin(), per.end());
+
+	//ë‹¤ìŒ ìˆœì—´ ì•Œê³ ë¦¬ì¦˜ ì´ìš©
+	do {
+		result = max(result, get_difference_value(per, n));
+	} while (next_permutation(per.begin(), per.end()));
+
+	cout << result << '\n';
 	return;
 }
 
-int solution(void) {
-	int n, result = 0;
-	vector<int> per;
-	
-	//ÀÔ·Â
-	cin >> n;
-	vector_input(n, per);
-
-	//¿À¸§Â÷¼ø 
-	sort(per.begin(), per.end());
-	for (int i = 0; i < n - 1; ++i) {
-		result += abs(per[i] - per[i + 1]);
-	}
-	
-	//´ÙÀ½ ¼ø¿­ ¾Ë°í¸®Áò
-	int tmp_result;
-	do {
-		tmp_result = get_difference_value(per, n);
-		result = max(result, tmp_result);
-	} while (next_permutation(per.begin(), per.end()));
-
-	return result;
-}
-
 int main(void) {
-	//ÃÊ±âÈ­
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
-	
-	//Á¤´ä µµÃâ
-	int ret = solution();
-	cout << ret << '\n';
+
+	solution();
 	return 0;
 }

@@ -2,49 +2,55 @@
 
 using namespace std;
 
-//ÃÖ´ë
+int result = -1;
+
+//ìµœëŒ€ ë¹„êµ
 int max(int a, int b) {
 	return a > b ? a : b;
 }
 
-void solution(void) {
-	int n, result = -1;
-	cin >> n;
-
-	//µ¿ÀûÇÒ´ç ¹× ÃÊ±âÈ­
-	int* arr = new int[n + 1];
-	int* dp = new int[n + 1];
-	//dp[i] = i¹øÂ° ¿ø¼Ò¸¦ ¸¶Áö¸·À¸·Î ÇÏ´Â LISÀÇ ±æÀÌ
-	for (int i = 0; i <= n; ++i) {
+void solution(int n, int* arr) {
+	//ë©”ëª¨ì œì´ì…˜ ìƒì„± ë° ì´ˆê¸°í™”
+	//dp[i] = ië²ˆì§¸ ì›ì†Œë¥¼ ë§ˆì§€ë§‰ìœ¼ë¡œ í•˜ëŠ” LDSì˜ ê¸¸ì´
+	int* dp = new int[n];
+	for (int i = 0; i < n; ++i) {
 		dp[i] = 0;
-		arr[i] = 0;
 	}
 
-	for (int i = 1; i <= n; ++i) {
-		cin >> arr[i];
+	//ë¶„í• ì •ë³µ
+	for (int i = 0; i < n; ++i) {
+		//ë§¤ ì´ˆê¸°í™”
 		int point = 0;
-		//ºÎºĞ¼ö¿­ Áß °¡Àå ±ä ºÎºĞ ¼ö¿­À» Ã£¾Æ¾ßÇÔ
-		for (int j = 1; j < i; ++j) {
-			//¸¸¾à °¨¼ÒÇÑ´Ù¸é
-			if (arr[i] < arr[j])
+		for (int j = 0; j < i; ++j) {
+			//ê°ì†Œí•œë‹¤ë©´
+			if (arr[i] < arr[j]) 
 				point = max(point, dp[j]);
 		}
 		dp[i] = point + 1;
 		result = max(result, dp[i]);
 	}
+
 	cout << result << '\n';
-	delete[] arr;
+	//ë©”ëª¨ë¦¬ í•´ì œ
 	delete[] dp;
 	return;
 }
 
 int main(void) {
-	//ÃÊ±âÈ­
+	//ì´ˆê¸°í™”
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
 
-	//ÇØ°á
-	solution();
+	int n;
+	cin >> n;
+	//ë™ì í• ë‹¹
+	int* arr = new int[n];
+	for (int i = 0; i < n; ++i) 
+		cin >> arr[i];
+	
+	solution(n, arr);
+	//ë©”ëª¨ë¦¬ í•´ì œ
+	delete[] arr;
 	return 0;
 }

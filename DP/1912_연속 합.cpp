@@ -2,47 +2,42 @@
 
 using namespace std;
 
-//ÃÖ´ë
+//ìµœëŒ“ê°’ ë¹„êµ
 int max(int a, int b) {
 	return a > b ? a : b;
 }
 
-//ÇØ°á
 void solution(void) {
 	int n;
 	cin >> n;
 
-	//µ¿ÀûÇÒ´ç
-	int* arr = new int[n+1];
-	int* dp = new int[n+1];
-	dp[0] = arr[0] = 0;
-	for (int i = 1; i <= n; ++i) {
+	//ë™ì í• ë‹¹
+	int* arr = new int[n];
+	int* dp = new int[n];
+
+	for (int i = 0; i < n; ++i) {
 		cin >> arr[i];
 		dp[i] = 0;
 	}
-	
-	//º¸ÅÒ¾÷
-	dp[1] = arr[1];
-	for (int i = 2; i <= n; ++i) {
-		dp[i] = max(arr[i], dp[i - 1] + arr[i]);
-	}
-
-	//dp¹è¿­¿¡¼­ ÃÖ´ñ°ª Ã£±â
-	int max_value = dp[1];
-	for (int i = 2; i <= n; ++i) {
+	//ë³´í…€ì—…
+	int max_value = dp[0] = arr[0];
+	for (int i = 1; i < n; ++i) {
+		dp[i] = max(arr[i], dp[i-1] + arr[i]);
+		//ìµœëŒ“ê°’ ì°¾ê¸°
 		if (max_value < dp[i])
 			max_value = dp[i];
 	}
+	//ì •ë‹µ ì¶œë ¥
 	cout << max_value << '\n';
-	
-	//¸Ş¸ğ¸® ÇØÁ¦
-	delete[] arr;
+
+	//ë©”ëª¨ë¦¬ í•´ì œ
 	delete[] dp;
+	delete[] arr;
 	return;
 }
 
 int main(void) {
-	//ÃÊ±âÈ­
+	//ì´ˆê¸°í™”
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);

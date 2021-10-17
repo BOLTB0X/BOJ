@@ -1,77 +1,83 @@
 #include <iostream>
 #include <vector>
-#include <cstring>
-#include <algorithm>
 
 using namespace std;
 
-//n+Ãâ¹ßÁ¡+µµÂøÁ¡
-vector<int> graph[102];
-bool visited[102];
-
-//ÃÊ±âÈ­
-void init() {
-	for (int i = 0; i < 102; i++) {
-		graph[i].clear();
-	}
-	memset(visited, false, sizeof(visited));
+//ì ˆëŒ“ê°’ ë°˜í™˜
+int abs(int a) {
+	return a < 0 ? -a : a;
 }
 
-//¸ÇÇÏÅº°Å¸®
-int manhattan_distance(pair<int, int> p1, pair<int, int> p2) {
-	return abs(p1.first - p2.first) + abs(p1.second - p2.second);
+//ë§¨í•˜íƒ„ê±°ë¦¬
+int manhattan_dist(pair<int,int> a, pair<int,int> b) {
+	return abs(a.first - b.first) + abs(a.second - b.second);
 }
 
-//Á¤¼® DFS
-void DFS(int cur) {
-	visited[cur] = true;
-	for (int i = 0; i < graph[cur].size(); i++) {
-		int next = graph[cur][i];
-		if (!visited[next])
-			DFS(next);
+//ê¹Šì´ ìš°ì„  íƒìƒ‰
+void DFS(vector<vector<int>>& graph, vector<bool>& visited, int depth) {
+	visited[depth] = true;
+
+	for (int i = 0; i < graph[depth].size(); ++i) {
+		int next = graph[depth][i];
+		if (visited[next])
+			continue;
+		DFS(graph, visited, next);
 	}
+	return;
 }
 
-//½Ã¹Ä·¹ÀÌ¼Ç
-void solution() {
-	//½ÃÀÛÀü ÃÊ±âÈ­
-	init();
-	int n;
-	vector<pair<int,int>> pos;
-	cin >> n;
-	//ÆíÀÇÁ¡ °¹¼ö ¿Ü Ãâ¹ß,µµÂø ÀÌ¹Ç·Î
-	for (int j = 0; j < n + 2; j++) {
-		int y, x;
-		cin >> y >> x;
-		pos.push_back(make_pair(y,x)); //À§Ä¡ ÀúÀå
-	}
-	//Á¶°Ç¿¡ ÇØ´çÇÏ´Â ±×·¡ÇÁ»ı¼º
-	for (int j = 0; j < n + 2; j++) {
-		for (int k = j + 1; k < n + 2; k++) {
-			//¸ÇÇÏÅº°Å¸®°¡ 1000º¸´Ù ÀÛ°Å³ª °°À¸¸é
-			if (manhattan_distance(pos[j], pos[k]) <= 20 * 50) {
-				graph[j].push_back(k);
-				graph[k].push_back(j);
+void simulation(int T) {
+	while (T--) {
+		int n;
+		cin >> n;
+		//ìƒì„± ë° ì´ˆê¸°í™”
+		vector<vector<int>> graph(n + 2);
+		vector<bool> visited(n + 2, false);
+		vector<pair<int, int>> pos;
+		
+		//ì¢Œí‘œì…ë ¥
+		for (int i = 0; i < n + 2; ++i) {
+			int y, x;
+			cin >> y >> x;
+			pos.push_back({ y,x });
+		}
+
+		//ê·¸ë˜í”„ì— í‘œì‹œ
+		for (int i = 0; i < n + 2; ++i) {
+			for (int j = i + 1; j < n + 2; ++j) {
+				//ë§¨í•˜íƒ„ê±°ë¦¬ê°€ 1000ë³´ë‹¤ ì‘ê±°ë‚˜ ê°™ìœ¼ë©´
+				if (manhattan_dist(pos[i], pos[j]) <= 1000) {
+					graph[i].push_back(j);
+					graph[j].push_back(i);
+				}
 			}
 		}
+		//DFSíƒìƒ‰ ì‹œì‘
+		DFS(graph, visited, 0);
+
+		//ê²°ê³¼
+		if (visited[n + 1])
+			cout << "happy\n";
+		else
+			cout << "sad\n";
 	}
-	DFS(0); //½ÃÀÛ0À¸·Î DFS½ÃÀÛ
-	//¸ÆÁÖ¸¦ ¸ø¸¶¼ÌÀ¸¸é ¹æ¹®X;
-	if (visited[n + 1])
-		cout << "happy" << '\n';
-	else
-		cout << "sad" << '\n';
+	return;
+}
+
+void solution(void) {
+	int T;
+	cin >> T;
+
+	simulation(T);
+	return;
 }
 
 int main(void) {
+	//ì´ˆê¸°í™”
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
-	int test;
-	cin >> test;
-	//Å×½ºÆ® ½ÇÇà
-	for (int t = 0; t < test; t++) {
-		solution();
-	}
+
+	solution();
 	return 0;
 }

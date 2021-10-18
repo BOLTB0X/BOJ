@@ -16,9 +16,11 @@ int two_pointer(int* arr, int size, long long target) {
 		//부분합이 타겟과 같아진다면
 		if (partial_tot == target)
 			cnt++;
+		
 		//부분 합이 타겟m보다 작으면면 arr에 end를
 		if (partial_tot < target)
 			partial_tot += arr[end++];
+		
 		//부분 합이 타겟m보다 크면 arr에 처음부터
 		else if (partial_tot >= target)
 			partial_tot -= arr[start++];

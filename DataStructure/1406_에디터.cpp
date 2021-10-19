@@ -1,42 +1,51 @@
 #include <iostream>
 #include <string>
 #include <stack>
+
 using namespace std;
 
-string str;
-int n;
-
-void solution(string s) {
+void solution(void) {
+	string str;
+	int T;
 	stack<char> L;
 	stack<char> R;
-	for (int i = 0; i < s.length(); i++) 
-		L.push(s[i]);
 
-	int T;
+	cin >> str;
+	for (int i = 0; i < str.length(); ++i)
+		L.push(str[i]);
+
 	cin >> T;
-	for (int i = 0; i < T; i++) {
-		char cmd;
-		cin >> cmd;
-		if (cmd == 'P') {
+	while (T--) {
+		char cmm;
+		cin >> cmm;
+		
+		//삽입
+		if (cmm == 'P') {
 			char c;
 			cin >> c;
 			L.push(c);
 		}
-		else if (cmd == 'L') {
-			if (L.empty()) 
+
+		//커서 왼쪽으로 옮김
+		else if (cmm == 'L') {
+			if (L.empty())
 				continue;
 			else {
 				R.push(L.top());
 				L.pop();
 			}
 		}
-		else if (cmd == 'B') {
+
+		//삭제
+		else if (cmm == 'B') {
 			if (L.empty())
 				continue;
 			else
 				L.pop();
 		}
-		else if (cmd == 'D') {
+
+		//오른쪽으로 한칸 옮김
+		else if (cmm == 'D') {
 			if (R.empty())
 				continue;
 			else {
@@ -45,22 +54,27 @@ void solution(string s) {
 			}
 		}
 	}
+	//왼쪽 스택 오른쪽 스택에 옮겨줌
 	while (!L.empty()) {
 		R.push(L.top());
 		L.pop();
 	}
+	
+	//선입후출이므로
+	//R의 상단을 뽑음
 	while (!R.empty()) {
 		cout << R.top();
 		R.pop();
 	}
+	return;
 }
 
 int main(void) {
+	//초기화
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
 
-	cin >> str;
-	solution(str);
+	solution();
 	return 0;
 }

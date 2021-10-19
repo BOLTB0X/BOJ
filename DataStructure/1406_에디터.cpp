@@ -7,26 +7,29 @@ using namespace std;
 void solution(void) {
 	string str;
 	int T;
+	//
 	stack<char> L;
 	stack<char> R;
 
+	//ì…ë ¥
 	cin >> str;
 	for (int i = 0; i < str.length(); ++i)
 		L.push(str[i]);
 
 	cin >> T;
 	while (T--) {
+		//ëª…ë ¹ì–´ì…ë ¥ 
 		char cmm;
 		cin >> cmm;
 		
-		//»ğÀÔ
+		//ì‚½ì…
 		if (cmm == 'P') {
 			char c;
 			cin >> c;
 			L.push(c);
 		}
 
-		//Ä¿¼­ ¿ŞÂÊÀ¸·Î ¿Å±è
+		//ì»¤ì„œ ì™¼ìª½ìœ¼ë¡œ ì˜®ê¹€
 		else if (cmm == 'L') {
 			if (L.empty())
 				continue;
@@ -36,7 +39,7 @@ void solution(void) {
 			}
 		}
 
-		//»èÁ¦
+		//ì‚­ì œ
 		else if (cmm == 'B') {
 			if (L.empty())
 				continue;
@@ -44,7 +47,7 @@ void solution(void) {
 				L.pop();
 		}
 
-		//¿À¸¥ÂÊÀ¸·Î ÇÑÄ­ ¿Å±è
+		//ì˜¤ë¥¸ìª½ìœ¼ë¡œ í•œì¹¸ ì˜®ê¹€
 		else if (cmm == 'D') {
 			if (R.empty())
 				continue;
@@ -54,14 +57,14 @@ void solution(void) {
 			}
 		}
 	}
-	//¿ŞÂÊ ½ºÅÃ ¿À¸¥ÂÊ ½ºÅÃ¿¡ ¿Å°ÜÁÜ
+	//ì™¼ìª½ ìŠ¤íƒ ì˜¤ë¥¸ìª½ ìŠ¤íƒì— ì˜®ê²¨ì¤Œ
 	while (!L.empty()) {
 		R.push(L.top());
 		L.pop();
 	}
 	
-	//¼±ÀÔÈÄÃâÀÌ¹Ç·Î
-	//RÀÇ »ó´ÜÀ» »ÌÀ½
+	//ì„ ì…í›„ì¶œì´ë¯€ë¡œ
+	//Rì˜ ìƒë‹¨ì„ ë½‘ìŒ
 	while (!R.empty()) {
 		cout << R.top();
 		R.pop();
@@ -70,7 +73,7 @@ void solution(void) {
 }
 
 int main(void) {
-	//ÃÊ±âÈ­
+	//ì´ˆê¸°í™”
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);

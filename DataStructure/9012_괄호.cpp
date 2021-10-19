@@ -15,23 +15,23 @@ void solution(void) {
 		cin >> paren;
 
 		for (int i = 0; i < paren.length(); ++i) {
-			char c = paren[i];
-			//¿©´Â °ıÈ£¸é »ğÀÔ
-			if (c == '(')
-				st.push(c);
+			//ì—¬ëŠ” ê´„í˜¸ë©´ ì‚½ì…
+			if (paren[i] == '(')
+				st.push(paren[i]);
 
-			//´İ´Â °ıÈ£°¡ »ğÀÔ µÉ½Ã
-			//ºñ¾îÀÖÁö ¾Ê°í topÀÌ ¿©´Â °ıÈ£ÀÎÁö Ã¼Å©
+			//ë‹«ëŠ” ê´„í˜¸ê°€ ì‚½ì… ë ì‹œ
+			//ë¹„ì–´ìˆì§€ ì•Šê³  topì´ ì—¬ëŠ” ê´„í˜¸ì¸ì§€ ì²´í¬
 			else if (!st.empty() && paren[i] == ')' && st.top() == '(')
 				st.pop();
 
-			// ±×¿Ü¸é ¾È‰Î
+			// ê·¸ì™¸ë©´
 			else {
 				answer = "NO";
 				break;
 			}
 		}
-		//¸¶Áö¸· Ã¼Å©
+		
+		//ë§ˆì§€ë§‰ ì²´í¬
 		if (!st.empty())
 			answer = "NO";
 		cout <<answer << '\n';
@@ -40,7 +40,7 @@ void solution(void) {
 }
 
 int main(void) {
-	//ÃÊ±âÈ­
+	//ì´ˆê¸°í™”
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);

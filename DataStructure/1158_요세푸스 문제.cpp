@@ -4,17 +4,23 @@
 using namespace std;
 
 void solution(void) {
-	// M-1¹ø popÀ» ÇÏ°í M-1¹ø push
-	int n, m;
+	int N, K;
 	queue<int> q;
-	cin >> n >> m;
+	
+	//ìž…ë ¥
+	cin >> N >> K;
 
-	for (int i = 1; i <= n; ++i) 
+	//1ë¶€í„° Nê¹Œì§€ qì— ì‚½ìž…
+	for (int i = 1; i <= N; ++i)
 		q.push(i);
+	
+	//ìš”ì„¸í‘¸ìŠ¤ ì‹œìž‘
+	//í•´ë²•ì€ k-1ë²ˆ push,popí•˜ê³  ìƒë‹¨ ì¶œë ¥
+	//ë°˜ë³µ
 	
 	cout << "<";
 	while (!q.empty()) {
-		//¿ø¼Ò°¡ ÇÏ³ª ³²¾Ò´Ù¸é
+		//ì›ì†Œê°€ í•˜ë‚˜ ë‚¨ì•˜ë‹¤ë©´
 		if (q.size() == 1) {
 			cout << q.front() << ">";
 			q.pop();
@@ -22,11 +28,12 @@ void solution(void) {
 		}
 		
 		//m-1 pop,push
-		for (int i = 1; i < m; ++i) {
+		for (int i = 1; i < K; ++i) {
 			q.push(q.front());
 			q.pop();
 		}
-		//»ó´Ü Ãâ·Â ÈÄ 
+		
+		//ìƒë‹¨ ì¶œë ¥ í›„ 
 		cout << q.front() << ", ";
 		q.pop();
 	}
@@ -35,7 +42,7 @@ void solution(void) {
 }
 
 int main(void) {
-	//ÃÊ±âÈ­
+	//ì´ˆê¸°í™”
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);

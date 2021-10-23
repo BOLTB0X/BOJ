@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <vector>
 #include <stack>
 
 using namespace std;
@@ -10,33 +9,37 @@ void solution(void) {
 	string bar_razor;
 	stack<char> st;
 
+	//입력
 	cin >> bar_razor;
 
-	for (int i = 0; i < bar_razor.size(); ++i) {
+	//쇠막대기 길이만큼 순회하면서 얼마나 잘리는지 확인
+	for (int i = 0; i < bar_razor.length(); ++i) {
+		//여는 괄호인 경우
 		if (bar_razor[i] == '(')
-			st.push('(');
-
-		//������ ������ ���
+			st.push(bar_razor[i]);
+		//닫는 괄호 즉 잘리는 경우
 		else {
-			if (bar_razor[i - 1] == '(') {
+			//여러개 잘리는 경우
+			if (bar_razor[i-1] == '(') {
 				st.pop();
-				//����
+				//잘린만큼 더해줌
 				answer += st.size();
 			}
+			//하나만 잘리는 경우
 			else {
 				st.pop();
-				//�ϳ��� �߸�
 				answer += 1;
 			}
 		}
 	}
 
+	//정답 출력
 	cout << answer << '\n';
 	return;
 }
 
 int main(void) {
-	//�ʱ�ȭ
+	//초기화
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);

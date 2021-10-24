@@ -3,14 +3,14 @@
 #include <vector>
 
 using namespace std;
-
+ 
 void solution(void) {
 	int n;
 	stack<int> st;
 	vector<char> answer;
 
 	cin >> n;
-	//½ºÅÃÀÇ »ó´Ü °ª
+	//ìŠ¤íƒì˜ ìƒë‹¨ ê°’
 	int st_top = 0;
 
 	while (n--) {
@@ -20,25 +20,25 @@ void solution(void) {
 		if (x > st_top) {
 			while (x > st_top) {
 				st.push(++st_top);
-				//pushÇÑ ¸¸Å­ +
+				//pushí•œ ë§Œí¼ +
 				answer.push_back('+');
 			}
 			st.pop();
 			answer.push_back('-');
 		}
 
-		//x°¡ »ó´Ü°ªº¸´Ù Å©°Å³ª °°Àº °æ¿ì
+		//xê°€ ìƒë‹¨ê°’ë³´ë‹¤ í¬ê±°ë‚˜ ê°™ì€ ê²½ìš°
 		else {
 			bool flag = false;
 			if (!st.empty()) {
-				//»ó´ÜÀÌ xÀÌ¸é
+				//ìƒë‹¨ì´ xì´ë©´
 				if (x == st.top()) 
 					flag = true;
 				st.pop();
 				answer.push_back('-');
 			}
 
-			//¸¸¾à Ã£Áö ¸øÇÑ´Ù¸é
+			//ë§Œì•½ ì°¾ì§€ ëª»í•œë‹¤ë©´
 			if (!flag) {
 				cout << "NO" << '\n';
 				return ;
@@ -46,14 +46,14 @@ void solution(void) {
 		}
 	}
 
-	//answer ÇÏ³ª¾¿ pop
+	//answer í•˜ë‚˜ì”© pop
 	for (auto a : answer)
 		cout << a << '\n';
 	return;
 }
 
 int main(void) {
-	//ÃÊ±âÈ­
+	//ì´ˆê¸°í™”
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);

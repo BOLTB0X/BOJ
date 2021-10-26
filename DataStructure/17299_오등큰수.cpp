@@ -8,30 +8,30 @@ void solution(void) {
 	int n;
 	
 	cin >> n;
-	//ì‚¬ì´ì¦ˆ ì¡°ì •
+	//»çÀÌÁî Á¶Á¤
 	vector<int> numbers(n + 1);
 	vector<int> ngf(n + 1, -1);
 	vector<int> f(1000001, 0);
 	stack<int> st;
 
-	//ì…ë ¥
+	//ÀÔ·Â
 	for (int i = 1; i <= n; ++i) {
 		cin >> numbers[i];
-		//ë“±ì¥ íšŸìˆ˜ ì¹´ìš´íŠ¸
+		//µîÀå È½¼ö Ä«¿îÆ®
 		f[numbers[i]]++;
 	}
 
 	for (int i = 1; i <= n; ++i) {
-		//stì˜ topì´ í´ ê²½ìš° í¬ ì¹´ìš´íŠ¸ì˜ í•´ë‹¹í•˜ëŠ” ì¸ë±ìŠ¤ì˜ ê°’ í• ë‹¹
+		//stÀÇ topÀÌ Å¬ °æ¿ì Å© Ä«¿îÆ®ÀÇ ÇØ´çÇÏ´Â ÀÎµ¦½ºÀÇ °ª ÇÒ´ç
 		while (!st.empty() && f[numbers[st.top()]] < f[numbers[i]]) {
-			//êµì²´
+			//±³Ã¼
 			ngf[st.top()] = numbers[i];
 			st.pop();
 		}
 		st.push(i);
 	}
 
-	//ì¶œë ¥
+	//Ãâ·Â
 	for (int i = 1; i <= n; ++i)
 		cout << ngf[i] << ' ';
 	cout << '\n';
@@ -40,7 +40,7 @@ void solution(void) {
 }
 
 int main(void) {
-	//ì´ˆê¸°í™”
+	//ÃÊ±âÈ­
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);

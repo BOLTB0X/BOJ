@@ -7,38 +7,40 @@ using namespace std;
 void solution(void) {
 	int n;
 	
-	//ÀÔ·Â
 	cin >> n;
+	//ì‚¬ì´ì¦ˆ ì¡°ì •
 	vector<int> numbers(n + 1);
 	vector<int> ngf(n + 1, -1);
 	vector<int> f(1000001, 0);
 	stack<int> st;
 
+	//ì…ë ¥
 	for (int i = 1; i <= n; ++i) {
 		cin >> numbers[i];
+		//ë“±ì¥ íšŸìˆ˜ ì¹´ìš´íŠ¸
 		f[numbers[i]]++;
 	}
 
 	for (int i = 1; i <= n; ++i) {
-		//¿À¸¥ÂÊ¿¡ ÀÖÀ¸¸é¼­ µîÀåÇÑ È½¼ö°¡ Å¬ °æ¿ì
+		//stì˜ topì´ í´ ê²½ìš° í¬ ì¹´ìš´íŠ¸ì˜ í•´ë‹¹í•˜ëŠ” ì¸ë±ìŠ¤ì˜ ê°’ í• ë‹¹
 		while (!st.empty() && f[numbers[st.top()]] < f[numbers[i]]) {
-			//±³Ã¼
+			//êµì²´
 			ngf[st.top()] = numbers[i];
 			st.pop();
 		}
 		st.push(i);
 	}
 
-	for (int i = 1; i <= n; ++i) {
+	//ì¶œë ¥
+	for (int i = 1; i <= n; ++i)
 		cout << ngf[i] << ' ';
-	}
 	cout << '\n';
 
 	return;
 }
 
 int main(void) {
-	//ÃÊ±âÈ­
+	//ì´ˆê¸°í™”
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);

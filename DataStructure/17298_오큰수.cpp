@@ -6,39 +6,38 @@ using namespace std;
 
 void solution(void) {
 	int n;
+
 	cin >> n;
 
-	//Á¤´ä¿ë
+	//ì‚¬ìš©í•  ë²¡í„° í¬ê¸° ì‚¬ì´ì¦ˆ ì¡°ì •
+	vector<int> numbers(n + 1);
 	vector<int> nge(n + 1, -1);
-	//½ºÅÃ
 	stack<int> st;
 
-	//µ¿ÀûÇÒ´ç
-	int* arr = new int[n + 1];
+	//ì…ë ¥
 	for (int i = 1; i <= n; ++i)
-		cin >> arr[i];
+		cin >> numbers[i];
 
+	//ìˆœíšŒ
 	for (int i = 1; i <= n; ++i) {
-		//½ºÅÃÀÌ topÀÌ ÃÊ·Ï ¸·´ëº¸´Ù ´õ Ä¿Áú ¶§±îÁö ½ºÅÃÀ» pop
-		while (!st.empty() && arr[st.top()] < arr[i]) {
-			nge [st.top()] = arr[i];
+		//ìŠ¤íƒì´ topì´ ë‹¤ ë” ì»¤ì§ˆ ë•Œê¹Œì§€ ìŠ¤íƒì„ pop
+		while (!st.empty() && numbers[st.top()] < numbers[i]) {
+			nge[st.top()] = numbers[i];
 			st.pop();
 		}
 		st.push(i);
 	}
 
-	//Ãâ·Â
+	//ì¶œë ¥
 	for (int i = 1; i <= n; ++i)
 		cout << nge[i] << ' ';
 	cout << '\n';
 
-	//ÇØÁ¦
-	delete[] arr;
 	return;
 }
 
 int main(void) {
-	//ÃÊ±âÈ­
+	//ì´ˆê¸°í™”
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);

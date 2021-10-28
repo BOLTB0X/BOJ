@@ -11,8 +11,8 @@ for _ in range(T):
     x = int(input())
     if x == 0:
         if heap:
-            print(heapq.heappop(heap)[1])
+            print(-1 * heapq.heappop(heap))
         else:
             print('0')
     else:
-        heapq.heappush(heap, [-x,x])
+        heapq.heappush(heap, -x)

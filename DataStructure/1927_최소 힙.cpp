@@ -1,24 +1,25 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <vector>
 #include <queue>
 
 using namespace std;
 
-int n;
+//구조체
 struct compare {
 	bool operator() (int x, int y) {
 		return x > y;
 	}
 };
 
-priority_queue<int,vector<int>,compare> pq;
-
-int main(void) {
-	int value;
-	scanf("%d", &n);
+void solution(void) {
+	int n;
+	//최소힙
+	priority_queue<int,vector<int>,compare> pq;
+	
+	cin >> n;
 	for (int i = 0; i < n; i++) {
-		scanf("%d", &value);
+		int value;
+		cin >> value;
 
 		if (value == 0) {
 			if (pq.empty())
@@ -32,5 +33,16 @@ int main(void) {
 			pq.push(value);
 		}
 	}
+
+	return;
+}
+
+int main(void) {
+	//초기화
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	solution();
 	return 0;
 }

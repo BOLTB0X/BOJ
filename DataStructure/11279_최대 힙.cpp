@@ -1,29 +1,42 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <queue>
+
 using namespace std;
 
-int n;
-priority_queue<int> pq;
+void solution(void) {
+	int n;
+	priority_queue<int> pq;
 
-int main(void) {
-	scanf("%d", &n);
+	//입력
+	cin >> n;
+
 	for (int i = 0; i < n; i++) {
 		int value;
-		scanf("%d", &value);
+		cin >> value;
 
 		if (value == 0) {
 			if (pq.empty()) 
-				printf("0\n");
+				cout << "0\n";
 			else {
 				int p = pq.top();
 				pq.pop();
-				printf("%d\n",p);
+				cout << p << '\n';
 			}
 		}
 		else {
 			pq.push(value);
 		}
 	}
+	
+	return;
+}
+
+int main(void) {
+	//초기화
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	solution();
 	return 0;
 }

@@ -2,8 +2,10 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+
 using namespace std;
 
+//숫자로 정렬
 bool compare(pair<int, string> a, pair<int, string> b) {
 	return a.first < b.first;
 }

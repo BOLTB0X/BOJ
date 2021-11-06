@@ -1,20 +1,16 @@
-#입출력
-from sys import stdin
-#입력 
-input = stdin.readline
-
 n=int(input())
 words=[]
 
-#단어 입력
 for i in range(n):
-    words.append(input())
+    word = input()
+    word_len = len(word)
+    words.append((word,word_len))
 
-#중복제거
+#중복 제거
 words=list(set(words))
-#길이 짧은 것 순
-result=sorted(words,key=lambda x: (len(x),x))
+#길이 짧은 순 그 다음 알파벳 
+words.sort(key=lambda word : (word[1] , word[0]))
 
 #출력
-for r in result:
-    print(r)
+for word in words:
+    print(word[0])

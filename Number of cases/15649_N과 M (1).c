@@ -2,9 +2,9 @@
 #include <stdio.h>
 #include <malloc.h>
 
-//±íÀÌ¿ì¼±Å½»öÀ» ÀÌ¿ëÇÑ ¹éÆ®·¡Å·
+//ê¹Šì´ìš°ì„ íƒìƒ‰ì„ ì´ìš©í•œ ë°±íŠ¸ë˜í‚¹
 void DFS(int* per, int n, int m, int depth) {
-	//Å½»ö
+	//íƒìƒ‰
 	for (int i = 1; i <= n; i++) {
 		int k = 0;
 
@@ -24,7 +24,7 @@ void DFS(int* per, int n, int m, int depth) {
 				continue;
 		}
 
-		//Ãâ·Â
+		//ì¶œë ¥
 		if (m - 1 == depth) {
 			for (int k = 0; k < m; k++)
 				printf("%d ", per[k]);
@@ -41,19 +41,17 @@ int main(void) {
 	int n, m;
 	scanf("%d %d", &n, &m);
 
-	//µ¿ÀûÇÒ´ç
+	//ë™ì í• ë‹¹
 	int* per = malloc(sizeof(int) * (n + 1));
-	int* visited = malloc(sizeof(int) * (n + 1));
 
-	//ÃÊ±âÈ­
+	//ì´ˆê¸°í™”
 	for (int i = 0; i < n; ++i)
 		per[i] = 0;
 	
 	DFS(per, n, m, 0);
 
-	//¸Ş¸ğ¸® ÇØÁ¦
+	//ë©”ëª¨ë¦¬ í•´ì œ
 	free(per);
-	free(visited);
 
 	return 0;
 }

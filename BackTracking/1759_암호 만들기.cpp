@@ -6,13 +6,14 @@
 using namespace std;
 
 int L, C;
-vector<char> per;
+vector<char> com;
 bool visited[15] = { false, };
 
 void last_check(string str) {
-	//¸ğÀ½°¹¼ö ¹× ÀÚÀ½ °¹¼ö Ä«¿îÆ®
+	//ëª¨ìŒê°¯ìˆ˜ ë° ììŒ ê°¯ìˆ˜ ì¹´ìš´íŠ¸
 	int moum_cnt = 0;
 	int cnt = 0;
+
 	for (int i = 0; i < str.length(); i++) {
 		if (visited[i]) {
 			if (str[i] == 'a' || str[i] == 'e' || str[i] == 'i'
@@ -22,10 +23,11 @@ void last_check(string str) {
 				cnt++;
 		}
 	}
-	//Á¶°Ç¿¡ ÃæÁ· µÇ¸é
+
+	//ì¡°ê±´ì— ì¶©ì¡± ë˜ë©´
 	if (moum_cnt >= 1 && cnt >= 2) {
 		for (int i = 0; i < str.length(); i++) {
-			//¹æ¹®µÈ°Íµé¸¸ Ãâ·Â
+			//ë°©ë¬¸ëœê²ƒë“¤ë§Œ ì¶œë ¥
 			if (visited[i])
 				cout << str[i];
 		}
@@ -35,12 +37,12 @@ void last_check(string str) {
 }
 
 void DFS(string s, int depth, int cur) {
-	//Å»Ãâ Á¶°Ç
+	//íƒˆì¶œ ì¡°ê±´
 	if (depth == L) {
 		last_check(s);
 		return;
 	}
-	// Á¶ÇÕ±¸ÇÏµíÀÌ ¹é Æ®·¡Å·
+	// ì¡°í•©êµ¬í•˜ë“¯ì´ ë°± íŠ¸ë˜í‚¹
 	for (int i = cur; i < s.length(); ++i) {
 		if (visited[i])
 			continue;
@@ -50,22 +52,30 @@ void DFS(string s, int depth, int cur) {
 	}
 }
 
-int main(void) {
-	//ÃÊ±âÈ­ 
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
-
-	//¹®ÀÚ¿­ ±æÀÌ¿Í Á¶ÇÕ °¹¼ö ÀÔ·Â
+void solution(void) {
+	//ë¬¸ìì—´ ê¸¸ì´ì™€ ì¡°í•© ê°¯ìˆ˜ ì…ë ¥
 	cin >> L >> C;
 	string str;
+
 	for (int i = 0; i < C; ++i) {
 		char c;
 		cin >> c;
 		str += c;
 	}
-	//±íÀÌ¿ì¼± ÀÌ¿ë
+
+	//ê¹Šì´ìš°ì„  ì´ìš©
 	sort(str.begin(), str.end());
 	DFS(str, 0, 0);
+
+	return;
+}
+
+int main(void) {
+	//ì´ˆê¸°í™” 
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	solution();
 	return 0;
 }

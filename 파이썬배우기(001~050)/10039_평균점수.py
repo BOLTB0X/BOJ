@@ -1,4 +1,6 @@
-#평균 점수 https://www.acmicpc.net/problem/10039
+import sys
+input = sys.stdin.readline
+
 tot=0
 for _ in range(5):
     a=int(input())

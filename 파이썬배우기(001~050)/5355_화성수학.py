@@ -1,4 +1,6 @@
-#화성수학 https://www.acmicpc.net/problem/5355
+import sys
+input = sys.stdin.readline
+
 n=int(input())
 for i in range(n):
     a=list(map(str,input().split()))

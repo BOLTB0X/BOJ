@@ -1,14 +1,23 @@
-#수들의 합 https://www.acmicpc.net/problem/1789
-n=int(input())
-tot=0
-answer=0
-for i in range(1,n+1):
-    tot+=i
-    answer=i #최댓값
-    if tot>n:
-        tot-=i
-        answer-=1
+import sys
+input = sys.stdin.readline
+
+S = int(input())
+tot = 0
+
+#그리드 알고리즘 이용
+for i in range(1,S + 1):
+    tot += i
+    cnt = i
+    
+    #크다면
+    if tot > S:
+        tot -= i
+        cnt = i - 1
         break
-    elif tot==n:
+    
+    #같다면
+    elif tot == S:
         break
-print(answer)
+
+#출력
+print(cnt)

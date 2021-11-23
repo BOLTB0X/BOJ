@@ -1,7 +1,10 @@
-#소음 https://www.acmicpc.net/problem/2935
-a=int(input())
-c=input()
-b=int(input())
+import sys
+input = sys.stdin.readline
+
+a = int(input())
+c = input()
+b = int(input())
+
 if c=='*':
     print(a*b)
 else:

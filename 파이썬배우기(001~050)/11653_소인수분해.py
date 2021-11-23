@@ -1,7 +1,10 @@
-#소인수분해
+import sys
+input = sys.stdin.readline
+
 n=int(input())
 d=2
 answer=[]
+
 while n>1:
     if n%d==0:
         n//=d

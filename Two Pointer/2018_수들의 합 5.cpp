@@ -3,7 +3,6 @@
 using namespace std;
 
 int solution(int n) {
-	//투 포인터 알고리즘
 	int cnt = 0;
 	int start = 1, end = 2;
 	int partial_tot = 1;

@@ -3,31 +3,34 @@
 
 int result;
 
-//깊이우선탐색
-void DFS(int n, int tot) {
-	//넘길시
-	if (tot > n)
+void DFS(int number, int tot) {
+	if (tot > number)
 		return;
-	if (tot == n)
+	if (tot == number)
 		result++;
+
 	for (int i = 1; i <= 3; ++i)
-		DFS(n, tot + i);
+		DFS(number, tot + i);
+
 	return;
 }
 
-int main(void) {
+void solution(void) {
 	int T;
 	scanf("%d", &T);
 
 	while (T--) {
-		int n;
-		scanf("%d", &n);
+		int number;
+		scanf("%d", &number);
 
-		//초기화 및 호출
 		result = 0;
-		DFS(n, 0);
-		
+		DFS(number, 0);
 		printf("%d\n", result);
 	}
+
+	return;
+}
+int main(void) {
+	solution();
 	return 0;
 }

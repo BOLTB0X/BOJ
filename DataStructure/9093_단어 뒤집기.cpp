@@ -10,19 +10,18 @@ void solution(void) {
 
 	cin >> T;
 
-	//ÀÔ·Â ¹öÆÛ ºñ¿ì±â
+	//ì…ë ¥ ë²„í¼ ë¹„ìš°ê¸°
 	cin.ignore();
 	while (T--) {
 		string words;
-		//¶ç¾î¾²±â ±îÁö ÀÔ·Â
+		//ë„ì–´ì“°ê¸° ê¹Œì§€ ì…ë ¥
 		getline(cin, words);
-
-		//Ãâ·ÂÀ» ¸ÂÃß±â À§ÇØ
+		//ì¶œë ¥ì„ ë§ì¶”ê¸° ìœ„í•´
 		words += " ";
 
-		//¼øÈ¸
+		//ìˆœíšŒ
 		for (int i = 0; i < words.length(); ++i) {
-			//°ø¹éÀÌ ½ºÅÃÀÇ pop ½ÅÈ£
+			//ê³µë°±ì´ ìŠ¤íƒì˜ pop ì‹ í˜¸
 			if (words[i] == ' ') {
 				while (!st.empty()) {
 					cout << st.top();
@@ -30,7 +29,7 @@ void solution(void) {
 				}
 				cout << ' ';
 			}
-			//½ºÅÃ¿¡ »ğÀÔ
+			//ìŠ¤íƒì— ì‚½ì…
 			else 
 				st.push(words[i]);
 		}
@@ -40,7 +39,7 @@ void solution(void) {
 }
 
 int main(void) {
-	//ÃÊ±âÈ­
+	//ì´ˆê¸°í™”
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);

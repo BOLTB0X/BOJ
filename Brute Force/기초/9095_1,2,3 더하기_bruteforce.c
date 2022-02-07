@@ -15,7 +15,7 @@ void DFS(int number, int tot) {
 	return;
 }
 
-void solution(void) {
+int main(void) {
 	int T;
 	scanf("%d", &T);
 
@@ -28,9 +28,5 @@ void solution(void) {
 		printf("%d\n", result);
 	}
 
-	return;
-}
-int main(void) {
-	solution();
 	return 0;
 }

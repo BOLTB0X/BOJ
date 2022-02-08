@@ -27,7 +27,7 @@ void solution(void) {
 			break;
 		}
 		
-		//m-1 pop,push
+		//m-1 pop,push 
 		for (int i = 1; i < K; ++i) {
 			q.push(q.front());
 			q.pop();

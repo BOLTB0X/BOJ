@@ -38,7 +38,6 @@ void solution(int n, int k) {
 		printf(", %d", que[head]);
 		dequeue();
 	}
-
 	printf(">");
 	return;
 }

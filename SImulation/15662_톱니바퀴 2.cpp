@@ -1,17 +1,42 @@
 #include <iostream>
 #include <queue>
 #include <string>
+
 using namespace std;
 
-int n,T;
+int T, k;
+string gears[1001];
+pair<int, int> cmd[1001];
+
 deque<int> dq[1001];
 
-void rotate_gear(queue<pair<int, int>> q) {
-	while (!q.empty()) {
+void input(void) {
+	string cmm;
+
+	cin >> T;
+	for (int i = 1; i <= T; ++i) {
+		cin >> cmm;
+		for (int j = 0; j < 8; ++j)
+			dq[i].push_back(cmm[j] - '0');
+	}
+
+	cin >> k;
+	for (int i = 1; i <= k; ++i) {
+		int number, dir;
+		cin >> number >> dir;
+		cmd[i].first = number;
+		cmd[i].second = dir;
+	}
+
+	return;
+}
+
+void rotate_gear(queue<pair<int, int>> que) {
+	while (!que.empty()) {
 		//큐의 정보 
-		int cur_idx = q.front().first;
-		int turn_dir = q.front().second;
-		q.pop();
+		int cur_idx = que.front().first;
+		int turn_dir = que.front().second;
+		que.pop();
 
 		//만약 방향이 시계방향이면
 		//가장 하단에 있는게 상단으로
@@ -19,7 +44,9 @@ void rotate_gear(queue<pair<int, int>> q) {
 			int tmp = dq[cur_idx].back();
 			dq[cur_idx].pop_back();
 			dq[cur_idx].push_front(tmp);
-		}//만약 방향이 빈시계방향이면
+		}
+		
+		//만약 방향이 빈시계방향이면
 		//가장 상단에 있는게 하단으로
 		else if (turn_dir == -1) {
 			int tmp = dq[cur_idx].front();
@@ -30,78 +57,75 @@ void rotate_gear(queue<pair<int, int>> q) {
 	return;
 }
 
-void turn_check(queue<pair<int, int>> q, int gear_idx, int dir) {
+void before_Rotate_Check(queue<pair<int, int>> que, int gear_idx, int dir) {
 	int idx = gear_idx;
 	int tmp_dir = dir;
-	q.push({ idx,tmp_dir });
-	
-	//먼저 오른쪽에 있는 톱니바퀴의 회전관련 정보확인
-	while (true) {
-		if (idx == n)
+	que.push({ idx, tmp_dir });
+
+	while (1) {
+		if (idx == T)
 			break;
 		idx++;
 		tmp_dir *= -1;
+
 		if (dq[idx - 1][2] != dq[idx][6])
-			q.push({ idx,tmp_dir });
+			que.push({ idx, tmp_dir });
 		else
 			break;
 	}
 	idx = gear_idx;
 	tmp_dir = dir;
-	// 이와 반대로 왼쪽 
-	while (true) {
+
+	while (1) {
 		if (idx == 1)
 			break;
 		idx--;
 		tmp_dir *= -1;
+
 		if (dq[idx + 1][6] != dq[idx][2])
-			q.push({ idx,tmp_dir });
+			que.push({ idx, tmp_dir });
 		else
 			break;
 	}
-	rotate_gear(q);
+
+	//명령 정보가 담겼으니 회전
+	rotate_gear(que);
 	return;
 }
 
 //12시방향이 S극인 톱니바퀴의 개수
-int get_gears_count() {
+int get_gears_count(void) {
 	int cnt = 0;
-	for (int i = 1; i <= n; i++) {
+	for (int i = 1; i <= T; i++) {
 		if (dq[i][0] == 1)
 			cnt++;
 	}
 	return cnt;
 }
 
+void solution(void) {
+	queue<pair<int, int>> que;
+	//시뮬 시작
+	for (int i = 1; i <= k; ++i) {
+		before_Rotate_Check(que, cmd[i].first, cmd[i].second);
+		while (!que.empty()) {
+			que.pop();
+		}
+	}
+
+	int ret = get_gears_count();
+	cout << ret << "\n";
+	return;
+}
+
 int main(void) {
 	//초기화
 	ios::sync_with_stdio(0);
-	cin.tie(0); cout.tie(0);
+	cin.tie(0); 
+	cout.tie(0);
 	
-	//입력
-	
-	cin >> n;
-	for (int i = 1; i <= n; i++) {
-		string tmp_gear;
-		cin >> tmp_gear;
-		//톱니바퀴 8방향 정보 저장
-		for (int j = 0; j < tmp_gear.length(); j++) {
-			dq[i].push_back(tmp_gear[j] - '0');
-		}
-	}
-	//회전정보 큐
-	queue<pair<int,int>> q;
-	cin >> T;
-	while (T!=0) {
-		int gear_idx, dir;
-		cin >> gear_idx >> dir;
-		//회전 전 사전정보확인
-		turn_check(q,gear_idx,dir);
-		while (!q.empty()) 
-			q.pop();
-		T--;
-	}
-	int ret = get_gears_count();
-	cout << ret << "\n";
+	input();
+	solution();
+
 	return 0;
 }

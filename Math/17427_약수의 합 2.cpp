@@ -3,22 +3,22 @@
 using namespace std;
 
 void solution(void) {
-	int n;
+	long long n;
 	cin >> n;
 
 	long long result = 0;
 
-	//  100¿Ã«œ 11¿« πËºˆµÈ 
-	// -> 11,22,33,44,55,66,77,88,99 √— 9∞≥ = 100/11
+	//  100Ïù¥Ìïò 11Ïùò Î∞∞ÏàòÎì§ 
+	// -> 11,22,33,44,55,66,77,88,99 Ï¥ù 9Í∞ú = 100/11
 	for (int i = 1; i <= n; ++i)
 		result += (n / i) * i;
 
-	cout << result << '\n';
+	cout << result;
 	return;
 }
 
 int main(void) {
-	//√ ±‚»≠
+	//Ï¥àÍ∏∞Ìôî
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);

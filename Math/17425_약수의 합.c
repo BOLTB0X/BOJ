@@ -1,31 +1,31 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <string.h>
-#define MAX_LEN 1000001
 
-long long div_tot[MAX_LEN];
-long long dp[MAX_LEN];
+#define MLN 1000001
 
-void set_div(void) {
-	memset(dp, 0, sizeof(long long) * MAX_LEN);
+long long dp[MLN];
+long long tot_div[MLN];
 
-	for (long long i = 0; i < MAX_LEN; ++i)
-		div_tot[i] = 1;
-	
-	for (long long i = 2; i < MAX_LEN; ++i) {
-		for (long long j = 1; j*i< MAX_LEN; ++j)
-			div_tot[i * j] += i;
+void init(void) {
+	memset(dp, 0, sizeof(long long) * MLN);
+	for (long long i = 1; i < MLN; ++i)
+		tot_div[i] = 1;
+
+	for (long long i = 2; i < MLN; ++i) {
+		for (long long j = 1; j * i < MLN; ++j)
+			tot_div[i * j] += i;
 	}
 
-	for (long long i = 1; i < MAX_LEN; ++i)
-		dp[i] = div_tot[i] + dp[i - 1];
-	
+	for (long long i = 1; i < MLN; ++i)
+		dp[i] = tot_div[i] + dp[i - 1];
+
 	return;
 }
 
 void solution(int T) {
 	long long n;
-	set_div();
+	init();
 
 	while (T--) {
 		scanf("%lld", &n);

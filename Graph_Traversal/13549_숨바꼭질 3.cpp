@@ -1,55 +1,56 @@
 #include <iostream>
+#include <vector>
 #include <queue>
+#define MLN 100001
 
 using namespace std;
 
-//¹æ¹®¸®½ºÆ®
-bool visited[100001] = { false, };
+int solution(int n, int k) {
+	int result = 0;
+	deque<int> dq;
+	vector<int> visited(MLN, 0);
 
-void simulation(void) {
-	int n, k;
-	cin >> n >> k;
-
-	deque<pair<int, int>> dq;
-	dq.push_back({ n,0 });
-	visited[n] = true;
+	dq.push_back(n);
+	visited[n] = 1;
 
 	while (!dq.empty()) {
-		//ÇöÀç À§Ä¡
-		int cur_l = dq.front().first;
-		//ÇöÀç ½Ã°£
-		int cur_t = dq.front().second;
+		int cur = dq.front();
 		dq.pop_front();
 
-		//¸ñÇ¥ À§Ä¡¿¡ µµ´ÞÇÏ¸é
-		if (cur_l == k) {
-			cout << cur_t << '\n';
+		if (cur == k) 
 			break;
+		
+		
+		if (cur * 2 < MLN && visited[cur * 2] == 0) {
+			visited[cur * 2] = visited[cur];
+			dq.push_front(cur * 2);
 		}
 
-		//3°¡Áö °æ¿ìÀÇ ¼ö
-		if (cur_l * 2 < 100001 && !visited[cur_l * 2]) {
-			dq.push_front({ (cur_l * 2),cur_t });
-			visited[cur_l * 2] = true;
+		if (cur + 1 < MLN && visited[cur + 1] == 0) {
+			visited[cur + 1] = visited[cur] + 1;
+			dq.push_back(cur + 1);
 		}
-		if (cur_l + 1 < 100001 && !visited[cur_l + 1]) {
-			dq.push_back({ (cur_l + 1),cur_t + 1 });
-			visited[cur_l + 1] = true;
+
+		if (cur - 1 >= 0 && visited[cur - 1] == 0) {
+			visited[cur - 1] = visited[cur] + 1;
+			dq.push_back(cur - 1);
 		}
-		if (cur_l - 1 >= 0 && !visited[cur_l - 1]) {
-			dq.push_back({ (cur_l - 1),cur_t + 1 });
-			visited[cur_l - 1] = true;
-		}
+		
 	}
-	return;
+	result = visited[k] - 1;
+	return result;
 }
 
 int main(void) {
-	//ÃÊ±âÈ­
+	//ì´ˆê¸°í™”
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
+	int n, k;
 
-	simulation();
+	cin >> n >> k;
+
+	int ret = solution(n, k);
+	cout << ret;
 	return 0;
 }

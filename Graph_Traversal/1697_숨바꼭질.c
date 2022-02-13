@@ -1,25 +1,25 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <string.h>
+#define MLN 100001
 
-int que[100001];
+int que[MLN];
 int head = 0, tail = 0;
-int visited[100001];
+int visited[MLN];
 
 void enqueue(int data) {
 	que[tail++] = data;
-	tail = tail % 100001;
+	return;
 }
 
 void dequeue(void) {
 	head++;
-	head = head % 100001;
+	return;
 }
 
-void solution(void) {
-	int n, k, result;
-	scanf("%d %d", &n, &k);
-	memset(visited, 0, sizeof(int) * 100001);
+int solution(int n, int k) {
+	int result = 0;
+	memset(visited, 0, sizeof(int) * MLN);
 	visited[n] = 1;
 	enqueue(n);
 
@@ -30,25 +30,29 @@ void solution(void) {
 		if (cur == k)
 			break;
 
-		if (cur + 1 < 100001 & !visited[cur + 1]) {
+		if (cur + 1 < MLN & visited[cur + 1] == 0) {
 			visited[cur + 1] = visited[cur] + 1;
 			enqueue(cur + 1);
 		}
-		if (cur - 1 >= 0 & !visited[cur - 1]) {
+		if (cur - 1 >= 0 & visited[cur - 1] == 0) {
 			visited[cur - 1] = visited[cur] + 1;
 			enqueue(cur - 1);
 		}
-		if (cur * 2 < 100001 & !visited[cur * 2]) {
+		if (cur * 2 < MLN & visited[cur * 2] == 0) {
 			visited[cur * 2] = visited[cur] + 1;
 			enqueue(cur * 2);
 		}
 	}
 	result = visited[k] - 1;
-	printf("%d", result);
-	return;
+	return result;
 }
 
 int main(void) {
-	solution();
+	int n, k, ret;
+	scanf("%d %d", &n, &k);
+	
+	ret = solution(n,k);
+
+	printf("%d", ret);
 	return 0;
 }

@@ -1,34 +1,41 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
-#include <malloc.h>
+#include <stdlib.h>
 
-//ÃÖ¼Ò
-int min(int a, int b) {
+//ìµœì†Ÿê°’ ë°˜í™˜
+int MIN(int a, int b) {
 	return a < b ? a : b;
+}
+
+int solution(int n) {
+	int answer = 0;
+	//ë™ì í• ë‹¹
+	int* dp = malloc(sizeof(int) * (n + 1));
+	//ì´ˆê¸°í™”
+	for (int i = 0; i <= n; ++i)
+		dp[i] = 0;
+
+	//2ë¶€í„° ë³´í…€ì—…
+	for (int i = 2; i <= n; ++i) {
+		dp[i] = dp[i - 1] + 1;
+
+		//2ì™€ 3ìœ¼ë¡œ ë‚˜ëˆ„ì–´ ë–¨ì–´ì§€ëŠ” ê²½ìš° ì²´í¬
+		if (i % 2 == 0)
+			dp[i] = MIN(dp[i], dp[i / 2] + 1);
+		if (i % 3 == 0) //ë‚˜ëˆ„ì–´ ë–¨ì–´ì§€ëŠ” ê²½ìš°
+			dp[i] = MIN(dp[i], dp[i / 3] + 1);
+	}
+
+	answer = dp[n];
+	free(dp);
+	return answer;
 }
 
 int main(void) {
 	int n;
 	scanf("%d", &n);
 
-	//µ¿ÀûÇÒ´ç ¹× ÃÊ±âÈ­
-	int* dp = (int*)malloc(sizeof(int) * (n + 1));
-	for (int i = 0; i <= n; ++i) {
-		dp[i] = 0;
-	}
-	
-	//º¸ÅÏ¾÷
-	for (int i = 2; i <= n; ++i) {
-		dp[i] = dp[i - 1] + 1;
-		//2¿Í 3 µ¿½Ã¿¡ ³ª´©¾î ¶³¾îÁö´Â °æ¿ìµµ Á¸Àç
-		if (i % 3 == 0) {
-			dp[i] = min(dp[i], dp[i / 3] + 1);
-		}
-		if (i % 2 == 0) {
-			dp[i] = min(dp[i], dp[i / 2] + 1);
-		}
-	}
-	printf("%d\n", dp[n]);
-	free(dp);
+	int ret = solution(n);
+	printf("%d", ret);
 	return 0;
 }

@@ -1,42 +1,40 @@
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
-int dp[100001] = { 0, };
-
-//�ּڰ�
-int min(int a, int b) {
+int MIN(int a, int b) {
 	return a < b ? a : b;
 }
 
-//�ʱ�ȭ
-void init(int n) {
+void solution(int n) {
+	int answer = 0;
+	vector<int> dp(n + 1, 0);
+
+	// 1, 1 + 1, 1 + 1 + 1...식으로 초기값 셋팅
 	for (int i = 0; i <= n; ++i)
 		dp[i] = i;
-	return;
-}
+	
+	//보텀업방식
+	for (int i = 2; i <= n; ++i) {
+		for (int j = 2; j * j <= i; ++j) {
+			dp[i] = MIN(dp[i], dp[i - j * j] + 1);
+		}
+	}
 
-void solution(void) {
-	int n;
-	cin >> n;
-
-	//�ʱ�ȭ
-	init(n);
-
-	for (int i = 2; i <= n; i++)
-		for (int j = 2; j * j <= i; j++)
-			dp[i] = min(dp[i], dp[i - j * j] + 1);
-
-	cout << dp[n] << '\n';
+	cout << dp[n];
 	return;
 }
 
 int main(void) {
-	//�ʱ�ȭ
+	//초기화
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
+	
+	int n;
+	cin >> n;
 
-	solution();
+	solution(n);
 	return 0;
 }

@@ -2,25 +2,33 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+long long solution(int n) {
+	long long answer = 0;
+	
+	//ë™ì í• ë‹¹ ë° ì´ˆê¸°í™”
+	long long* dp = (long long*)malloc(sizeof(long long) * (n + 1));
+	for (int i = 0; i <= n; ++i) 
+		dp[i] = 0;
+	
+	dp[1] = 1;
+	dp[2] = 3;
+
+	//ë³´í…€ì—… ë°©ì‹
+	for (int i = 3; i <= n; ++i)
+		//ì í™”ì‹ i-2ì˜ *2ë°° í•´ì£¼ê³  ë”í•´ì•¼í•¨
+		dp[i] = (dp[i - 1] + (dp[i - 2] * 2)) % 10007;
+	
+	// 10007ë¡œ ë‚˜ëˆˆ ë‚˜ë¨¸ì§€ë¥¼ ì¶œë ¥
+	answer = dp[n];
+	free(dp);
+	return answer;
+}
+
 int main(void) {
 	int n;
 	scanf("%d", &n);
 
-	//µ¿ÀûÇÒ´ç ¹× ÃÊ±âÈ­
-	long long* dp = (long long*)malloc(sizeof(long long) * (n + 1));
-	for (int i = 0; i <= n; ++i) {
-		dp[i] = 0;
-	}
-	dp[1] = 1;
-	dp[2] = 3;
-
-	//º¸ÅÒ¾÷ ¹æ½Ä
-	for (int i = 3; i <= n; ++i)
-		//Á¡È­½Ä i-2ÀÇ *2¹è ÇØÁÖ°í ´õÇØ¾ßÇÔ
-		dp[i] = (dp[i - 1] + (dp[i - 2] * 2)) % 10007;
-	
-	// 10007·Î ³ª´« ³ª¸ÓÁö¸¦ Ãâ·Â
-	printf("%lld\n", dp[n]);
-	free(dp);
+	long long ret = solution(n);
+	printf("%lld\n", ret);
 	return 0;
 }

@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//�ִ� ��ȯ
+//최댓값 반환
 int MAX(int a, int b) {
 	return a > b ? a : b;
 }
@@ -10,21 +10,22 @@ int MAX(int a, int b) {
 int solution(int n, int* arr) {
 	int answer = 0;
 	int* dp = (int*)malloc(sizeof(int) * n);
-	//dp �ʱ�ȭ
+
+	//dp 초기화
 	for (int i = 0; i < n; ++i)
 		dp[i] = 0;
 
-	//��������
+	//최대길이 체크
 	for (int i = 0; i < n; ++i) {
-		int check = 0;
-		for (int j = 0; j < i; ++j) {
-			if (arr[i] > arr[j])
-				check = MAX(check, dp[j]);
+		dp[i] = 1; //길이 1로 셋팅
+		for (int j = i - 1; j >= 0; --j) {
+			if (arr[i] > arr[j]) //크다면
+				dp[i] = MAX(dp[i], dp[j] + 1); //업데이트
 		}
-		dp[i] = check + 1;
-		if (answer < dp[i])
-			answer = dp[i];
+
+		answer = MAX(dp[i], answer);
 	}
+	free(dp);
 	return answer;
 }
 

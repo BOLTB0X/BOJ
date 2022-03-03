@@ -1,41 +1,44 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
-#include <malloc.h>
+#include <stdlib.h>
 
-//ÃÖ´ë
-int max(int a, int b) {
+//ìµœëŒ“ê°’ ë°˜í™˜
+int MAX(int a, int b) {
 	return a > b ? a : b;
 }
 
-int main(void) {
-	int n, result = -1;
-	scanf("%d", &n);
+int solution(int n, int* arr) {
+	int answer = 0;
+	int* dp = (int*)malloc(sizeof(int) * n);
 
-	int* arr = malloc(sizeof(int) * (n + 1));
-	int* dp = malloc(sizeof(int) * (n + 1));
-	arr[0] = dp[0] = 0;
-	for (int i = 1; i <= n; ++i) {
-		scanf("%d", &arr[i]);
+	//dp ì´ˆê¸°í™”
+	for (int i = 0; i < n; ++i)
 		dp[i] = 0;
-	}
 
-	//°¡Àå ±ä °¨¼ÒÇÏ´Â ºÎºÐ ¼ö¿­ Ã£¾Æ¾ßÇÔ
-	//point¸¦ ÁöÁ¤ÇØ¼­ °¨¼Ò ±¸°£À» Ã£°í
-	//max¸¦ ÀÌ¿ëÇÏ¿© ´õ Å©°Ô °¨¼ÒÇÏ´Â Áö Ã¼Å©
-	for (int i = 1; i <= n; ++i) {
-		int point = 0;
-		for (int j = 1; j < i; ++j) {
-			if (arr[i] < arr[j])
-				point = max(point, dp[j]);
+	//ìµœëŒ€ê¸¸ì´ ì²´í¬
+	for (int i = 0; i < n; ++i) {
+		dp[i] = 1; //ê¸¸ì´ 1ë¡œ ì…‹íŒ…
+		for (int j = i - 1; j >= 0; --j) {
+			if (arr[i] < arr[j]) //ìž‘ë‹¤ë©´
+				dp[i] = MAX(dp[i], dp[j] + 1); //ì—…ë°ì´íŠ¸
 		}
-		dp[i] = point + 1;
-		result = max(result, dp[i]);
+
+		answer = MAX(dp[i], answer);
 	}
+	return answer;
+}
 
-	printf("%d\n", result);
+int main(void) {
+	int n;
+	int* arr;
 
-	//¸Þ¸ð¸® ÇØÁ¦
+	scanf("%d", &n);
+	arr = (int*)malloc(sizeof(int) * n);
+	for (int i = 0; i < n; ++i)
+		scanf("%d", &arr[i]);
+
+	int ret = solution(n, arr);
+	printf("%d", ret);
 	free(arr);
-	free(dp);
 	return 0;
 }

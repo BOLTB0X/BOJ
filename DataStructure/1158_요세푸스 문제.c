@@ -18,9 +18,12 @@ void dequeue(void) {
 
 void solution(int n, int k) {
 	int tmp;
+	
+	//idx 큐에 삽입
 	for (int i = 1; i <= n; ++i)
 		enqueue(i);
-
+	
+	//k - 1만큼 회전
 	for (int i = 1; i < k; ++i) {
 		tmp = que[head];
 		dequeue();
@@ -30,11 +33,13 @@ void solution(int n, int k) {
 	printf("<%d", que[head]);
 	dequeue();
 	while (head != tail) {
+		//k - 1만큼 회전
 		for (int i = 1; i < k; ++i) {
 			int tmp = que[head];
 			dequeue();
 			enqueue(tmp);
 		}
+		//pop
 		printf(", %d", que[head]);
 		dequeue();
 	}

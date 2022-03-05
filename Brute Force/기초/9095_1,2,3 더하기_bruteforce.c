@@ -3,30 +3,33 @@
 
 int result = 0;
 
-void DFS(int n, int tot, int level) {
-	if (tot == n) {
+void DFS(int n, int tot) {
+	//카운트 조건
+	if (n == tot) {
 		result++;
 		return;
 	}
 
+	// 조건을 넘겼을때
 	if (tot > n)
 		return;
 
 	for (int i = 1; i <= 3; ++i)
-		DFS(n, tot + i, level + 1);
+		DFS(n, tot + i);
 	return;
 }
 
 void solution(int T) {
 	int n;
-
 	while (T--) {
-		result = 0;
+		result = 0; //초기화
+
 		scanf("%d", &n);
-		DFS(n, 0, 0);
+		//DFS로 탐색
+		DFS(n, 0);
+
 		printf("%d\n", result);
 	}
-
 	return;
 }
 

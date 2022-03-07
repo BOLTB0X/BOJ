@@ -1,75 +1,79 @@
 #include <iostream>
 #include <vector>
+#include <string>
 #include <algorithm>
 
 using namespace std;
 
-//´Ü¾î°¡ µÇ´ÂÁö Ã¼Å©
-void voca_check(vector<char>& str, vector<bool>& visited) {
-	int moum_cnt = 0;
-	int jaum_cnt = 0;
+int L, C;
+vector<char> com;
+bool visited[15] = { false, };
 
-	for (int i = 0; i < str.size(); ++i) {
+void last_check(string str) {
+	//ëª¨ìŒê°¯ìˆ˜ ë° ìžìŒ ê°¯ìˆ˜ ì¹´ìš´íŠ¸
+	int moum_cnt = 0;
+	int cnt = 0;
+
+	for (int i = 0; i < str.length(); i++) {
 		if (visited[i]) {
-			if (str[i] == 'a' || str[i] == 'e' || str[i] == 'i' || str[i] == 'o' || str[i] == 'u')
+			if (str[i] == 'a' || str[i] == 'e' || str[i] == 'i'
+				|| str[i] == 'o' || str[i] == 'u')
 				moum_cnt++;
 			else
-				jaum_cnt++;
+				cnt++;
 		}
 	}
 
-	if (jaum_cnt >= 2 && moum_cnt >= 1) {
-		for (int i = 0; i < str.size(); ++i) 
+	//ì¡°ê±´ì— ì¶©ì¡± ë˜ë©´
+	if (moum_cnt >= 1 && cnt >= 2) {
+		for (int i = 0; i < str.length(); i++) {
+			//ë°©ë¬¸ëœê²ƒë“¤ë§Œ ì¶œë ¥
 			if (visited[i])
 				cout << str[i];
+		}
 		cout << '\n';
 	}
 	return;
 }
 
-//±íÀÌ¿ì¼±Å½»ö
-void DFS(vector<char>& str, vector<bool>& visited, int L, int C, int cur, int depth) {
-	if (depth == L) {
-		voca_check(str,visited);
+void DFS(string s, int cur, int level) {
+	//íƒˆì¶œ ì¡°ê±´
+	if (level == L) {
+		last_check(s);
 		return;
 	}
-
-	//Á¶ÇÕ ±¸Çö
-	for (int i = cur; i < str.size(); ++i) {
+	// ì¡°í•©êµ¬í•˜ë“¯ì´ ë°± íŠ¸ëž˜í‚¹
+	for (int i = cur; i < C; ++i) {
 		if (visited[i])
 			continue;
 		visited[i] = true;
-		DFS(str, visited, L, C, i, depth + 1);
+		DFS(s, i, level + 1);
 		visited[i] = false;
 	}
-	return;
 }
 
-void solution(void) {
-	int L, C;
-	
-	//ÀÔ·Â
-	cin >> L >> C;
-	vector<char> str(C, 0);
-	for (int i = 0; i < C; ++i) 
-		cin >> str[i];
-	
-	vector<bool> visited(C, false);
-
-	//DFS¸¦ À§ÇÑ Á¤·Ä
+void solution(string str) {
+	//ê¹Šì´ìš°ì„  ì´ìš©
 	sort(str.begin(), str.end());
-	//È£Ãâ
-	DFS(str, visited, L, C, 0, 0);
+	DFS(str, 0, 0);
 
 	return;
 }
 
 int main(void) {
-	//ÃÊ±âÈ­
+	//ì´ˆê¸°í™” 
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
+	cin >> L >> C;
+	string str;
 
-	solution();
+	for (int i = 0; i < C; ++i) {
+		char c;
+		cin >> c;
+		str += c;
+	}
+
+	solution(str);
 	return 0;
 }

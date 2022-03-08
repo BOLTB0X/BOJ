@@ -8,11 +8,11 @@ int n, m;
 int board[101][101];
 bool visited[101][101] = { false, };
 
-//»óÇÏÁÂ¿ì
+//ìƒí•˜ì¢Œìš°
 const int dy[4] = { 1,-1,0,0 };
 const int dx[4] = { 0,0,-1,1 };
 
-//ÀÔ·Â
+//ì…ë ¥
 void input(void) {
 	cin >> n >> m;
 	for (int i = 0; i < n; ++i) {
@@ -24,54 +24,57 @@ void input(void) {
 	}
 }
 
-//³Êºñ¿ì¼±Å½»ö
+//ë„ˆë¹„ìš°ì„ íƒìƒ‰
 void BFS(int y, int x) {
 	queue<pair<int, int>> q;
 	visited[y][x] = true;
 	q.push({ y,x });
 	
-	//Å¥°¡ ºô¶§±îÁö
+	//íê°€ ë¹Œë•Œê¹Œì§€
 	while (!q.empty()) {
 		int cy = q.front().first;
 		int cx = q.front().second;
 		q.pop();
 
-		//»óÇÏÁÂ¿ì Å½»ö
+		//ìƒí•˜ì¢Œìš° íƒìƒ‰
 		for (int dir = 0; dir < 4; ++dir) {
 			int ny = cy + dy[dir];
 			int nx = cx + dx[dir];
 
-			//¹üÀ§ÃÊ°ú
+			//ë²”ìœ„ì´ˆê³¼
 			if (ny >= n || nx >= m || nx < 0 || ny < 0)
 				continue;
-			//Àç¹æ¹® ¶Ç´Â º®ÀÎ °æ¿ì
+			//ì¬ë°©ë¬¸ ë˜ëŠ” ë²½ì¸ ê²½ìš°
 			if (visited[ny][nx] || board[ny][nx] == 0)
 				continue;
-			//°Å¸® Ã¼Å©
+			//ê±°ë¦¬ ì²´í¬
 			board[ny][nx] = board[cy][cx] + 1;
 			visited[ny][nx] = true;
 			q.push({ ny,nx });
 		}
 	}
+
+	return;
 }
 
-//½Ã¹Ä·¹ÀÌ¼Ç
+//ì‹œë®¬ë ˆì´ì…˜
 void simulation(void) {
-	//ÀÔ·Â
-	input();
-	//BFS½ÃÀÛ
+	//BFSì‹œì‘
 	BFS(0, 0);
-	//ÃÖ¼Ò°Å¸®´Â °İÀÚÆÇÀÇ °¡Àå ¸¶Áö¸· À§Ä¡
+	//ìµœì†Œê±°ë¦¬ëŠ” ê²©ìíŒì˜ ê°€ì¥ ë§ˆì§€ë§‰ ìœ„ì¹˜
 	cout << board[n - 1][m - 1] << '\n';
 	return;
 }
 
 int main(void) {
-	//ÃÊ±âÈ­
+	//ì´ˆê¸°í™”
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
-	//½Ã¹Ä½ÃÀÛ
+	
+	input();
+	
+	//ì‹œë®¬ì‹œì‘
 	simulation();
 	return 0;
 }

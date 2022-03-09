@@ -5,8 +5,8 @@
 int arr[ML];
 int dp[ML];
 
-//Å« °ª ¹ÝÈ¯
-int MAX(int a, int b) {
+//í° ê°’ ë°˜í™˜
+int Max(int a, int b) {
 	return a > b ? a : b;
 }
 
@@ -17,10 +17,11 @@ int solution(int n) {
 	
 	dp[0] = result = arr[0];
 
-	//º¸ÅÒ¾÷
+	//ë³´í…€ì—…
 	for (int i = 1; i < n; ++i) {
-		dp[i] = MAX(dp[i - 1] + arr[i], arr[i]); //À½¼ö¸¦ ´õÇÏ´õ¶óµµ °á±£°ªÀÌ Å©´Ù¸é
-		result = MAX(result, dp[i]);
+		//ìŒìˆ˜ê°€ ìžˆìœ¼ë¯€ë¡œ
+		dp[i] = Max(arr[i] + dp[i - 1], arr[i]);
+		result = Max(dp[i], result);
 	}
 
 	return result;

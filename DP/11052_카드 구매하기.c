@@ -4,25 +4,25 @@
 int dp[1001];
 int cards[1001];
 
+//ìµœëŒ“ê°’ ë°˜í™˜
 int MAX(int a, int b) {
 	return a > b ? a : b;
 }
 
 int solution(int n) {
 	int answer;
-	//dpÅ×ÀÌºí ÃÊ±âÈ­
-	for (int i = 0; i <= n; ++i)
+
+	//dp í…Œì´ë¸” ì´ˆê¸°í™”
+	for (int i = 1; i <= n; ++i)
 		dp[i] = 0;
 
-	//Ä«µå ¼±ÅÃ°¹¼ö 1ºÎÅÍ n±îÁö
+	//ë³´í…€ì—…
 	for (int i = 1; i <= n; ++i) {
-		//Â÷·Ê·Î ÇØ´ç j¸¦ i¸¸Å­ »ê°Í°ú ´Ù¸¥ °Í°ú Á¶ÇÕÇØ¼­
-		//»ê °ÍÁß ÃÖ´ñ°ª ¼ÂÆÃ
-		for (int j = 1; j <= i; ++j) {
+		//ì¦‰ iê°¯ìˆ˜ ë§Œí¼ ì‚´ë•Œ ì¡°í•©ì—ì˜í•œ ê°’ ì¤‘ ìµœëŒ“ê°’ì„ dpí…Œì´ë¸”ì— ë„£ì–´ë‘ë©´ ëŒ
+		for (int j = 1; j <= i; ++j) 
 			dp[i] = MAX(dp[i - j] + cards[j], dp[i]);
-		}
 	}
-
+	
 	answer = dp[n];
 	return answer;
 }

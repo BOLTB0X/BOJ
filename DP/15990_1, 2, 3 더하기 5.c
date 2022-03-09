@@ -1,49 +1,47 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
-#include <stdlib.h>
-#define ML 100001
+#define MS 100001 //ìµœëŒ€ ê¸¸ì´
 
-long long dp[ML][4];
+long long dp[MS][4]; //dp í…Œì´ë¸”
 const int INF = 1e9 + 9;
 
-void init(void) {
-	for (int i = 0; i < ML; ++i) {
+void init_dp(void) {
+	//dp í…Œì´ë¸” ì´ˆê¸°í™”
+	for (int i = 0; i < MS; ++i) {
 		for (int j = 0; j < 4; ++j)
 			dp[i][j] = 0;
 	}
-	
-	//1°³ÀÇ °æ¿ìÀÇ ¼ö°¡ ³ª¿À´Â °æ¿ì
-	//n X 4(1,2,3)À¸·Î °¢ ¼ıÀÚ°¡ ¸î¹ø »ç¿ëÇß´ÂÁö Ã¼Å©
-	dp[1][1] = dp[2][2] = dp[3][1] = dp[3][2] = dp[3][3] = 1;
 
-	//º¸ÅÒ¾÷ ¹æ½Ä
-	for (int i = 4; i < ML; ++i) {
-		if (i - 1 >= 0) //1À» ¿¬¼Ó »ç¿ë X
+	dp[1][1] = dp[2][2] = dp[3][1] = dp[3][2] = dp[3][3] = 1;
+	//ë³´í…€ì—… ë°©ì‹
+	for (int i = 4; i < MS; ++i) {
+		if (i - 1 >= 0) //1ì„ ì—°ì† ì‚¬ìš© X
 			dp[i][1] = (dp[i - 1][2] + dp[i - 1][3]) % INF;
-		if (i - 2 >= 0) //2À» ¿¬¼Ó »ç¿ë X
+		if (i - 2 >= 0) //2ì„ ì—°ì† ì‚¬ìš© X
 			dp[i][2] = (dp[i - 2][1] + dp[i - 2][3]) % INF;
-		if (i - 3 >= 0) //1À» ¿¬¼Ó »ç¿ë X
+		if (i - 3 >= 0) //3ì„ ì—°ì† ì‚¬ìš© X
 			dp[i][3] = (dp[i - 3][1] + dp[i - 3][2]) % INF;
 	}
+
 	return;
 }
 
 void solution(int T) {
 	int n;
-	//ÃÊ±âÈ­
-	init();
-
+	init_dp();
+	//í…ŒìŠ¤íŠ¸ ì¼€ì´ìŠ¤ ì‹œì‘
 	while (T--) {
 		scanf("%d", &n);
 		printf("%lld\n", (dp[n][1] + dp[n][2] + dp[n][3]) % INF);
 	}
+
 	return;
 }
 
 int main(void) {
 	int T;
 	scanf("%d", &T);
-	solution(T);
 
+	solution(T);
 	return 0;
 }

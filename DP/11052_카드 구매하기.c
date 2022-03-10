@@ -5,7 +5,7 @@ int dp[1001];
 int cards[1001];
 
 //최댓값 반환
-int MAX(int a, int b) {
+int Max(int a, int b) {
 	return a > b ? a : b;
 }
 
@@ -18,9 +18,9 @@ int solution(int n) {
 
 	//보텀업
 	for (int i = 1; i <= n; ++i) {
-		//즉 i갯수 만큼 살때 조합에의한 값 중 최댓값을 dp테이블에 넣어두면 됌
+		////즉 i갯수 만큼 살때 조합에의한 값 중 최댓값을 dp테이블에 넣어두면 됌
 		for (int j = 1; j <= i; ++j) 
-			dp[i] = MAX(dp[i - j] + cards[j], dp[i]);
+			dp[i] = Max(dp[i - j] + cards[j], dp[i]);
 	}
 	
 	answer = dp[n];

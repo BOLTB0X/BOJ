@@ -6,19 +6,19 @@ int n;
 int graph[501][501];
 int dp[501][501] = { 0, };
 
-int max(int a, int b) {
+int Max(int a, int b) {
 	return a > b ? a : b;
 }
 
 int solution(int n) {
-	//Æ®¸®ÀÇ ÃÖ»óÀ§ ¼ÂÆÃ
+	//íŠ¸ë¦¬ì˜ ìµœìƒìœ„ ì…‹íŒ…
 	dp[1][1] = graph[1][1];
-	//¼øÈ¸ ½ÃÀÛ
+	//ìˆœíšŒ ì‹œì‘
 	for (int r = 2; r <= n; r++) {
 		for (int c = 1; c <= r; c++) 
-			dp[r][c] = max(dp[r - 1][c - 1], dp[r - 1][c]) + graph[r][c];
+			dp[r][c] = Max(dp[r - 1][c - 1], dp[r - 1][c]) + graph[r][c];
 	}
-	//ÃÖÇÏÀ§ ±¸°£ ÃÖ´ñ°ª Ã£±â
+	//ìµœí•˜ìœ„ êµ¬ê°„ ìµœëŒ“ê°’ ì°¾ê¸°
 	int max_value = dp[n][1];
 	for (int i = 2; i <= n; i++) {
 		if (max_value < dp[n][i])
@@ -31,7 +31,7 @@ int solution(int n) {
 int main(void) {
 	scanf("%d", &n);
 	
-	//±×·¡ÇÁ »ı¼º
+	//ê·¸ë˜í”„ ìƒì„±
 	for (int r = 1; r <= n; r++) {
 		for (int c = 1; c <= r; c++) {
 			scanf("%d", &graph[r][c]);

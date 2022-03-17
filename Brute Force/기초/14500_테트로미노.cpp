@@ -1,103 +1,111 @@
-#include <iostream>
-#include <cstring>
+#define _CRT_SECURE_NO_WARNINGS
+#include <cstdio>
 
-using namespace std;
-
-int n, m, result;
+int result; // ìµœëŒ“ê°’ì„ ìœ„í•œ
 int board[501][501];
-bool visited[501][501] = { false, };
+int visited[501][501] = { 0, };
 
-//»óÇÏÁÂ¿ì
+// ìƒí•˜ì¢Œìš°
 const int dy[4] = { 1,-1,0,0 };
 const int dx[4] = { 0,0,-1,1 };
 
-//ÃÖ´ë
-int max(int a, int b) {
+//ìµœëŒ€
+int Max(int a, int b) {
 	return a > b ? a : b;
 }
 
-//¤Ì¸ð¾ç È¸ÀüÇÏ¸é¼­ Ã£±â
-void find_special_shape(int y, int x) {
-	// ¤Ì
+//ã…œëª¨ì–‘ íšŒì „
+void Special_Shape(int n, int m, int y, int x) {
+	// ã…œ
 	if (y + 1 < n && x + 2 < m)
-		result = max(result, board[y][x] + board[y][x + 1] + board[y][x + 2] + board[y + 1][x + 1]);
-	// ¤¿
+		result = Max(result, board[y][x] + board[y][x + 1] + board[y][x + 2] + board[y + 1][x + 1]);
+	
+	// ã…
 	if (y + 2 < n && x + 1 < m)
-		result = max(result, board[y][x] + board[y + 1][x] + board[y + 1][x + 1] + board[y + 2][x]);
-	// ¤Ç
+		result = Max(result, board[y][x] + board[y + 1][x] + board[y + 1][x + 1] + board[y + 2][x]);
+	
+	// ã…—
 	if (y - 1 >= 0 && x + 2 < m)
-		result = max(result, board[y][x] + board[y][x + 1] + board[y][x + 2] + board[y - 1][x + 1]);
-	// ¤Ã
+		result = Max(result, board[y][x] + board[y][x + 1] + board[y][x + 2] + board[y - 1][x + 1]);
+	
+	// ã…“
 	if (y + 2 < n && x - 1 >= 0)
-		result = max(result, board[y][x] + board[y + 1][x] + board[y + 1][x - 1] + board[y + 2][x]);
+		result = Max(result, board[y][x] + board[y + 1][x] + board[y + 1][x - 1] + board[y + 2][x]);
 
 	return;
 }
 
-//³ª¸ÓÁö ¸ð¾ç ´Ù ±íÀÌ°¡ 3ÀÓ
-void find_normal_shape(int y, int x, int tot, int depth) {
-	if (depth == 3) {
-		result = max(result, tot);
+// DFS
+void General_Shape(int n, int m, int y, int x, int tot, int level) {
+	// 1ë¶€í„° ì‹œìž‘í•˜ë¯€ë¡œ
+	if (level == 3) {
+		result = Max(result, tot);
 		return;
 	}
 
-	for (int i = 0; i < 4; ++i) {
-		int ny = y + dy[i];
-		int nx = x + dx[i];
+	// ìƒí•˜ì¢Œìš° ì°¨ë¡ˆë¡œ
+	for (int dir = 0; dir < 4; ++dir) {
+		int ny = y + dy[dir];
+		int nx = x + dx[dir];
 
+		// ë²”ìœ„ ì´ˆê³¼
 		if (ny < 0 || nx < 0 || ny >= n || nx >= m)
 			continue;
-		if (visited[ny][nx])
+
+		// ìž¬ë°©ë¬¸
+		if (visited[ny][nx] == 1)
 			continue;
-		visited[ny][nx] = true;
-		find_normal_shape(ny, nx, tot + board[ny][nx], depth + 1);
-		visited[ny][nx] = false;
+
+		visited[ny][nx] = 1;
+		General_Shape(n, m, ny, nx, tot + board[ny][nx], level + 1);
+		visited[ny][nx] = 0;
 	}
+	return;
+}
+
+void find_Shape(int n, int m, int y, int x) {
+	//í˜„ìž¬ ìœ„ì¹˜ì— íƒìƒ‰ê¸¸ì´ê°€ 4ì¸ ëª¨ì–‘ - > ã…œì¸ì§€
+	Special_Shape(n, m, y, x);
+
+	visited[y][x] = 1;
+	General_Shape(n, m, y, x, board[y][x], 0);
+	visited[y][x] = 0;
 
 	return;
 }
 
-//¸ð¾ç Ã£±â
-void find_shape(int y, int x) {
-	find_special_shape(y, x);
+int solution(int n, int m) {
+	int answer = 0;
+	// ì™„ì „íƒìƒ‰ ë¬¸ì œ
 
-	visited[y][x] = true;
-	find_normal_shape(y, x, board[y][x], 0);
-	visited[y][x] = false;
-}
-
-//½Ã¹Ä
-void simulation(void) {
-	result = -1;
-
-	//ÀÔ·Â
-	cin >> n >> m;
-	for (int y = 0; y < n; ++y) {
-		for (int x = 0; x < m; ++x) {
-			cin >> board[y][x];
-		}
+	//ì´ˆê¸°í™”
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j)
+			visited[i][j] = 0;
 	}
 
-	//Å½»ö ½ÃÀÛ
-	for (int y = 0; y < n; ++y) {
-		for (int x = 0; x < m; ++x) {
-			memset(visited, false, sizeof(visited));
-			find_shape(y, x);
-		}
+	// ã…œì œì™¸ ëª¨ì–‘ì€ level 4ì´ë¯€ë¡œ ê·¸ëƒ¥ íƒìƒ‰í•˜ë©´ ëŒ
+	// ã…œì€ ã…œ, ã…“, ã…, ã…—
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j)
+			find_Shape(n, m, i, j);
 	}
-	cout << result << '\n';
 
-	return;
+	answer = result;
+	return answer;
 }
 
 int main(void) {
-	//ÃÊ±âÈ­
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
+	int n, m;
+	scanf("%d %d", &n, &m);
 
-	//½Ã¹Ä·¹ÀÌ¼Ç
-	simulation();
-	
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j)
+			scanf("%d", &board[i][j]);
+	}
+
+	int ret = solution(n, m);
+	printf("%d", ret);
+
 	return 0;
 }

@@ -1,58 +1,57 @@
-#define _CRT_SECURE_NO_WARNINGS
-#include <cstdio>
+#include <iostream>
 
-int result; // 최댓값을 위한
+using namespace std;
+
+int result;
 int board[501][501];
-int visited[501][501] = { 0, };
+int visited[501][501];
 
 // 상하좌우
-const int dy[4] = { 1,-1,0,0 };
-const int dx[4] = { 0,0,-1,1 };
+const int dy[4] = { 1, -1, 0, 0 };
+const int dx[4] = { 0, 0, -1, 1 };
 
-//최대
+// 최댓값
 int Max(int a, int b) {
 	return a > b ? a : b;
 }
 
-//ㅜ모양 회전
+// ㅗ, ㅏ , ㅓ, ㅜ 
 void Special_Shape(int n, int m, int y, int x) {
-	// ㅜ
-	if (y + 1 < n && x + 2 < m)
-		result = Max(result, board[y][x] + board[y][x + 1] + board[y][x + 2] + board[y + 1][x + 1]);
+	// ㅗ
+	if (x + 2 <= m && y - 1 >= 1)
+		result = Max(result, board[y][x] + board[y][x + 1] + board[y - 1][x + 1] + board[y][x + 2]);
 	
 	// ㅏ
-	if (y + 2 < n && x + 1 < m)
+	if (x + 1 <= m && y + 2 <= n)
 		result = Max(result, board[y][x] + board[y + 1][x] + board[y + 1][x + 1] + board[y + 2][x]);
 	
-	// ㅗ
-	if (y - 1 >= 0 && x + 2 < m)
-		result = Max(result, board[y][x] + board[y][x + 1] + board[y][x + 2] + board[y - 1][x + 1]);
-	
 	// ㅓ
-	if (y + 2 < n && x - 1 >= 0)
+	if (x - 1 >= 1 && y + 2 <= n)
 		result = Max(result, board[y][x] + board[y + 1][x] + board[y + 1][x - 1] + board[y + 2][x]);
+	
+	// ㅜ
+	if (x + 2 <= m && y + 1 <= n)
+		result = Max(result, board[y][x] + board[y][x + 1] + board[y + 1][x + 1] + board[y][x + 2]);
 
 	return;
 }
 
-// DFS
+// DFS 이용
 void General_Shape(int n, int m, int y, int x, int tot, int level) {
-	// 1부터 시작하므로
+	// 탈출 조건
 	if (level == 3) {
-		result = Max(result, tot);
+		result = Max(tot, result);
 		return;
 	}
 
-	// 상하좌우 차롈로
 	for (int dir = 0; dir < 4; ++dir) {
 		int ny = y + dy[dir];
 		int nx = x + dx[dir];
 
 		// 범위 초과
-		if (ny < 0 || nx < 0 || ny >= n || nx >= m)
+		if (ny < 1 || nx < 1 || ny > n || nx > m)
 			continue;
 
-		// 재방문
 		if (visited[ny][nx] == 1)
 			continue;
 
@@ -64,10 +63,13 @@ void General_Shape(int n, int m, int y, int x, int tot, int level) {
 }
 
 void find_Shape(int n, int m, int y, int x) {
-	//현재 위치에 탐색길이가 4인 모양 - > ㅜ인지
+	// ㅗ, ㅏ , ㅓ, ㅜ  찾기
+
+	// 현재 위치에 탐색길이가 4인 모양 - > ㅜ인지
 	Special_Shape(n, m, y, x);
 
 	visited[y][x] = 1;
+	// 이제 길이 3 -> 원래는 4이지만 하날 더해주고 시작
 	General_Shape(n, m, y, x, board[y][x], 0);
 	visited[y][x] = 0;
 
@@ -76,19 +78,21 @@ void find_Shape(int n, int m, int y, int x) {
 
 int solution(int n, int m) {
 	int answer = 0;
-	// 완전탐색 문제
 
-	//초기화
-	for (int i = 0; i < n; ++i) {
-		for (int j = 0; j < m; ++j)
+	result = -1; // 최댓값을 위한
+	// 방문리스트 초기화
+	for (int i = 0; i <= n; ++i) {
+		for (int j = 0; j <= m; ++j)
 			visited[i][j] = 0;
 	}
-
+	
 	// ㅜ제외 모양은 level 4이므로 그냥 탐색하면 됌
 	// ㅜ은 ㅜ, ㅓ, ㅏ, ㅗ
-	for (int i = 0; i < n; ++i) {
-		for (int j = 0; j < m; ++j)
+	for (int i = 1; i <= n; ++i) {
+		for (int j = 1; j <= m; ++j) {
+			// 모양 찾기
 			find_Shape(n, m, i, j);
+		}
 	}
 
 	answer = result;
@@ -97,15 +101,15 @@ int solution(int n, int m) {
 
 int main(void) {
 	int n, m;
-	scanf("%d %d", &n, &m);
 
-	for (int i = 0; i < n; ++i) {
-		for (int j = 0; j < m; ++j)
-			scanf("%d", &board[i][j]);
+	cin >> n >> m;
+	for (int i = 1; i <= n; ++i) {
+		for (int j = 1; j <= m; ++j)
+			cin >> board[i][j];
 	}
 
 	int ret = solution(n, m);
-	printf("%d", ret);
+	cout << ret;
 
 	return 0;
 }

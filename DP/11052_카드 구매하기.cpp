@@ -1,48 +1,42 @@
 #include <iostream>
-#define MN 1001
 
 using namespace std;
 
-int cards[MN];
-int dp[MN];
-
-//ÃÖ´ñ°ª ¹İÈ¯
-int MAX(int a, int b) {
+int Max(int a, int b) {
 	return a > b ? a : b;
 }
 
-int solution(int n) {
+int solution(int n, int* cards) {
 	int answer = 0;
-	//dpÅ×ÀÌºí ÃÊ±âÈ­
+
+	// dpí…Œì´ë¸” ìƒì„± ë° ì´ˆê¸°í™”
+	int* dp = new int[n + 1];
 	for (int i = 0; i <= n; ++i)
 		dp[i] = 0;
-	
-	
-	//º¸ÅÒ¾÷
+
 	for (int i = 1; i <= n; ++i) {
-		//i°¡ ÃÖ´ë Ä«µå¸¦ °®´Â °³¼ö, j°¡ Ä«µå Á¾·ù¶ó »ı°¢
-		for (int j = 1; j <= i; ++j)
-			dp[i] = MAX(dp[i - j] + cards[j], dp[i]);
+		for (int j = 1; j <= i; ++j) {
+			if (i - j >= 0)
+				dp[i] = Max(dp[i], cards[j] + dp[i - j]);
+		}
 	}
-
 	answer = dp[n];
-
+	delete[] dp;
 	return answer;
 }
 
 int main(void) {
-	//ÃÊ±âÈ­
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
-
 	int n;
+
 	cin >> n;
-	for (int i = 1; i <= n; ++i) 
+	int* cards = new int[n + 1];
+
+	for (int i = 1; i <= n; ++i)
 		cin >> cards[i];
-	
-	int ret = solution(n);
+
+	int ret = solution(n, cards);
 	cout << ret;
 
+	delete[] cards;
 	return 0;
 }

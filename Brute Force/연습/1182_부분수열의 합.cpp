@@ -2,40 +2,46 @@
 
 using namespace std;
 
-int n, s;
-int arr[20];
-int cnt = 0;
+int result;
+int arr[21];
 
-void DFS(int idx, int tot) {
-	if (idx == n)
+// DFS
+void DFS(int n, int s, int tot, int level) {
+	// 배열을 넘어 간다면
+	if (level == n)
 		return;
 
-	if (tot + arr[idx] == s)
-		cnt++;
-
-	DFS(idx + 1, tot);
-	DFS(idx + 1, tot + arr[idx]);
-}
-
-void solution(void) {
-	cin >> n >> s;
-
-	for (int i = 0; i < n; i++)
-		cin >> arr[i];
+	// 목표값 도달할 시
+	if (tot + arr[level] == s) 
+		result++; // 카운트
 	
-	//���̿켱Ž��
-	DFS(0, 0);
-	cout << cnt << '\n';
+	DFS(n, s, tot, level + 1); // 현재를 건너 뛰기
+	DFS(n, s, tot + arr[level], level + 1); // 현재 위치 더해주기
 	
 	return;
 }
 
-int main(void) {
-	//�ʱ�ȭ
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
+// 솔루션
+int solution(int n, int s) {
+	int answer = 0;
+	result = 0;
 
-	solution();
+	// DFS로 완전탐색 시작
+	DFS(n, s, 0, 0);
+	answer = result; // 카운트
+	return answer;
+}
+
+int main(void) {
+	int n, s;
+
+	cin >> n >> s;
+
+	for (int i = 0; i < n; ++i) // 원소 입력
+		cin >> arr[i];
+
+	int ret = solution(n, s);
+	cout << ret;
+
 	return 0;
 }

@@ -3,48 +3,48 @@
 using namespace std;
 
 int result;
+int board[16];
 
+// ì ˆëŒ“ê°’ ë°˜í™˜
 int Abs(int a) {
 	return a < 0 ? -a : a;
 }
 
-// »óÇÏÁÂ¿ì ´ë°¢¼±¿¡ ÀÖ´Â°¡?
-int is_Process(int n, int* board, int y) {
-	// ÇØ´ç Çà°ú ¿­¿¡ ÀÖ´Â Áö È®ÀÎ
-	for (int i = 0; i < y; ++i) {
-		// °°Àº À§Ä¡¿¡ ÀÖ´Â Áö È®ÀÎ
-		if (board[y] == board[i] || y - i == Abs(board[y] - board[i]))
+// ì§„í–‰ê°€ëŠ¥í•œ ê°€?
+int is_Process(int n, int row) {
+	// í–‰ê³¼ ì—´ì„ ë¹„êµí•˜ë©° ìƒí•˜ì¢Œìš°ëŒ€ê°ì„ ì´ ë‹¿ëŠ” ì§€ í™•ì¸
+	for (int col = 0; col < row; ++col) {
+		// ê°™ì€ ìœ„ì¹˜ì— ìžˆëŠ” ì§€ í™•ì¸
+		if (board[row] == board[col] || row - col == Abs(board[row] - board[col]))
 			return 0;
 	}
 
 	return 1;
 }
 
-void DFS(int n, int* board, int y) {
-	// nÇà±îÁö °¬´Ù¸é
-	if (y == n) {
+void DFS(int n, int row) {
+	// ê²©ìžíŒ n - 1ë²ˆì§¸ í–‰ê¹Œì§€ ê°”ë‹¤ë©´ 
+	if (row == n) {
 		result++;
 		return;
 	}
 
-	// º¸µå¿¡ ¿­ Á¤º¸¸¦ »ðÀÔ
-	for (int x = 0; x < n; ++x) {
-		board[y] = x;
-		if (is_Process(n, board, y) == 1)
-			DFS(n, board, y + 1);
-		board[y] = 0;
+	for (int col = 0; col < n; ++col) {
+		board[row] = col;
+		if (is_Process(n, row) == 1)
+			DFS(n, row + 1); // ì§„í–‰
 	}
+
 	return;
 }
 
 int solution(int n) {
 	int answer = 0;
-	int board[15]; //º¸µå
-	
-	result = 0; // ÃÊ±âÈ­
-	DFS(n, board, 0);
 
+	result = 0; // ì´ˆê¸°í™”
+	DFS(n, 0); // ë°±íŠ¸ëž˜í‚¹ ì‹œìž‘
 	answer = result;
+
 	return answer;
 }
 
@@ -54,5 +54,6 @@ int main(void) {
 	cin >> n;
 	int ret = solution(n);
 	cout << ret;
+
 	return 0;
 }

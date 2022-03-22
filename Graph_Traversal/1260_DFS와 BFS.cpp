@@ -1,74 +1,86 @@
 #include <iostream>
 #include <vector>
-#include <queue>
-#include <cstring>
-#include <algorithm>
+#include <algorithm> // sort
 
 using namespace std;
 
-int n, m, k;
-vector<int> graph[10001];
-bool visited[10001] = { false, };
+int que[10001];
+int fr = 0, re = 0;
+vector<int> adj[1001]; //인접 리스트
 
-//���� �켱
-void DFS(int start) {
-	visited[start] = true;
-	cout << start << ' ';
-	for (int i = 0; i < graph[start].size(); i++) {
-		int next = graph[start][i];
-		if (!visited[next])
-			DFS(next);
+void enqueue(int data) {
+	que[re++] = data;
+	return;
+}
+
+int dequeue(void) {
+	return que[fr++];
+}
+
+// 깊이우선탐색
+void DFS(vector<int>& visited, int cur) {
+	visited[cur] = 1;
+	cout << cur << ' '; // 출력
+
+	for (int& next : adj[cur]) {
+		if (visited[next] == 1)
+			continue;
+
+		DFS(visited, next); // 탐색
 	}
 	return;
 }
 
-//�ʺ� �켱
-void BFS(int start) {
-	queue<int> q;
-	
-	q.push(start);
-	visited[start] = true;
-	
-	while (!q.empty()) {
-		int cur = q.front();
-		q.pop();
+// 너비우선탐색
+void BFS(vector<int>& visited, int start) {
+	visited[start] = 1;
+	enqueue(start); // 삽입
 
+	while (fr < re) {
+		int cur = dequeue();
 		cout << cur << ' ';
-		for (int i = 0; i < graph[cur].size(); i++) {
-			int next = graph[cur][i];
-			if (!visited[next]) {
-				q.push(next);
-				visited[next] = true;
-			}
+
+		for (int& next : adj[cur]) {
+			if (visited[next] == 1)
+				continue;
+
+			visited[next] = 1;
+			enqueue(next);
 		}
 	}
 	return;
 }
 
-int main(void) {
-	//�ʱ�ȭ
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
+void solution(int n, int m, int v) {
+	//정렬
+	for (int i = 1; i <= n; i++)
+		sort(adj[i].begin(), adj[i].end());
+	vector<int> visited(n + 1, 0); // 방문리스트 선언
 
-	cin >> n >> m >> k;
-	for (int i = 0; i < m; i++) {
-		int from, to;
-		cin >> from >> to;
-		graph[from].push_back(to);
-		graph[to].push_back(from);
+	// 먼저 DFS
+	DFS(visited, v);
+	cout << '\n';
+
+	//초기화
+	fill(visited.begin(), visited.end(), 0);
+	BFS(visited, v);
+
+	return;
+}
+
+int main(void) {
+	int n, m, v;
+
+	cin >> n >> m >> v;
+	for (int i = 0; i < m; ++i) {
+		int a, b;
+
+		cin >> a >> b;
+		adj[a].push_back(b);
+		adj[b].push_back(a);
 	}
 
-	//����
-	for (int i = 1; i <= n; i++) 
-		sort(graph[i].begin(), graph[i].end());
-	
-	//Ž�� ����
-	memset(visited, false, sizeof(visited));
-	DFS(k);
-	cout << '\n';
-	memset(visited, false, sizeof(visited));
-	BFS(k);
+	solution(n, m, v);
 
 	return 0;
 }

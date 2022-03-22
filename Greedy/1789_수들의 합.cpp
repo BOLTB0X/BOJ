@@ -1,31 +1,27 @@
 #include <iostream>
+#define LL long long
+
 using namespace std;
 
-int solution(long long S) {
-	int number = 1;
-	int max_number = 0;
-	long long tot = 0;
-	while (true) {
+int main(void) {
+	LL S;
+	LL tot = 0;
+	cin >> S;
+	int max_number = 0, number = 1; // 결과와 더해지는 수
+
+	while (1) {
 		tot += number;
 		max_number++;
+
 		if (tot > S) {
+			tot -= number;
 			max_number--;
 			break;
 		}
 		number++;
 	}
-	return max_number;
-}
 
-int main(void) {
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
+	cout << max_number;
 
-	long long S;
-	cin >> S;
-
-	int ret = solution(S);
-	cout << ret << '\n';
 	return 0;
 }

@@ -1,51 +1,70 @@
-#define _CRT_SECURE_NO_WARNINGS
-#include <cstdio>
+#include <iostream>
+#define Max_value (1e9+1)
 
 using namespace std;
 
-//�ִ�
-int max(int a, int b) {
+int max_result;
+int min_result;
+int arr[12]; // 숫자를 담을 배열
+
+// 최댓값
+int Max(int a, int b) {
 	return a > b ? a : b;
 }
-//�ּ�
-int min(int a, int b) {
+
+// 최솟값
+int Min(int a, int b) {
 	return a < b ? a : b;
 }
 
-int n, max_result = -0x7fffffff, min_result=0x7fffffff;
-int numbers[11];
-
-void DFS(int tot, int add, int sub, int mul, int div,int idx) {
-	if (idx == n) {
-		max_result = max(max_result, tot);
-		min_result = min(min_result, tot);
+// DFS이용
+void DFS(int n, int tot, int level, int plus, int minus, int mul, int div) {
+	// 탈출 조건
+	if (level == n) {
+		max_result = Max(max_result, tot);
+		min_result = Min(min_result, tot);
 		return;
 	}
+
+	// 연산
 	else {
-		if (add > 0) {
-			DFS(tot + numbers[idx], add - 1, sub, mul, div, idx + 1);
-		}
-		if (sub > 0) {
-			DFS(tot - numbers[idx], add, sub - 1, mul, div, idx + 1);
-		}
-		if (mul > 0) {
-			DFS(tot * numbers[idx], add, sub, mul - 1, div, idx + 1);
-		}
-		if (div > 0) {
-			DFS((int)tot / numbers[idx], add, sub, mul, div - 1, idx + 1);
-		}
+		if (plus > 0)
+			DFS(n, tot + arr[level], level + 1, plus - 1, minus, mul, div);
+		if (minus > 0)
+			DFS(n, tot - arr[level], level + 1, plus, minus - 1, mul, div);
+		if (mul > 0)
+			DFS(n, tot * arr[level], level + 1, plus, minus, mul - 1, div);
+		if (div > 0)
+			DFS(n, (int)tot / arr[level], level + 1, plus, minus, mul, div - 1);
 	}
+	return;
+}
+
+pair<int, int> solution(int n, int plus, int minus, int mul, int div) {
+	pair<int, int> answer;
+
+	// 초기값 셋팅
+	max_result = -Max_value;
+	min_result = Max_value;
+
+	DFS(n, arr[0], 1, plus, minus, mul, div);
+
+	answer.first = max_result;
+	answer.second = min_result;
+	return answer;
 }
 
 int main(void) {
-	scanf("%d", &n);
-	for (int i = 0; i < n; i++) {
-		scanf("%d", &numbers[i]);
-	}
-	int add, sub, mul, div;
-	scanf("%d %d %d %d", &add, &sub, &mul, &div);
-	DFS(numbers[0], add, sub, mul, div, 1);
-	printf("%d\n", max_result);
-	printf("%d\n", min_result);
+	int n, plus, minus, mul, div;
+
+	cin >> n;
+	for (int i = 0; i < n; ++i)
+		cin >> arr[i];
+
+	cin >> plus >> minus >> mul >> div;
+
+	pair<int,int> ret = solution(n, plus, minus, mul, div);
+	cout << ret.first << '\n' << ret.second;
+	
 	return 0;
 }

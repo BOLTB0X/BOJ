@@ -1,31 +1,41 @@
 #include <iostream>
+
 using namespace std;
 
-int N, S;
+int result = 0;
 int arr[20];
-int cnt = 0;
 
-void DFS(int idx, int tot) {
-	if (idx == N) 
+void DFS(int n, int s, int idx, int tot) {
+	// 탈출 조건
+	if (idx == n)
 		return;
-	
-	if (tot + arr[idx] == S)
-		cnt++;
 
-	DFS(idx + 1, tot);
-	DFS(idx + 1, tot + arr[idx]);
+	// 타겟넘버가 되면
+	if (tot + arr[idx] == s) 
+		result++;
+
+	DFS(n, s, idx + 1, tot + arr[idx]);
+	DFS(n, s, idx + 1, tot);
+	return;
+}
+
+int solution(int n, int s) {
+	int answer = 0;
+
+	DFS(n, s, 0, 0);
+	answer = result;
+	return answer;
 }
 
 int main(void) {
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
+	int n, s;
 
-	cin >> N >> S;
-
-	for (int i = 0; i < N; i++) 
+	cin >> n >> s;
+	for (int i = 0; i < n; ++i) 
 		cin >> arr[i];
-	DFS(0,0);
-	cout << cnt << '\n';
+	
+	int ret = solution(n, s);
+	cout << ret;
+
 	return 0;
 }

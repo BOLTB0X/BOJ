@@ -2,88 +2,95 @@
 
 using namespace std;
 
-int result;
 char board[51][51];
+int result = 0;
 
-// Çà Ä«¿îÆ®
-void Count_Row(int n) {
-	for (int y = 1; y <= n; ++y) {
-		int cnt = 1; // ¾îÂ÷ÇÇ ±³Ã¼ÇÏ¹Ç·Î 1·Î
-		char cmp = board[y][1];
-		for (int x = 2; x <= n; ++x) {
-			if (cmp == board[y][x])
-				cnt++;
-
-			// ¿¬¼ÓÇØ¼­ ¸ÔÀ¸¹Ç·Î
-			else {
-				cnt = 1;
-				cmp = board[y][x];
-			}
-			
-			if (cnt > result)
-				result = cnt;
-		}
-	}
-
-	return;
+// ìµœëŒ“ê°’ë°˜í™˜
+int Max(int a, int b) {
+	return a > b ? a : b;
 }
 
-// ¿­ Ä«¿îÆ®
-void Count_Col(int n) {
-	for (int y = 1; y <= n; ++y) {
-		int cnt = 1; // ¾îÂ÷ÇÇ ±³Ã¼ÇÏ¹Ç·Î 1·Î
-		int cmp = board[1][y];
-		for (int x = 2; x <= n; ++x) {
-			if (cmp == board[x][y])
+int count_Row(int n) {
+	int max_cnt = 1;
+	for (int i = 0; i < n; ++i) {
+		int cnt = 1;
+		for (int j = 0; j < n - 1; ++j) {
+			if (board[i][j] == board[i][j + 1])
 				cnt++;
-
-			// ¿¬¼ÓÇØ¼­ ¸ÔÀ¸¹Ç·Î
 			else {
+				max_cnt = Max(max_cnt, cnt);
 				cnt = 1;
-				cmp = board[x][y];
 			}
-
-			if (cnt > result)
-				result = cnt;
 		}
+		max_cnt = Max(max_cnt, cnt);
 	}
+	return max_cnt;
+}
 
-	return;
+int count_Col(int n) {
+	int max_cnt = 1;
+	for (int i = 0; i < n; ++i) {
+		int cnt = 1;
+		for (int j = 0; j < n - 1; ++j) {
+			if (board[j][i] == board[j + 1][i])
+				cnt++;
+			else {
+				max_cnt = Max(max_cnt, cnt);
+				cnt = 1;
+			}
+		}
+		max_cnt = Max(max_cnt, cnt);
+	}
+	return max_cnt;
 }
 
 int solution(int n) {
 	int answer = 0;
-	result = 0;
 
-	// ¸ÕÀú ´Ù¸¥ ÀÎÁ¢ÇÑ µÎ Ä­ Å½»ö
-	for (int i = 1; i <= n; ++i) {
-		for (int j = 1; j < n; ++j) {
-
-			// °¡·Î ½º¿ÍÇÎ
-			swap(board[i][j], board[i][j + 1]);
-			Count_Row(n);
-			Count_Col(n);
-			swap(board[i][j + 1], board[i][j]);
-			
-			// ¼¼·Î ½º¿ÍÇÎ
-			swap(board[j][i], board[j + 1][i]);
-			Count_Row(n);
-			Count_Col(n);
-			swap(board[j + 1][i], board[j][i]);
+	// ê°€ë¡œë¶€í„°
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < n - 1; ++j) {
+			// ì‚¬íƒ• ì¢…ë¥˜ê°€ ë‹¤ë¥´ë‹¤ë©´
+			if (board[i][j] != board[i][j + 1]) {
+				// êµì²´
+				swap(board[i][j], board[i][j + 1]);
+				int rcnt = count_Row(n);
+				int ccnt = count_Col(n);
+				// ì›ìƒ ë³µêµ¬
+				swap(board[i][j + 1], board[i][j]);
+				answer = Max(Max(rcnt, ccnt), answer);
+			}
+		}
+	}
+	
+	// ì„¸ë¡œ
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < n - 1; ++j) {
+			// ì‚¬íƒ• ì¢…ë¥˜ê°€ ë‹¤ë¥´ë‹¤ë©´
+			if (board[j][i] != board[j + 1][i]) {
+				// êµì²´
+				swap(board[j][i], board[j + 1][i]);
+				int rcnt = count_Row(n);
+				int ccnt = count_Col(n);
+				// ì›ìƒ ë³µêµ¬
+				swap(board[j + 1][i], board[j][i]);
+				answer = Max(Max(rcnt, ccnt), answer);
+			}
 		}
 	}
 
-	answer = result;
 	return answer;
 }
 
 int main(void) {
 	int n;
-
+	string tmp;
 	cin >> n;
-	for (int i = 1; i <= n; ++i) {
-		for (int j = 1; j <= n; ++j)
-			cin >> board[i][j];
+
+	for (int i = 0; i < n; ++i) {
+		cin >> tmp;
+		for (int j = 0; j < n; ++j)
+			board[i][j] = tmp[j];
 	}
 
 	int ret = solution(n);

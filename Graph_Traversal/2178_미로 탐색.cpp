@@ -1,80 +1,78 @@
 #include <iostream>
-#include <string>
-#include <queue>
-
+#include <cstring>
+#define Max_Size 100001
 using namespace std;
 
-int n, m;
-int board[101][101];
-bool visited[101][101] = { false, };
+typedef struct {
+	int y, x;
+} Pair;
 
-//상하좌우
+Pair que[Max_Size];
+int fr = 0, re = 0;
+
+void enqueue(Pair data) {
+	que[re++] = data;
+	return;
+}
+
+void dequeue(void) {
+	fr++;
+	return;
+}
+
+int board[101][101];
+int dist[101][101];
+
+// 상하좌우
 const int dy[4] = { 1,-1,0,0 };
 const int dx[4] = { 0,0,-1,1 };
 
-//입력
-void input(void) {
-	cin >> n >> m;
-	for (int i = 0; i < n; ++i) {
-		string tmp;
-		cin >> tmp;
-		for (int j = 0; j < m; ++j) {
-			board[i][j] = (tmp[j] - '0');
-		}
-	}
-}
-
-//너비우선탐색
-void BFS(int y, int x) {
-	queue<pair<int, int>> q;
-	visited[y][x] = true;
-	q.push({ y,x });
+int solution(int n, int m) {
+	int answer = 0;
+	// 방문리스트 초기화
+	memset(dist, 0, 101);
 	
-	//큐가 빌때까지
-	while (!q.empty()) {
-		int cy = q.front().first;
-		int cx = q.front().second;
-		q.pop();
+	enqueue({ 0,0}); // 큐 삽입
+	dist[0][0] = 1;
 
-		//상하좌우 탐색
+	while (fr < re) {
+		int cy = que[fr].y;
+		int cx = que[fr].x;
+		dequeue(); // pop
+
 		for (int dir = 0; dir < 4; ++dir) {
 			int ny = cy + dy[dir];
 			int nx = cx + dx[dir];
 
-			//범위초과
-			if (ny >= n || nx >= m || nx < 0 || ny < 0)
+			// 범위초과
+			if (ny < 0 || nx < 0 || ny >= n || nx >= m)
 				continue;
-			//재방문 또는 벽인 경우
-			if (visited[ny][nx] || board[ny][nx] == 0)
+
+			// 재방문 또는 벽
+			if (dist[ny][nx] != 0 || board[ny][nx] == 0)
 				continue;
-			//거리 체크
-			board[ny][nx] = board[cy][cx] + 1;
-			visited[ny][nx] = true;
-			q.push({ ny,nx });
+			
+			dist[ny][nx] = dist[cy][cx] + 1;
+			enqueue({ ny, nx });
 		}
 	}
 
-	return;
-}
-
-//시뮬레이션
-void simulation(void) {
-	//BFS시작
-	BFS(0, 0);
-	//최소거리는 격자판의 가장 마지막 위치
-	cout << board[n - 1][m - 1] << '\n';
-	return;
+	answer = dist[n - 1][m - 1];
+	return answer;
 }
 
 int main(void) {
-	//초기화
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
-	
-	input();
-	
-	//시뮬시작
-	simulation();
+	int n, m;
+	string tmp;
+
+	cin >> n >> m;
+	for (int i = 0; i < n; ++i) {
+		cin >> tmp;
+		for (int j = 0; j < m; ++j) 
+			board[i][j] = tmp[j] - '0';
+	}
+
+	int ret = solution(n, m);
+	cout << ret;
 	return 0;
 }

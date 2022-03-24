@@ -2,24 +2,20 @@
 
 using namespace std;
 
-//ÃÖ´ë°ø¾à¼ö
+// ìµœëŒ€ê³µì•½ìˆ˜
 int gcd(int a, int b) {
 	if (a % b == 0)
 		return b;
 	return gcd(b, a % b);
 }
 
-//ÃÖ¼Ò°ø¹è¼ö
+// ìµœì†Œê³µë°°ìˆ˜
 int lcm(int a, int b) {
 	return (a * b) / gcd(a, b);
 }
 
-void solution(void) {
-	int a, b;
-
-	cin >> a >> b;
-	
-	//ÃÖ´ë°ø¾à¼ö, ÃÖ¼Ò°ø¹è¼ö 
+void solution(int a, int b) {
+	// ìµœëŒ€ê³µì•½ìˆ˜, ìµœì†Œê³µë°°ìˆ˜ 
 	int ret1 = gcd(a, b);
 	int ret2 = lcm(a, b);
 
@@ -30,12 +26,10 @@ void solution(void) {
 }
 
 int main(void) {
-	//ÃÊ±âÈ­
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
+	int a, b;
 
-	solution();
+	cin >> a >> b;
+	solution(a,b);
 	
 	return 0;
 }

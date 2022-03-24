@@ -3,35 +3,28 @@
 
 using namespace std;
 
-//ÃÖ¼Ò
-int min(int a, int b) {
-	return a < b ? a : b;
-}
-
-//¸Ş¸ğÀÌÁ¦ÀÌ¼Ç
+// ë©”ëª¨ì´ì œì´ì…˜
 void memoization(vector<int>& coins, int n, int m) {
-	//dpÅ×ÀÌºí »ı¼º ¹× ÃÊ±âÈ­
+	// dpí…Œì´ë¸” ìƒì„± ë° ì´ˆê¸°í™”
 	int* dp = new int[m+1];
-	for (int i = 0; i <= m; ++i)
+	for (int i = 1; i <= m; ++i)
 		dp[i] = 0;
 	
-	//º¸ÅÒ¾÷
-	dp[0] = 1;
+	dp[0] = 1; // ì…‹íŒ…
 	for (int i = 1; i <= n; ++i) {
-		for (int j = coins[i]; j <= m; ++j) {
+		for (int j = coins[i]; j <= m; ++j)
 			dp[j] = dp[j] + dp[j - coins[i]];
-		}
 	}
 
 	cout << dp[m] << '\n';
 
-	//¸Ş¸ğ¸® ÇØÁ¦
+	// ë©”ëª¨ë¦¬ í•´ì œ
 	delete[] dp;
 	return;
 }
 
 int main(void) {
-	//ÃÊ±âÈ­
+	//ì´ˆê¸°í™”
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
@@ -39,14 +32,12 @@ int main(void) {
 	int n, m;
 	cin >> n >> m;
 
-	//µ¿ÀüÀÇ °¡Ä¡¸¦ ´ã´Â º¤ÅÍ
+	// ë™ì „ì˜ ê°€ì¹˜ë¥¼ ë‹´ëŠ” ë²¡í„°
 	vector<int> coins(n+1,0);
 
-	for (int i = 1; i <= n; ++i) {
-		int value;
-		cin >> value;
-		coins[i]=value;
-	}
+	for (int i = 1; i <= n; ++i) 
+		cin >> coins[i];
+
 	memoization(coins, n, m);
 	return 0;
 }

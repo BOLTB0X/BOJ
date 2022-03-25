@@ -15,11 +15,9 @@ int solution(int n, int* arr) {
 	for (int i = 0; i <= n; ++i)
 		dp[i] = 0;
 
-	dp[0] = answer = arr[1]; // 셋팅
-
-	// 보텀업
+	answer = dp[1] = arr[1];
 	for (int i = 2; i <= n; ++i) {
-		dp[i] = Max(arr[i] + dp[i - 1], arr[i]);
+		dp[i] = Max(dp[i - 1] + arr[i], arr[i]);
 		answer = Max(answer, dp[i]);
 	}
 

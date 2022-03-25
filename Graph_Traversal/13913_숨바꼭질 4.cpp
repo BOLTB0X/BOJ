@@ -1,15 +1,15 @@
 #include <iostream>
 #include <vector>
 #include <queue>
-#define MLN 100001
+#define Max_Size 100001
 
 using namespace std;
 
 vector<int> solution(int n, int k) {
-	vector<int> result; //∞·∞˙
-	queue<int> que; //≈•
-	vector<int> visited(MLN, 0); //πÊπÆ∏ÆΩ∫∆Æ
-	vector<int> path(MLN, 0); //∞Ê∑Œ ¿˙¿Â
+	vector<int> result; //Í≤∞Í≥º
+	queue<int> que; //ÌÅê
+	vector<int> visited(Max_Size, 0); //Î∞©Î¨∏Î¶¨Ïä§Ìä∏
+	vector<int> path(Max_Size, 0); //Í∏∞Î°ù
 
 	que.push(n);
 	visited[n] = 1;
@@ -29,22 +29,22 @@ vector<int> solution(int n, int k) {
 			break;
 		}
 
-		if (cur + 1 < MLN && visited[cur + 1] == 0) {
-			que.push(cur + 1);
-			visited[cur + 1] = 1;
-			path[cur + 1] = cur;
-		}
-		
 		if (cur - 1 >= 0 && visited[cur - 1] == 0) {
-			que.push(cur - 1);
 			visited[cur - 1] = 1;
 			path[cur - 1] = cur;
+			que.push(cur - 1);
 		}
 		
-		if (cur * 2 < MLN && visited[cur * 2] == 0) {
-			que.push(cur * 2);
+		if (cur + 1 < Max_Size && visited[cur + 1] == 0) {
+			visited[cur + 1] = 1;
+			path[cur + 1] = cur;
+			que.push(cur + 1);
+		}
+		
+		if (cur * 2 < Max_Size && visited[cur * 2] == 0) {
 			visited[cur * 2] = 1;
 			path[cur * 2] = cur;
+			que.push(cur * 2);
 		}
 	}
 

@@ -4,13 +4,15 @@ using namespace std;
 
 int main(void) {
 	int n;
-	int i = 1, answer = 0;
+	int idx = 1, answer = 0;
 
 	cin >> n;
-	while (i <= n) {
-		answer += (n - i + 1);
-		i *= 10;
+
+	while (idx <= n) {
+		answer += (n - idx + 1);
+		idx *= 10;
 	}
+	
 	cout << answer << '\n';
 	return 0;
 }

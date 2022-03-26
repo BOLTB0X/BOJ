@@ -3,79 +3,87 @@
 using namespace std;
 
 char board[51][51];
-int result = 0;
 
-// 최댓값반환
+// 최댓값 반환
 int Max(int a, int b) {
 	return a > b ? a : b;
 }
 
-int count_Row(int n) {
+// 가로
+int Count_Row(int n) {
 	int max_cnt = 1;
+
 	for (int i = 0; i < n; ++i) {
 		int cnt = 1;
 		for (int j = 0; j < n - 1; ++j) {
 			if (board[i][j] == board[i][j + 1])
 				cnt++;
+
 			else {
 				max_cnt = Max(max_cnt, cnt);
-				cnt = 1;
+				cnt = 1; // 초기화
 			}
 		}
 		max_cnt = Max(max_cnt, cnt);
 	}
+
 	return max_cnt;
 }
 
-int count_Col(int n) {
+// 세로
+int Count_Col(int n) {
 	int max_cnt = 1;
+	
 	for (int i = 0; i < n; ++i) {
 		int cnt = 1;
 		for (int j = 0; j < n - 1; ++j) {
 			if (board[j][i] == board[j + 1][i])
 				cnt++;
+
 			else {
 				max_cnt = Max(max_cnt, cnt);
-				cnt = 1;
+				cnt = 1; // 초기화
 			}
 		}
 		max_cnt = Max(max_cnt, cnt);
 	}
+
 	return max_cnt;
 }
 
 int solution(int n) {
 	int answer = 0;
 
-	// 가로부터
+	// 완전탐색 시작
 	for (int i = 0; i < n; ++i) {
 		for (int j = 0; j < n - 1; ++j) {
-			// 사탕 종류가 다르다면
+			// 가로에서 찾았다면
 			if (board[i][j] != board[i][j + 1]) {
-				// 교체
 				swap(board[i][j], board[i][j + 1]);
-				int rcnt = count_Row(n);
-				int ccnt = count_Col(n);
-				// 원상 복구
+
+				int r_cnt = Count_Row(n);
+				int c_cnt = Count_Col(n);
 				swap(board[i][j + 1], board[i][j]);
-				answer = Max(Max(rcnt, ccnt), answer);
+
+				answer = Max(Max(r_cnt, c_cnt), answer);
 			}
 		}
 	}
 	
-	// 세로
+	// 완전탐색 시작
 	for (int i = 0; i < n; ++i) {
 		for (int j = 0; j < n - 1; ++j) {
-			// 사탕 종류가 다르다면
+			// 세로에서 찾았다면
 			if (board[j][i] != board[j + 1][i]) {
-				// 교체
 				swap(board[j][i], board[j + 1][i]);
-				int rcnt = count_Row(n);
-				int ccnt = count_Col(n);
-				// 원상 복구
+
+				int r_cnt = Count_Row(n);
+				int c_cnt = Count_Col(n);
 				swap(board[j + 1][i], board[j][i]);
-				answer = Max(Max(rcnt, ccnt), answer);
+
+				answer = Max(Max(r_cnt, c_cnt), answer);
 			}
+
 		}
 	}
 

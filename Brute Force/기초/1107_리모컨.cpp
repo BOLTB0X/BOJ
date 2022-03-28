@@ -1,11 +1,11 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#define Max_Size 1000001
 
 using namespace std;
 
-vector<int> chanel; // 채널
-vector<int> visited;
+vector<bool> visited(Max_Size, 1); // 고장난 버튼 체크
 
 // 최솟값 반환
 int Min(int a, int b) {
@@ -17,59 +17,53 @@ int Abs(int a) {
 	return a < 0 ? -a : a;
 }
 
-// 고장난 버튼인가?
-int is_Broken(int number) {
-	int div = 10;
-
-	if (number == 0) {
-		if (visited[0] == 1)
-			return 0;
+// 고장 판별
+int is_broken(int butten) {
+	if (butten == 0) {
+		if (visited[0] == 0)
+			return 1;
 	}
 
-	// 자리수 확인
-	while (number != 0) {
-		int mod = number % div;
+	// 각 자리수 체크
+	while (butten > 0) {
+		int mod = butten % 10;
 
-		if (visited[mod] == 1)
-			return 0;
+		// 고장난 버튼
+		if (visited[mod] == 0)
+			return 1;
 
-		number /= div;
+		butten /= 10;
 	}
 
-	return 1;
+	return 0;
 }
 
 int solution(int n, int m) {
-	//1씩 증가시키는 방법이 최대 횟수
-	int answer = abs(n - 100); // 수빈이 시작은 100이므로
-	
-	for (int i = 0; i <= 1000000; ++i) {
-		// 고장난 버튼이 아니면
-		if (is_Broken(i) == 1) {
-			int tmp = abs(n - i) + to_string(i).length();
+	int answer = Abs(n - 100); // 수빈이는 100에서 시작하므로
+
+	for (int i = 0; i < Max_Size; ++i) {
+		// i가 고장나지 않았다면
+		if (is_broken(i) == 0) {
+			int tmp = Abs(n - i) + to_string(i).length();
 			answer = Min(answer, tmp);
 		}
 	}
+
 	return answer;
 }
 
 int main(void) {
 	int n, m;
-	int x;
+	int a;
 
-	cin >> n;
-	chanel.resize(n + 1, 0);
-	visited.resize(10, 0);
-	
-	cin >> m;
+	cin >> n >> m;
 	
 	for (int i = 0; i < m; ++i) {
-		cin >> x;
-		visited[x] = 1;
+		cin >> a;
+		visited[a] = 0;
 	}
 
 	int ret = solution(n, m);
 	cout << ret;
-
 	return 0;
 }

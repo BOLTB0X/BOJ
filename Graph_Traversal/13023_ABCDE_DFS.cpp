@@ -3,77 +3,58 @@
 
 using namespace std;
 
-bool flag;
+int flag = 0;
+vector<int> adj[2001];
+vector<int> visited(2001, 0); // 방문리스트 초기화
 
-//깊이우선탐색
-void DFS(vector<vector<int>>& adj, vector<bool>& visited, int start, int depth) {
-	visited[start] = true;
-
-	//깊이가 4까지 간다면
-	if (depth == 4) {
-		flag = true;
+void DFS(int n, int m, int cur, int level) {
+	if (level == 4) {
+		flag = 1;
 		return;
 	}
 
-	//현재 노드에 연결되어 있는 노드 탐색
-	for (int i = 0; i < adj[start].size(); ++i) {
-		//다음 노드
-		int next = adj[start][i];
-		
-		//재방문인 경우
-		if (visited[next])
+	for (int& next : adj[cur]) {
+		if (visited[next] == 1)
 			continue;
-
-		//다음 노드 깊이우선탐색
-		DFS(adj, visited, next, depth + 1);
-		visited[next] = false;
+		visited[next] = 1;
+		DFS(n, m, next, level + 1);
+		visited[next] = 0;
 	}
-
 	return;
 }
 
-void solution(void) {
-	int n, m;
+int solution(int n, int m) {
+	int answer = 0;
 
-	cin >> n >> m;
+	// 각 노드에서 시작하여 길이가 m인걸 찾아야함
+	for (int i = 1; i <= n; ++i) {
+		visited[i] = 1;
+		DFS(n, m, i, 0);
 
-	//인접그래프,방문리스트 생성 및 초기화
-	vector<vector<int>> adj_graph(n + 1);
-	vector<bool> visited(n + 1, false);
-
-	//입력
-	for (int i = 0; i < m; ++i) {
-		int a, b;
-		cin >> a >> b;
-		//무향이므로
-		adj_graph[a].push_back(b);
-		adj_graph[b].push_back(a);
-	}
-
-	for (int i = 0; i < n; ++i) {
-		DFS(adj_graph, visited, i, 0);
-		//호출 후 해당 노드 미방문 처리
-		visited[i] = false;
-		
-		//만약 answer가 true이면
-		if (flag)
+		// 있다면
+		if (flag == 1)
 			break;
+		visited[i] = 0;
+
 	}
-
-	if (flag)
-		cout << 1 << '\n';
-	else
-		cout << 0 << '\n';
-
-	return;
+	if (flag == 1)
+		answer = 1;
+	return answer;
 }
 
 int main(void) {
-	//초기화
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
+	int n, m;
+	cin >> n >> m;
 
-	solution();
+	for (int i = 0; i < m; ++i) {
+		int a, b;
+		cin >> a >> b;
+
+		adj[a].push_back(b);
+		adj[b].push_back(a);
+	}
+
+	int ret = solution(n, m);
+	cout << ret;
 	return 0;
 }

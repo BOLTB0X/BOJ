@@ -4,51 +4,40 @@
 
 using namespace std;
 
-vector<int> per;
+vector<int> v;
 
-//±íÀÌ¿ì¼±Å½»ö
-void DFS(vector<int>& arr, int n, int m, int depth) {
-	//Å»ÃâÁ¶°Ç
-	if (per.size() == m) {
-		for (int i = 0; i < per.size(); ++i)
-			cout << per[i] << " ";
-		cout << "\n";
+void DFS(int n, int m, vector<int>& per,int level) {
+	if (level == m) {
+		for (int& p : per)
+			cout << p << ' ';
+		cout << '\n';
 		return;
 	}
 
-	for (int i = 0; i < arr.size(); ++i) {
-		per.push_back(arr[i]);
-		DFS(arr, n, m, depth + 1);
+	for (int i = 0; i < n; ++i) {
+		per.push_back(v[i]);
+		DFS(n, m, per, level + 1);
 		per.pop_back();
 	}
 	return;
 }
 
-void solution(void) {
-	int n, m;
+void solution(int n, int m) {
+	sort(v.begin(), v.end()); // ì˜¤ë¦„ì°¨ìˆœ ì •ë ¬
 
-	//ÀÔ·Â
-	cin >> n >> m;
-
-	//º¤ÅÍ »çÀÌÁî ¼³Á¤
-	vector<int> arr(n);
-	for (int i = 0; i < n; ++i)
-		cin >> arr[i];
-
-	//¿À¸§Â÷¼ø
-	sort(arr.begin(), arr.end());
-
-	//Å½»ö ½ÃÀÛ
-	DFS(arr, n, m, 0);
+	vector<int> per;
+	DFS(n, m, per, 0); 
 	return;
 }
 
 int main(void) {
-	//ÃÊ±âÈ­
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
+	int n, m;
 
-	solution();
+	cin >> n >> m;
+	v.resize(n);
+	for (int i = 0; i < n; ++i)
+		cin >> v[i];
+
+	solution(n, m);
 	return 0;
 }

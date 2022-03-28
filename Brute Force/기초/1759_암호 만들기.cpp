@@ -1,79 +1,68 @@
 #include <iostream>
-#include <vector>
 #include <string>
-#include <algorithm>
+#include <vector>
+#include <algorithm> // sort
 
 using namespace std;
 
-int L, C;
-vector<char> com;
-bool visited[15] = { false, };
+vector<int> visited;
+vector<string> result;
 
-void last_check(string str) {
-	//모음갯수 및 자음 갯수 카운트
-	int moum_cnt = 0;
-	int cnt = 0;
-
-	for (int i = 0; i < str.length(); i++) {
-		if (visited[i]) {
-			if (str[i] == 'a' || str[i] == 'e' || str[i] == 'i'
-				|| str[i] == 'o' || str[i] == 'u')
-				moum_cnt++;
-			else
-				cnt++;
-		}
+int check_Voca(string voca) {
+	int size = voca.length();
+	int m_cnt = 0;
+	int j_cnt = 0;
+	for (char& v : voca) {
+		if (v == 'a' || v == 'e' || v == 'i' || v == 'o' || v == 'u')
+			m_cnt++;
+		else
+			j_cnt++;
 	}
 
-	//조건에 충족 되면
-	if (moum_cnt >= 1 && cnt >= 2) {
-		for (int i = 0; i < str.length(); i++) {
-			//방문된것들만 출력
-			if (visited[i])
-				cout << str[i];
-		}
-		cout << '\n';
-	}
-	return;
+	return m_cnt >= 1 && j_cnt >= 2 ? 1 : 0;
 }
 
-void DFS(string s, int cur, int level) {
-	//탈출 조건
+void DFS(int L, int C, string words, string str, int cur, int level) {
 	if (level == L) {
-		last_check(s);
+		if (check_Voca(str) == 1)
+			result.push_back(str);
 		return;
 	}
-	// 조합구하듯이 백 트래킹
+
 	for (int i = cur; i < C; ++i) {
-		if (visited[i])
+		if (visited[i] == 1)
 			continue;
-		visited[i] = true;
-		DFS(s, i, level + 1);
-		visited[i] = false;
+		visited[i] = 1;
+		str.push_back(words[i]);
+		DFS(L, C, words, str, i, level + 1);
+		str.pop_back();
+		visited[i] = 0;
 	}
 }
 
-void solution(string str) {
-	//깊이우선 이용
-	sort(str.begin(), str.end());
-	DFS(str, 0, 0);
+vector<string> solution(int L, int C, string words) {
+	vector<string> answer;
+	visited.resize(C + 1, 0); // 방문 리스트 초기화
+	sort(words.begin(), words.end()); // 오름차순 정렬
+	DFS(L, C, words, "", 0, 0);
+	answer = result;
 
-	return;
+	return answer;
 }
 
 int main(void) {
-	//초기화 
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
+	int L, C;
+	string words;
 	cin >> L >> C;
-	string str;
 
 	for (int i = 0; i < C; ++i) {
-		char c;
-		cin >> c;
-		str += c;
+		char ch;
+		cin >> ch;
+		words += ch;
 	}
 
-	solution(str);
-	return 0;
+	vector<string> ret = solution(L, C, words);
+	for (string& r : ret) {
+		cout << r << '\n';
+	}
 }

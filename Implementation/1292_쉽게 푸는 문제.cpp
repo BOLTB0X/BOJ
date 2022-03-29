@@ -5,14 +5,14 @@ using namespace std;
 long solution(int a, int b){
 	long long answer = 0;
 	string seq = "";
-
+	
+	// 수열 생성
 	for (int i = 1; i <= b; ++i) {
 		for (int j = 1; j <= i; ++j)
-			seq += (i + '0');
+			seq.push_back(i + '0');
 	}
 
-	long long arr = atoll(seq.c_str());
-	for (long long i = a - 1; i < b; ++i)
+	for (int i = a - 1; i < b; ++i)
 		answer += (seq[i] - '0');
 
 	return answer;

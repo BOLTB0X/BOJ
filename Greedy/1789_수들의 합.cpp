@@ -4,20 +4,19 @@ using namespace std;
 
 long long solution(long long S) {
 	long long answer = 0;
-	long long tot = 0, max_number = 0, plus_number = 1;
+	long long max_number = 0, number = 1, tot = 0;
 
 	while (1) {
-		tot += plus_number;
+		tot += number;
 		max_number++;
 
-		// 커진다면
 		if (tot > S) {
 			max_number--;
 			break;
 		}
-
-		plus_number++; // 더해지는 수 증가
+		number++;
 	}
+
 	answer = max_number;
 	return answer;
 }

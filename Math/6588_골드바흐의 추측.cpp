@@ -1,38 +1,56 @@
 #include <iostream>
-#include <cmath>
+#include <vector>
 
 using namespace std;
 
-const int MAX = 1000000;
-int prime[MAX];
-bool check[MAX + 1];
-int p_idx;
+vector<int> prime(1000001, 0);
+vector<int> prime_v;
 
-int main(void ) {
-    //소수 만들기
-    check[0] = check[1] = true;
-    for (int i = 2; i * i <= MAX; i++) {
-        if (check[i] == false) {
-            prime[p_idx++] = i;
-            for (int j = i + i; j <= MAX; j += i)
-                check[j] = true;
-        }
-    }
+void eratos(void) {
+	prime[0] = prime[1] = 1;
 
-    while (true) {
-        int n;
+	for (int i = 2; i * i < 1000001; ++i) {
+		// 소수 발견
+		if (prime[i] == 0) 
+			prime_v.push_back(i);
+		
+		for (int j = i + i; j < 1000001; j += i)
+			prime[j] = 1;
+	}
+	return;
+}
 
-        cin >> n;
+void solution(int n) {
+	int p1 = 0;
+	int p2 = 0;
 
-        if (n == 0)
-            break;
+	for (int i = 0; i < prime_v.size(); ++i) {
+		// 발견
+		if (prime[n - prime_v[i]] == 0) {
+			p1 = prime_v[i];
+			p2 = n - prime_v[i];
+			break;
+		}
+	}
+	printf("%d = %d + %d\n", n, p1, p2);
+	return;
+}
 
-        for (int i = 0; i < p_idx; i++) {
-            if (check[n - prime[i]] == false) {
-                printf("%d = %d + %d\n", n, prime[i], n - prime[i]);
-                break;
-            }
-        }
-    }
-    return 0;
+int main(void) {
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+	int n;
+
+	eratos(); // 먼저 소수 구별
+	while (1) {
+		cin >> n;
+
+		if (n == 0)
+			break;
+
+		solution(n);
+	}
+
+	return 0;
 }

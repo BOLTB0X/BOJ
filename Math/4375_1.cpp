@@ -1,35 +1,34 @@
 #include <iostream>
+#define LL long long
 
 using namespace std;
 
 int solution(int n) {
-	int mul = 1;
-	int	k = 1;
+	LL cnt = 1;
+	LL	k = 1;
 
-	//x mod N = (x mod N) mod N  이용
-	//안그러면 계속 커져 시간초과
+	// 1로만 이루어진 n의 배수를 찾는 -> 1, 11, 111, .....
+	// x mod N = (x mod N) mod N  이용
 	while (1) {
-		if (mul % n == 0)
+		// k가 n에 나눠떨어지면 -> 배수
+		if (k % n == 0)
 			break;
-		else {
-			k++;
-			mul = mul * 10 + 1;
-			mul %= n;
-		}
+
+		// 11 = 9 + 2 = 2 (mod 3)
+		k %= n;
+		k = k * 10 + 1;
+		cnt++;
 	}
 	
-	return k;
+	return cnt;
 }
 
 int main(void) {
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
+	int n;
 
-	int n, k;
 	while (cin >> n) {
-		k = solution(n);
-		cout << k << '\n';
+		LL ret = solution(n);
+		cout << ret << '\n';
 	}
 
 	return 0;

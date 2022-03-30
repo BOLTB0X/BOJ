@@ -1,28 +1,46 @@
 #include <iostream>
+#define LL long long
 
 using namespace std;
 
-void solution(void) {
-	long long n;
-	cin >> n;
+LL solution(LL n) {
+	LL answer = 0;
 
-	long long result = 0;
+	/* // 시간초과
+	for (LL i = 1; i <= n; ++i) {
+		for (LL j = 1; j <= i; ++j) {
+			if (i % j == 0)
+				answer += j;
+		}
+	}
+	*/
 
-	//  100이하 11의 배수들 
-	// -> 11,22,33,44,55,66,77,88,99 총 9개 = 100/11
-	for (int i = 1; i <= n; ++i)
-		result += (n / i) * i;
+	// n == 10
+	// f(1) = tot(1)
+	// f(2) = tot(1, 2) 
+	// f(3) = tot(1, 3) 
+	// f(4) = tot(1, 2, 4) 
+	// f(5) = tot(1, 5)
+	// f(6) = tot(1, 2, 3, 6)
+	// f(7) = tot(1, 7)
+	// f(8) = tot(1, 2, 4, 8)
+	// f(9) = tot(1, 3, 9)
+	// f(10) = tot(1, 2, 5, 10)
 
-	cout << result;
-	return;
+	// 1 -> 4, 2 - > 2, 3 -> 1, 4 -> 1
+	// 1은 4번, 2는 2번 3은 1번 4은 1번
+ 	for (LL i = 1; i <= n; ++i)
+		answer += (n / i) * i;
+	
+	return answer;
 }
 
 int main(void) {
-	//초기화
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
+	LL n;
+	cin >> n;
 
-	solution();
+	LL ret = solution(n);
+	cout << ret;
+
 	return 0;
 }

@@ -2,73 +2,64 @@
 
 using namespace std;
 
-int arr[300][300];
+int arr[301][301];
 
-//시뮬레이션
-void arr_rotate(int n, int m, int r) {
-	while (r--) {
-		int y1 = 0, x1 = 0;
-		int y2 = n - 1, x2 = 0;
-		int y3 = n - 1, x3 = m - 1;
-		int y4 = 0, x4 = m - 1;
+// 최솟값 반환
+int Min(int a, int b) {
+	return a < b ? a : b;
+}
 
-		while ((y1 < y2) && (x1 < x4)) {
-			int tmp = arr[y2][x2];
-			
-			// 상
-			for (int i = y2; i > y1; --i)
-				arr[i][x2] = arr[i - 1][x2];
+// 회전
+void arr_rotate(int n, int m) {
+	int max_cnt = Min(n, m) / 2; // 돌리는 횟수
 
-			// 좌
-			for (int i = x1; i < x4; ++i)
-				arr[y1][i] = arr[y1][i + 1];
+	for (int cnt = 0; cnt < max_cnt; ++cnt) {
+		int max_n = n - cnt - 1;
+		int max_m = m - cnt - 1;
+		int tmp = arr[cnt][cnt];
 
-			// 하
-			for (int i = y4; i < y3; ++i)
-				arr[i][x4] = arr[i + 1][x4];
+		// 윗 변: <-
+		for (int i = cnt; i < max_m; ++i)
+			arr[cnt][i] = arr[cnt][i + 1];
 
-			// 우
-			for (int i = x3; i > x2; --i)
-				arr[y3][i] = arr[y3][i - 1];
+		// 오른쪽 변
+		for (int i = cnt; i < max_n; ++i)
+			arr[i][max_m] = arr[i + 1][max_m];
 
-			arr[y2][x2 + 1] = tmp;
-			y1++, x1++;
-			y2--, x2++;
-			y3--, x3--;
-			y4++, x4--;
-		}
+		// 아래 변: ->
+		for (int i = max_m; i > cnt; --i)
+			arr[max_n][i] = arr[max_n][i - 1];
+
+		// 왼쪽 변
+		for (int i = max_n; i > cnt; --i)
+			arr[i][cnt] = arr[i - 1][cnt];
+
+		arr[cnt + 1][cnt] = tmp;
 	}
-	
 	return;
 }
 
-//해결
 void solution(int n, int m, int r) {
-	//시뮬레이션 시작
-	arr_rotate(n, m, r);
-
+	while (r--)
+		arr_rotate(n, m);
 	return;
 }
 
 int main(void) {
 	int n, m, r;
 
-	//입력
 	cin >> n >> m >> r;
 
-	for (int y = 0; y < n; ++y) {
-		for (int x = 0; x < m; ++x) {
-			cin >> arr[y][x];
-		}
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j)
+			cin >> arr[i][j];
 	}
 
 	solution(n, m, r);
 
-	//출력
-	for (int y = 0; y < n; ++y) {
-		for (int x = 0; x < m; ++x) {
-			cout << arr[y][x] << ' ';
-		}
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j)
+			cout << arr[i][j] << ' ';
 		cout << '\n';
 	}
 	return 0;

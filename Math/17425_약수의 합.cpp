@@ -1,48 +1,41 @@
 #include <iostream>
-#include <cmath>
 #include <vector>
-#define MAX_LEN 1000001
+#define LL long long
+#define Max_Size 1000001
 
 using namespace std;
 
 vector<long long> dp;
-vector<long long> div_tot;
+vector<long long> divisor_tot;
 
-void get_Divisor_tot(void) {
-	for (int i = 2; i < MAX_LEN; ++i) {
-		for (int j = 1; i * j < MAX_LEN; ++j)
-			div_tot[i * j] += i;
+void do_dp(void) {
+	dp.resize(Max_Size, 0);
+	divisor_tot.resize(Max_Size, 1);
+
+	dp[1] = 1;
+	for (LL i = 2; i < Max_Size; ++i) {
+		for (LL j = 1; j * i < Max_Size; ++j) {
+			divisor_tot[i * j] += i;
+		}
+		dp[i] = dp[i - 1] + divisor_tot[i];
 	}
-
-	for (int i = 1; i < MAX_LEN; ++i) 
-		dp[i] = dp[i - 1] + div_tot[i];
-
+	
 	return;
 }
 
-void solution(int T) {
-	int number;
-	dp.resize(MAX_LEN, 0);
-	div_tot.resize(MAX_LEN, 1);
-
-	get_Divisor_tot();
-
-	while (T--) {
-		cin >> number;
-
-		cout << dp[number] << '\n';
-	}
-	return;
-}
 
 int main(void) {
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
 
-	int T;
-	cin >> T;
+	int T, n;
 
-	solution(T);
+	cin >> T;
+	do_dp();
+	while (T--) {
+		cin >> n;
+		cout << dp[n] << '\n';
+	}
 	return 0;
 }

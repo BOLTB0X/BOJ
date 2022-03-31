@@ -1,22 +1,16 @@
 #include <iostream>
-#include <cstring>
-#define Max_Size 100001
+
 using namespace std;
 
 typedef struct {
 	int y, x;
 } Pair;
 
-Pair que[Max_Size];
+Pair que[10011];
 int fr = 0, re = 0;
 
-void enqueue(Pair data) {
+void push(Pair data) {
 	que[re++] = data;
-	return;
-}
-
-void dequeue(void) {
-	fr++;
 	return;
 }
 
@@ -27,18 +21,16 @@ int dist[101][101];
 const int dy[4] = { 1,-1,0,0 };
 const int dx[4] = { 0,0,-1,1 };
 
-int solution(int n, int m) {
-	int answer = 0;
-	// 방문리스트 초기화
-	memset(dist, 0, 101);
-	
-	enqueue({ 0,0}); // 큐 삽입
+// 너비우선탐색
+void BFS(int n, int m) {
+	push({ 0,0 });
 	dist[0][0] = 1;
 
+	// 큐가 비어질때까지
 	while (fr < re) {
 		int cy = que[fr].y;
 		int cx = que[fr].x;
-		dequeue(); // pop
+		fr++; // pop
 
 		for (int dir = 0; dir < 4; ++dir) {
 			int ny = cy + dy[dir];
@@ -48,15 +40,26 @@ int solution(int n, int m) {
 			if (ny < 0 || nx < 0 || ny >= n || nx >= m)
 				continue;
 
-			// 재방문 또는 벽
-			if (dist[ny][nx] != 0 || board[ny][nx] == 0)
+			// 벽
+			if (board[ny][nx] == 0)
 				continue;
 			
+			// 재방문
+			if (dist[ny][nx] != 0)
+				continue;
+
 			dist[ny][nx] = dist[cy][cx] + 1;
-			enqueue({ ny, nx });
+			push({ ny, nx });
 		}
 	}
 
+	return;
+}
+
+int solution(int n, int m) {
+	int answer = 0;
+	
+	BFS(n, m); // 탐색
 	answer = dist[n - 1][m - 1];
 	return answer;
 }
@@ -68,8 +71,10 @@ int main(void) {
 	cin >> n >> m;
 	for (int i = 0; i < n; ++i) {
 		cin >> tmp;
-		for (int j = 0; j < m; ++j) 
+		for (int j = 0; j < m; ++j) {
 			board[i][j] = tmp[j] - '0';
+			dist[i][j] = 0;
+		}
 	}
 
 	int ret = solution(n, m);

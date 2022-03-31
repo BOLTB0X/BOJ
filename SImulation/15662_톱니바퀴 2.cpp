@@ -1,131 +1,129 @@
 #include <iostream>
 #include <queue>
-#include <string>
 
 using namespace std;
 
-int T, k;
-string gears[1001];
-pair<int, int> cmd[1001];
+typedef struct {
+	int idx, dir;
+} Pair;
 
-deque<int> dq[1001];
+deque<int> dq[1001]; // í†±ë‹ˆë°”í€´
+Pair cmd[1000];
 
-void input(void) {
-	string cmm;
+void prepare_Rotate(queue<Pair>& que, int t, int gidx, int gdir) {
+	int idx = gidx;
+	int dir = gdir;
+	que.push({ idx, dir }); // íšŒì „í•  ë²ˆí˜¸ì™€ ë°©í–¥ ì‚½ì…
 
-	cin >> T;
-	for (int i = 1; i <= T; ++i) {
-		cin >> cmm;
-		for (int j = 0; j < 8; ++j)
-			dq[i].push_back(cmm[j] - '0');
-	}
-
-	cin >> k;
-	for (int i = 1; i <= k; ++i) {
-		int number, dir;
-		cin >> number >> dir;
-		cmd[i].first = number;
-		cmd[i].second = dir;
-	}
-
-	return;
-}
-
-void rotate_gear(queue<pair<int, int>> que) {
-	while (!que.empty()) {
-		//Å¥ÀÇ Á¤º¸ 
-		int cur_idx = que.front().first;
-		int turn_dir = que.front().second;
-		que.pop();
-
-		//¸¸¾à ¹æÇâÀÌ ½Ã°è¹æÇâÀÌ¸é
-		//°¡Àå ÇÏ´Ü¿¡ ÀÖ´Â°Ô »ó´ÜÀ¸·Î
-		if (turn_dir == 1) {
-			int tmp = dq[cur_idx].back();
-			dq[cur_idx].pop_back();
-			dq[cur_idx].push_front(tmp);
-		}
-		
-		//¸¸¾à ¹æÇâÀÌ ºó½Ã°è¹æÇâÀÌ¸é
-		//°¡Àå »ó´Ü¿¡ ÀÖ´Â°Ô ÇÏ´ÜÀ¸·Î
-		else if (turn_dir == -1) {
-			int tmp = dq[cur_idx].front();
-			dq[cur_idx].pop_front();
-			dq[cur_idx].push_back(tmp);
-		}
-	}
-	return;
-}
-
-void before_Rotate_Check(queue<pair<int, int>> que, int gear_idx, int dir) {
-	int idx = gear_idx;
-	int tmp_dir = dir;
-	que.push({ idx, tmp_dir });
-
+	// ë¨¼ì € ì‹œê³„ë°©í–¥
+	// ->
 	while (1) {
-		if (idx == T)
+		if (idx == t)
 			break;
-		idx++;
-		tmp_dir *= -1;
 
+		idx++;
+		dir *= -1;
+
+		// ->
 		if (dq[idx - 1][2] != dq[idx][6])
-			que.push({ idx, tmp_dir });
+			que.push({ idx, dir });
 		else
 			break;
 	}
-	idx = gear_idx;
-	tmp_dir = dir;
 
+	idx = gidx;
+	dir = gdir;
+
+	// ë¨¼ì € ë°˜ì‹œê³„ë°©í–¥
+	// <-
 	while (1) {
 		if (idx == 1)
 			break;
-		idx--;
-		tmp_dir *= -1;
 
-		if (dq[idx + 1][6] != dq[idx][2])
-			que.push({ idx, tmp_dir });
+		idx--;
+		dir *= -1;
+
+		// ->
+		if (dq[idx][2] != dq[idx + 1][6])
+			que.push({ idx, dir });
 		else
 			break;
 	}
-
-	//¸í·É Á¤º¸°¡ ´ã°åÀ¸´Ï È¸Àü
-	rotate_gear(que);
 	return;
 }
 
-//12½Ã¹æÇâÀÌ S±ØÀÎ Åé´Ï¹ÙÄûÀÇ °³¼ö
-int get_gears_count(void) {
-	int cnt = 0;
-	for (int i = 1; i <= T; i++) {
-		if (dq[i][0] == 1)
-			cnt++;
-	}
-	return cnt;
-}
+void Rotate_gear(queue<Pair>& que, int t) {
+	while (!que.empty()) {
+		// íšŒì „í•  ì •ë³´
+		int cidx = que.front().idx;
+		int cdir = que.front().dir;
+		que.pop();
 
-void solution(void) {
-	queue<pair<int, int>> que;
-	//½Ã¹Ä ½ÃÀÛ
-	for (int i = 1; i <= k; ++i) {
-		before_Rotate_Check(que, cmd[i].first, cmd[i].second);
-		while (!que.empty()) {
-			que.pop();
+		// ì‹œê³„ë°©í–¥ íšŒì „
+		// ->, ìƒë‹¨ -> í•˜ë‹¨
+		if (cdir == 1) {
+			int tmp = dq[cidx].back();
+			dq[cidx].pop_back();
+			dq[cidx].push_front(tmp);
+		}
+		
+		// ë°˜ì‹œê³„ë°©í–¥ íšŒì „
+		// <-, ìƒë‹¨ <- í•˜ë‹¨
+		else if (cdir == -1) {
+			int tmp = dq[cidx].front();
+			dq[cidx].pop_front();
+			dq[cidx].push_back(tmp);
 		}
 	}
 
-	int ret = get_gears_count();
-	cout << ret << "\n";
 	return;
 }
 
-int main(void) {
-	//ÃÊ±âÈ­
-	ios::sync_with_stdio(0);
-	cin.tie(0); 
-	cout.tie(0);
-	
-	input();
-	solution();
+// ì¹´ìš´íŠ¸
+int get_Count_gear(int t) {
+	int cnt = 0;
+	for (int i = 1; i <= t; ++i) {
+		// 12ì‹œë°©í–¥
+		if (dq[i][0] == 1)
+			cnt++;
+	}
 
+	return cnt;
+}
+
+int solution(int t, int k) {
+	int answer = 0;
+	queue<Pair> que;
+
+	// ëª…ë ¹ì¡°ê±´ì— ë”°ë¼ íšŒì „
+	for (int i = 0; i < k; ++i) {
+		prepare_Rotate(que, t, cmd[i].idx, cmd[i].dir); // ë°°ì—´ ì •ë³´
+		Rotate_gear(que, t);
+
+		while (!que.empty())
+			que.pop();
+	}
+
+	answer = get_Count_gear(t);
+	return answer;
+}
+
+int main(void) {
+	int T, K;
+	string tmp;
+
+	cin >> T;
+	for (int i = 1; i <= T; ++i) {
+		cin >> tmp;
+		for (int j = 0; j < 8; ++j)
+			dq[i].push_back(tmp[j] - '0');
+	}
+
+	cin >> K;
+	for (int i = 0; i < K; ++i)
+		cin >> cmd[i].idx >> cmd[i].dir;
+
+	int ret = solution(T, K);
+	cout << ret;
 	return 0;
 }

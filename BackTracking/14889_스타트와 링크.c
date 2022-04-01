@@ -1,39 +1,41 @@
-#define _CRT_SECURE_NO_WARNINGS
-#include <stdio.h>
-#include <string.h>
+#include <iostream>
+#include <vector>
 
-int n;
-int result = 0x7fffffff;
+using namespace std;
+
 int board[21][21];
-int visited[21];
+int result = 0x7fffffff;
 
-int MIN(int a, int b) {
-	return a < b ? a : b;
-}
-
-int abs(int a) {
+// 절댓값 반환
+int Abs(int a) {
 	return a < 0 ? -a : a;
 }
 
-void check_gap(void) {
-	int start = 0, link = 0;
-
-	for (int i = 0; i < n; ++i) {
-		for (int j = 0; j < n; ++j) {
-			if (visited[i] == 1 && visited[j] == 1)
-				start += board[i][j];
-			if (visited[i] == 0 && visited[j] == 0)
-				link += board[i][j];
-		}
-	}
-
-	result = MIN(result, abs(start - link));
-	return;
+// 최솟값 반환
+int Min(int a, int b) {
+	return a < b ? a : b;
 }
 
-void DFS(int cur, int level) {
+void DFS(int n, vector<int>& visited, int cur, int level) {
+	// 탈출 조건
 	if (level == n / 2) {
-		check_gap();
+		int s_tot = 0;
+		int l_tot = 0;
+
+		for (int i = 0; i < n; ++i) {
+			for (int j = 0; j < n; ++j) {
+				if (i == j)
+					continue;
+				// 방문한 팀들이 스타트 팀
+				if (visited[i] == 1 && visited[j] == 1)
+					s_tot += board[i][j];
+				// 미방문한 팀들이 링크팀
+				else if (visited[i] == 0 && visited[j] == 0)
+					l_tot += board[i][j];
+			}
+		}
+
+		result = Min(result, Abs(s_tot - l_tot));
 		return;
 	}
 
@@ -41,32 +43,32 @@ void DFS(int cur, int level) {
 		if (visited[i] == 1)
 			continue;
 		visited[i] = 1;
-		DFS(i + 1, level + 1);
+		DFS(n, visited, i + 1, level + 1);
 		visited[i] = 0;
 	}
-
 	return;
 }
 
-int solution(void) {
+int solution(int n) {
 	int answer = 0;
-	memset(visited, 0, sizeof(int) * 21);
-
-	DFS(0, 0);
+	vector<int> visited(n, 0); // 방문리스트
+							   
+	// 먼저 조합을 구함
+	DFS(n, visited, 0, 0);
 	answer = result;
 	return answer;
 }
 
 int main(void) {
-	scanf("%d", &n);
+	int n;
+	cin >> n;
 
 	for (int i = 0; i < n; ++i) {
 		for (int j = 0; j < n; ++j)
-			scanf("%d", &board[i][j]);
+			cin >> board[i][j];
 	}
 
-	int ret = solution();
-	printf("%d", ret);
-
+	int ret = solution(n);
+	cout << ret;
 	return 0;
 }

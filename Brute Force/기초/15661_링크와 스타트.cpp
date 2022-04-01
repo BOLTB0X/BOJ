@@ -3,45 +3,47 @@
 
 using namespace std;
 
-int result = 0x7fffffff; // ÃÖ¼Ò¸¦ À§ÇÑ
-int board[21][21];
+int result = 0x7fffffff; // ìµœì†Œë¥¼ ìœ„í•œ
+int board[20][20];
 vector<int> visited;
-
-// ÃÖ¼Ú°ª ¹İÈ¯
+ 
+// ìµœì†Ÿê°’ ë°˜í™˜
 int Min(int a, int b) {
 	return a < b ? a : b;
 }
 
-// Àı´ñ°ª ¹İÈ¯
+// ì ˆëŒ“ê°’ ë°˜í™˜
 int Abs(int a) {
 	return a < 0 ? -a : a;
 }
 
-// ¹éÆ®·¡Å·À¸·Î Á¶ÇÕ
-void DFS(int n, int cur, int level, int div) {
-	if (div == level) {
-		int s_score = 0; // ½ºÅ¸Æ® ÆÀ
-		int l_score = 0; // ¸µÅ© ÆÀ
+void DFS(int n, int cur, int level) {
+	// ë‹¤ ë„ë‹¬í•˜ë©´
+	if (n == level) {
+		int s_tot = 0;
+		int l_tot = 0;
 
-		for (int i = 1; i <= n; ++i) {
-			for (int j = 1; j <= n; ++j) {
-				if (visited[i] && visited[j])
-					s_score += board[i][j];
+		for (int i = 0; i < n; ++i) {
+			for (int j = 0; j < n; ++j) {
+				// ë°©ë¬¸ -> ìŠ¤íƒ€íŠ¸
+				if (visited[i] == 1 && visited[j] == 1)
+					s_tot += board[i][j];
+				// ë¯¸ë°©ë¬¸ -> ë§í¬
 				else if (visited[i] == 0 && visited[j] == 0)
-					l_score += board[i][j];
+					l_tot += board[i][j];
 			}
 		}
 
-		result = Min(result, Abs(s_score - l_score));
+		// ìµœì†Œ ì°¨ì´ê°’
+		result = Min(result, Abs(s_tot - l_tot));
 		return;
-
 	}
 
-	for (int i = cur; i <= n; ++i) {
+	for (int i = cur; i < n; ++i) {
 		if (visited[i] == 1)
 			continue;
 		visited[i] = 1;
-		DFS(n, i + 1, level + 1, div);
+		DFS(n, i + 1, level + 1);
 		visited[i] = 0;
 	}
 	return;
@@ -49,13 +51,13 @@ void DFS(int n, int cur, int level, int div) {
 
 int solution(int n) {
 	int answer = 0;
-	visited.resize(n + 1, 0);
+	visited = vector<int>(n, 0); // ë°©ë¬¸ ë¦¬ìŠ¤íŠ¸ ì´ˆê¸°í™”
 
-	// DFS·Î Á¶ÇÕ
-	for (int i = 2; i < n - 1; ++i) {
-		visited = vector<int>(n + 1, 0); // ÃÊ±âÈ­
-		DFS(n, 1, 0, i);
-	}
+	// íŒ€ ìˆ«ìê°€ ì•ˆë§ì•„ë„ ë˜ë¯€ë¡œ
+	// 1ë¶€í„° n- 1ê¹Œì§€
+	for (int i = 1; i < n; ++i) 
+		DFS(n, 0, i);
+	
 
 	answer = result;
 	return answer;
@@ -65,8 +67,8 @@ int main(void) {
 	int n;
 
 	cin >> n;
-	for (int i = 1; i <= n; ++i) {
-		for (int j = 1; j <= n; ++j)
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < n; ++j)
 			cin >> board[i][j];
 	}
 

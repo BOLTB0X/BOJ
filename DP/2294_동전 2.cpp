@@ -1,48 +1,45 @@
 #include <iostream>
-
+#include <vector>
 using namespace std;
 
-int coins[101]; // µ¿Àü
+int coins[101]; // ë™ì „ ë°°ì—´
 
-// ÃÖ¼Ú°ª¹İÈ¯
+// ìµœì†Ÿê°’ ë°˜í™˜
 int Min(int a, int b) {
 	return a < b ? a : b;
 }
 
 int solution(int n, int k) {
-	int answer = 0;
-
-	// µ¿ÀûÇÒ´ç ¹× ÃÊ±âÈ­
-	int* dp = new int[k + 1];
-	for (int i = 1; i <= k; ++i)
-		dp[i] = 10001; // ÃÖ´ñ°ª
-
+	int answer = -1;
+	vector<int> dp(k + 1, 10001); // dp í…Œì´ë¸” ìƒì„± ë° ì´ˆê¸°í™”
+	
+	// ë³´í…€ì—… ë°©ì‹
+	// ì¤‘ë³µí—ˆìš©
 	dp[0] = 0;
 	for (int i = 1; i <= k; ++i) {
-		for (int j = 1; j <= n; ++j) {
-			int coin = coins[j]; // »ç¿ëÇÒ µ¿Àü
-			if (i - coin >= 0) // °Å½½·¯ ÁÙ ¼ö ÀÖ´Ù¸é
+		for (int j = 0; j < n; ++j) {
+			int coin = coins[j];
+
+			if (i >= coin)
 				dp[i] = Min(dp[i], dp[i - coin] + 1);
 		}
 	}
 
-	answer = dp[k];
-	delete[] dp;
-
-	// ºÒ°¡´ÉÇÏ´Ù¸é
-	if (answer == 10001)
-		answer = -1;
+	// ê±°ìŠ¬ëŸ¬ ì£¼ë©´
+	if (dp[k] != 10001)
+		answer = dp[k];
 	return answer;
 }
 
 int main(void) {
 	int n, k;
-
 	cin >> n >> k;
-	for (int i = 1; i <= n; ++i)
+
+	for (int i = 0; i < n; ++i)
 		cin >> coins[i];
 
 	int ret = solution(n, k);
 	cout << ret;
+
 	return 0;
 }

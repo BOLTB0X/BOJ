@@ -3,41 +3,33 @@
 
 using namespace std;
 
-// 메모이제이션
-void memoization(vector<int>& coins, int n, int m) {
-	// dp테이블 생성 및 초기화
-	int* dp = new int[m+1];
-	for (int i = 1; i <= m; ++i)
-		dp[i] = 0;
-	
-	dp[0] = 1; // 셋팅
-	for (int i = 1; i <= n; ++i) {
-		for (int j = coins[i]; j <= m; ++j)
-			dp[j] = dp[j] + dp[j - coins[i]];
+int coins[101];
+
+int solution(int n, int k) {
+	int answer = 0;
+	vector<int> dp(k + 1, 0); // dp 테이블 생성 및 초기화
+
+	// 경우의 수를 알고 싶은 경우
+	// 보텀업
+	dp[0] = 1;
+	for (int i = 0; i < n; ++i) {
+		int coin = coins[i];
+		for (int j = coin; j <= k; ++j) 
+			dp[j] += dp[j - coin];
 	}
 
-	cout << dp[m] << '\n';
-
-	// 메모리 해제
-	delete[] dp;
-	return;
+	answer = dp[k];
+	return answer;
 }
 
 int main(void) {
-	//초기화
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
-
-	int n, m;
-	cin >> n >> m;
-
-	// 동전의 가치를 담는 벡터
-	vector<int> coins(n+1,0);
-
-	for (int i = 1; i <= n; ++i) 
+	int n, k;
+	
+	cin >> n >> k;
+	for (int i = 0; i < n; ++i)
 		cin >> coins[i];
 
-	memoization(coins, n, m);
+	int ret = solution(n, k);
+	cout << ret;
 	return 0;
 }

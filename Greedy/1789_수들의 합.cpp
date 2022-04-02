@@ -1,20 +1,22 @@
 #include <iostream>
+#define LL long long
 
 using namespace std;
 
-long long solution(long long S) {
-	long long answer = 0;
-	long long max_number = 0, number = 1, tot = 0;
+LL solution(LL n) {
+	LL answer = 0;
+	LL tot = 0; // 합
+	LL max_number = 0, plus_number = 1;
 
 	while (1) {
-		tot += number;
+		tot += plus_number;
 		max_number++;
 
-		if (tot > S) {
+		if (tot > n) {
 			max_number--;
 			break;
 		}
-		number++;
+		plus_number++;
 	}
 
 	answer = max_number;
@@ -22,11 +24,11 @@ long long solution(long long S) {
 }
 
 int main(void) {
-	long long S;
+	LL n;
+	
+	cin >> n;
 
-	cin >> S;
-	long long ret = solution(S);
+	LL ret = solution(n);
 	cout << ret;
-
 	return 0;
 }

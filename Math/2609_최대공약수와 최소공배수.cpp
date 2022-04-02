@@ -4,6 +4,7 @@ using namespace std;
 
 // 최대공약수
 int gcd(int a, int b) {
+	// b가 클 경우
 	if (a < b)
 		swap(a, b);
 

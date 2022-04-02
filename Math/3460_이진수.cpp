@@ -7,11 +7,12 @@ void solution(int n) {
 
 	while (n > 0) {
 		int r = n % 2;
-		binary_number += ((char)r + '0');
+		binary_number += (r + '0');
 		n /= 2;
 	}
 
-	int size = binary_number.length(); // ����
+	// 최하위 비트(least significant bit, lsb)의 위치는 0
+	int size = binary_number.length(); // 길이
 	for (int i = 0; i <= size; ++i) {
 		if (binary_number[i] == '1')
 			cout << i << ' ';

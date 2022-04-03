@@ -3,9 +3,9 @@
 
 using namespace std;
 
-vector<int> tmp_LIS[1001];
+vector<int> LIS[1001];
 
-// �ִ� ��ȯ
+// 최댓값 반환
 int Max(int a, int b) {
 	return a > b ? a : b;
 }
@@ -15,20 +15,21 @@ vector<int> solution(int n, int* arr) {
 	vector<int> dp(n + 1, 0);
 	
 	for (int i = 0; i < n; ++i) {
-		tmp_LIS[i].push_back(arr[i]);
 		dp[i] = 1;
+		LIS[i].push_back(arr[i]);
 
 		for (int j = i - 1; j >= 0; --j) {
 			if (arr[i] > arr[j] && dp[i] < dp[j] + 1) {
-				tmp_LIS[i].clear();
-				tmp_LIS[i] = tmp_LIS[j];
-				tmp_LIS[i].push_back(arr[i]);
+				LIS[i].clear();
+				LIS[i] = LIS[j]; // 업데이트
+				LIS[i].push_back(arr[i]);
 				dp[i] = dp[j] + 1;
 			}
 		}
-		// ��ü
-		if (answer.size() < tmp_LIS[i].size())
-			answer = tmp_LIS[i];
+
+		// 교체
+		if (answer.size() < LIS[i].size())
+			answer = LIS[i];
 	}
 
 	return answer;

@@ -1,68 +1,54 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
 
 using namespace std;
 
-vector<int> lotto;
 vector<int> com;
-vector<bool> visited;
 
-//±íÀÌ ¿ì¼± Å½»ö
-void DFS(int n, int cur, int dep) {
-    int i;
-    if (dep == 6) {
-        //Ãâ·Â
-        for (i = 0; i < 6; i++)
-            cout << com[i] << " ";
-        cout << "\n";
-        return;
-    }
+void DFS(int n, vector<int>& lotto, vector<int>& visited, int cur, int level) {
+	if (level == 6) {
+		for (int& c : com)
+			cout << c << ' ';
+		cout << '\n';
+		return;
+	}
 
-    for (int i = cur; i < n; i++) {
-        if (visited[i])
-            continue;
-        visited[i] = true;
-        com[dep] = lotto[i];
-        DFS(n, i + 1, dep + 1);
-        visited[i] = false;
-    }
-    return;
+	for (int i = cur; i < n; ++i) {
+		if (visited[i] == 1)
+			continue;
+		visited[i] = 1;
+		com.push_back(lotto[i]);
+		DFS(n, lotto, visited, i + 1, level + 1);
+		com.pop_back();
+		visited[i] = 0;
+	}
+	return;
 }
 
-void solution(void) {
-    int n;
-    while (true) {
+void solution(int n, vector<int>& lotto) {
+	vector<int> visited(n, 0); // ì´ˆê¸°í™”
+
+	DFS(n, lotto, visited, 0, 0);
+	return;
+}
+
+int main(void) {
+	int n;
+	vector<int> lotto;
+	
+	while (1) {
 		cin >> n;
 
-        //Å»Ãâ Á¶°Ç
-		if (n == 0) 
-			return;
-        
-        //»çÀÌÁî ÇÒ´ç
-        lotto.resize(n);
-        com.resize(n);
-        visited.resize(n, false);
+		// íƒˆì¶œ ì¡°ê±´
+		if (n == 0)
+			break;
+		lotto.resize(n, 0);
+		com.clear();
 
-        //ÀÔ·Â
-        for (int i = 0; i < n; i++) 
-            cin >> lotto[i];
-        
-        //¿À¸§Â÷¼ø Á¤·Ä
-        sort(lotto.begin(), lotto.end());
-        //È£Ãâ
-        DFS(n, 0, 0);
-        cout << "\n";
+		for (int i = 0; i < n; ++i)
+			cin >> lotto[i];
+		solution(n, lotto);
+		cout << '\n';
 	}
-    return;
-}
-
-int main() {
-    //ÃÊ±âÈ­
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
-
-    solution();
-    return 0;
+	return 0;
 }

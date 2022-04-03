@@ -1,70 +1,60 @@
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
-int n, result;
+int result = 0x7fffffff; // ìµœì†Œë¥¼ ìœ„í•œ
 
-//´Ù Å½»ö µÇ¾ú´ÂÁö Ã¼Å©ÇÔ¼ö
-bool check(bool* visited) {
-	for (int i = 1; i < n; i++) {
-		if (!visited[i])
-			return false;
-	}
-	return true;
+// ìµœì†Ÿê°’ ë¹„êµ
+int Min(int a, int b) {
+	return a < b ? a : b;
 }
 
-//±íÀÌ ¿ì¼± Å½»ö
-void DFS(int (*graph)[11], bool* visited, int tot, int depth) {
-	//¸ğµç Á¤Á¡ Å½»öÇß´Ù¸é
-	if (check(visited)) {
-		//¸¶Áö¸· À§Ä¡ ¿¬»ê
-		if (graph[depth][0] != 0) {
-			tot += graph[depth][0];
-			//ÃÖ¼Ò°ª Á¶°ÇÀÌ µÇ¸é
-			if (tot < result)
-				result = tot;
-		}
+// ìˆœì—´
+void DFS(int n, vector<vector<int>>& board, vector<int>& visited, int start, int cur, int tot, int level) {
+	if (level == n - 1) {
+		if (board[cur][start] != 0) 
+			result = Min(result, tot + board[cur][start]);
 		return;
 	}
-	//¿¬°áµÈ Á¤Á¡ Å½»ö
-	for (int i = 1; i < n; i++) {
-		//±×·¡ÇÁ°¡ 0ÀÌ ¾Æ´Ï°í ¹Ì¹æ¹®ÀÌ¸é
-		if (graph[depth][i] != 0 && !visited[i]) {
-			visited[i] = true;
-			DFS(graph, visited, tot + graph[depth][i], i);
-			visited[i] = false;
-		}
-	}
-}
 
-//ÇØ°áÇÔ¼ö
-void solution(int(*graph)[11], bool* visited) {
-	//ÇØ°á
-	cin >> n;
-	for (int y = 0; y < n; y++) {
-		for (int x = 0; x < n; x++) {
-			cin >> graph[y][x];
+	for (int i = 0; i < n; ++i) {
+		if (board[cur][i] != 0 && visited[i] == 0) {
+			visited[i] = 1;
+			DFS(n, board, visited, start, i ,tot + board[cur][i], level + 1);
+			visited[i] = 0;
 		}
 	}
-	//°á°ú ¼ÂÆÃ
-	result = 987654321;
-	//°¢ Á¤Á¡ Å½»ö½ÃÀÛ
-	DFS(graph, visited, 0, 0);
-	cout << result << '\n';
 	return;
 }
 
+int solution(int n, vector<vector<int>>& board) {
+	int answer = 0;
+	vector<int> visited(n + 1, 0); // ë°©ë¬¸ë¦¬ìŠ¤íŠ¸
+
+	// ê° í–‰ì„ ìˆœì—´ë¡œ ë½‘ì•„ ê° ë¹„ìš©ì„ ë¹„êµ
+	for (int i = 0; i < n; ++i) {
+		visited[i] = 1;
+		DFS(n, board, visited, i, i, 0, 0);
+		visited[i] = 0;
+	}
+
+	answer = result;
+	return answer;
+}
+
 int main(void) {
-	//ÃÊ±âÈ­
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
+	int n;
+	vector<vector<int>> board;
 
-	int graph[11][11];
-	bool visited[11] = { false, };
+	cin >> n;
+	board.resize(n, vector<int>(n, 0));
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < n; ++j)
+			cin >> board[i][j];
+	}
 
-	//¼Ö·ç¼Ç½ÃÀÛ
-	solution(graph, visited);
-	
+	int ret = solution(n, board);
+	cout << ret;
 	return 0;
 }

@@ -6,17 +6,16 @@ using namespace std;
 
 LL solution(int n, int* arr) {
 	LL answer = 0;
-	vector<LL> dp(n + 1, 0);
+	vector<LL> dp(n + 1, 0); // dp테이블 초기화
 
 	for (int i = 0; i < n; ++i) {
 		dp[i] = arr[i];
-
 		for (int j = i - 1; j >= 0; --j) {
-			if (arr[i] > arr[j] && dp[i] < dp[j] + arr[i]) 
+			// 크다면
+			if (arr[i] > arr[j] && dp[i] < dp[j] + arr[i])
 				dp[i] = dp[j] + arr[i];
 		}
-
-		// ��ü
+		// 교체
 		if (answer < dp[i])
 			answer = dp[i];
 	}

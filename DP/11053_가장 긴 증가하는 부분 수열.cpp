@@ -15,13 +15,14 @@ int solution(int n, int *arr) {
 	for (int i = 0; i < n; ++i) 
 		dp[i] = 0;
 
+	// LIS
 	for (int i = 0; i < n; ++i) {
 		dp[i] = 1;
 		for (int j = i - 1; j >= 0; --j) {
 			if (arr[i] > arr[j])
 				dp[i] = Max(dp[i], dp[j] + 1);
 		}
-
+		// 교체
 		answer = Max(dp[i], answer);
 	}
 	

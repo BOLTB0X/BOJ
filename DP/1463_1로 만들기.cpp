@@ -1,26 +1,39 @@
 #include <iostream>
+
 using namespace std;
 
-int min(int a, int b) {
+int Min(int a, int b) {
 	return a < b ? a : b;
 }
 
-int main(void) {
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
+int solution(int n) {
+	int answer = 0;
 
-	int x;
-	int dp[1000001] = { 0 };
-	cin >> x;
+	//dp 테이블 생성 및 초기화
+	int* dp = new int[n + 1];
+	for (int i = 0; i <= n; ++i)
+		dp[i] = 0;
 
-	for (int i = 2; i <= x; i++) {
+	for (int i = 2; i <= n; ++i) {
 		dp[i] = dp[i - 1] + 1;
+
 		if (i % 3 == 0)
-			dp[i] = min(dp[i], dp[i / 3] + 1);
+			dp[i] = Min(dp[i / 3] + 1, dp[i]);
+		
 		if (i % 2 == 0)
-			dp[i] = min(dp[i], dp[i / 2] + 1);
+			dp[i] = Min(dp[i / 2] + 1, dp[i]);
 	}
-	cout << dp[x] << '\n';
+
+	answer = dp[n];
+	delete[] dp;
+	return answer;
+}
+
+int main(void) {
+	int n;
+
+	cin >> n;
+	int ret = solution(n);
+	cout << ret;
 	return 0;
 }

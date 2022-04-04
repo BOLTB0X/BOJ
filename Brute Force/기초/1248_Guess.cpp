@@ -9,7 +9,8 @@ vector<int> result;
 
 int is_Process(vector<int>& seq, int idx) {
 	int tot = 0;
-
+	
+	// 
 	for (int i = idx; i >= 0; --i) {
 		tot += seq[i];
 
@@ -27,11 +28,11 @@ int is_Process(vector<int>& seq, int idx) {
 }
 
 void DFS(int n, vector<int>& seq, int level) {
-	// ´äÀÌ ³ª¿Ô´Ù¸é
+	// ë‹µì´ ë‚˜ì™”ë‹¤ë©´
 	if (flag == 1)
 		return;
 
-	// Å»Ãâ Á¶°Ç
+	// íƒˆì¶œ ì¡°ê±´
 	if (level == n) {
 		result = seq;
 		flag = 1;
@@ -50,10 +51,10 @@ void DFS(int n, vector<int>& seq, int level) {
 
 vector<int> solution(int n, string guess_cmd) {
 	vector<int> answer;
-	vector<int> seq; // ¼ö¿­
+	vector<int> seq; // ìˆ˜ì—´
 	int idx = 0;
 
-	// ¸í·É¾î¸¦ ¿Ä±è
+	// ëª…ë ¹ì–´ë¥¼ ì˜­ê¹€
 	for (int i = 0; i < n; ++i) {
 		for (int j = i; j < n; ++j)
 			board[i][j] = guess_cmd[idx++];

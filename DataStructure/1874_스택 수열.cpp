@@ -1,63 +1,53 @@
 #include <iostream>
-#include <stack>
 #include <vector>
+#include <stack>
 
 using namespace std;
- 
-void solution(void) {
-	int n;
-	stack<int> st;
+
+vector<char> solution(int n, vector<int>& cmd) {
 	vector<char> answer;
+	stack<int> st; // 스택
+	int cur = 0, flag = 0;
 
-	cin >> n;
-	//스택의 상단 값
-	int st_top = 0;
+	st.push(cur++); // 먼저 0을 넣어줌
+	for (int i = 0; i < n; ++i) {
+		// 스택의 최상단이 작다면
+		while (st.top() < cmd[i]) {
+			st.push(cur++);
+			answer.push_back('+');
+		}
 
-	while (n--) {
-		int x;
-		cin >> x;
-
-		if (x > st_top) {
-			while (x > st_top) {
-				st.push(++st_top);
-				//push한 만큼 +
-				answer.push_back('+');
-			}
+		if (st.top() == cmd[i]) {
 			st.pop();
 			answer.push_back('-');
 		}
 
-		//x가 상단값보다 크거나 같은 경우
-		else {
-			bool flag = false;
-			if (!st.empty()) {
-				//상단이 x이면
-				if (x == st.top()) 
-					flag = true;
-				st.pop();
-				answer.push_back('-');
-			}
-
-			//만약 찾지 못한다면
-			if (!flag) {
-				cout << "NO" << '\n';
-				return ;
-			}
+		else { // 전체가 불가능한 경우
+			flag = 1;
+			break;
 		}
 	}
 
-	//answer 하나씩 pop
-	for (auto a : answer)
-		cout << a << '\n';
-	return;
+	if (flag == 1)
+		answer.clear();
+	return answer;
 }
 
 int main(void) {
-	//초기화
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
+	int n;
+	vector<int> cmd;
 
-	solution();
+	cin >> n;
+	cmd.resize(n);
+	for (int i = 0; i < n; ++i) 
+		cin >> cmd[i];
+
+	vector<char> ret = solution(n, cmd);
+	if (ret.size() == 0)
+		cout << "NO";
+	else {
+		for (char& r : ret)
+			cout << r << '\n';
+	}
 	return 0;
 }

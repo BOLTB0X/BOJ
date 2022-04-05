@@ -4,80 +4,69 @@
 
 using namespace std;
 
-void solution(void) {
-	string str;
+string solution(string str) {
 	int T;
-	//
-	stack<char> L;
-	stack<char> R;
+	string answer;
+	stack<char> L; // 왼쪽
+	stack<char> R; // 오른쪽
 
-	//입력
-	cin >> str;
-	for (int i = 0; i < str.length(); ++i)
-		L.push(str[i]);
-
+	// 왼쪽에서 시작하므로
+	for (char& ch : str)
+		L.push(ch);
+	
 	cin >> T;
 	while (T--) {
-		//명령어입력 
-		char cmm;
-		cin >> cmm;
+		char cmd;
+		cin >> cmd;
+
+		if (cmd == 'P') {
+			char ch;
+			cin >> ch;
+			L.push(ch);
+		}
+
+		else if (cmd == 'L') {
+			if (L.empty())
+				continue;
+			R.push(L.top());
+			L.pop();
+		}
 		
-		//삽입
-		if (cmm == 'P') {
-			char c;
-			cin >> c;
-			L.push(c);
-		}
-
-		//커서 왼쪽으로 옮김
-		else if (cmm == 'L') {
-			if (L.empty())
-				continue;
-			else {
-				R.push(L.top());
-				L.pop();
-			}
-		}
-
-		//삭제
-		else if (cmm == 'B') {
-			if (L.empty())
-				continue;
-			else
-				L.pop();
-		}
-
-		//오른쪽으로 한칸 옮김
-		else if (cmm == 'D') {
+		else if (cmd == 'D') {
 			if (R.empty())
 				continue;
-			else {
-				L.push(R.top());
-				R.pop();
-			}
+			L.push(R.top());
+			R.pop();
+		}
+
+		else if (cmd == 'B') {
+			if (L.empty())
+				continue;
+			L.pop(); // 삭제
+			// R은 그대로
 		}
 	}
-	//왼쪽 스택 오른쪽 스택에 옮겨줌
+
+	// -> 순으로 쌓이니
+	// 출력을 위해 R에 넘겨줌
 	while (!L.empty()) {
 		R.push(L.top());
 		L.pop();
 	}
-	
-	//선입후출이므로
-	//R의 상단을 뽑음
+
 	while (!R.empty()) {
-		cout << R.top();
+		answer += R.top();
 		R.pop();
 	}
-	return;
+
+	return answer;
 }
 
 int main(void) {
-	//초기화
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
+	string str;
 
-	solution();
+	cin >> str;
+	string ret = solution(str);
+	cout << ret;
 	return 0;
 }

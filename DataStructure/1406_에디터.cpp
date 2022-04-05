@@ -1,72 +1,53 @@
 #include <iostream>
 #include <string>
-#include <stack>
+#include <vector>
 
 using namespace std;
 
-string solution(string str) {
-	int T;
-	string answer;
-	stack<char> L; // 왼쪽
-	stack<char> R; // 오른쪽
+char stack[1001];
+int top;
 
-	// 왼쪽에서 시작하므로
-	for (char& ch : str)
-		L.push(ch);
-	
-	cin >> T;
-	while (T--) {
-		char cmd;
-		cin >> cmd;
+void push(char data) {
+	stack[++top] = data;
+	return;
+}
 
-		if (cmd == 'P') {
-			char ch;
-			cin >> ch;
-			L.push(ch);
-		}
+vector<string> solution(string str) {
+	vector<string> answer;
+	string tmp = "";
+	top = -1; // 스택 초기화
+	int size = str.length();
 
-		else if (cmd == 'L') {
-			if (L.empty())
-				continue;
-			R.push(L.top());
-			L.pop();
+	for (int i = 0; i < size; ++i) {
+		if (str[i] == ' ') {
+			while (top != -1)
+				tmp += stack[top--];
+			answer.push_back(tmp);
+			tmp = "";
 		}
-		
-		else if (cmd == 'D') {
-			if (R.empty())
-				continue;
-			L.push(R.top());
-			R.pop();
-		}
-
-		else if (cmd == 'B') {
-			if (L.empty())
-				continue;
-			L.pop(); // 삭제
-			// R은 그대로
-		}
+		else
+			push(str[i]);
 	}
-
-	// -> 순으로 쌓이니
-	// 출력을 위해 R에 넘겨줌
-	while (!L.empty()) {
-		R.push(L.top());
-		L.pop();
-	}
-
-	while (!R.empty()) {
-		answer += R.top();
-		R.pop();
-	}
+	while (top != -1)
+		tmp += stack[top--];
+	answer.push_back(tmp);
 
 	return answer;
 }
 
 int main(void) {
-	string str;
+	int T;
+	
+	cin >> T;
+	cin.ignore();
+	while (T--) {
+		string str;
+		getline(cin, str);
+		vector<string> ret = solution(str);
+		for (int i = 0; i < ret.size(); ++i)
+			cout << ret[i] << ' ';
+		cout << '\n';
+	}
 
-	cin >> str;
-	string ret = solution(str);
-	cout << ret;
 	return 0;
 }

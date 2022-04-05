@@ -1,69 +1,54 @@
 #include <iostream>
 #include <vector>
 #include <queue>
-
+#define Max_Size 100001
 using namespace std;
 
-//¹æ¹®¸®½ºÆ® »ý¼º
-bool visited[100001] = { false, };
+int solution(int n, int k) {
+	int answer = 0;
+	vector<int> visited(Max_Size, 0); // ë°©ë¬¸ë¦¬ìŠ¤íŠ¸
+	queue<int> que;
+	
+	que.push(n);
+	visited[n] = 1;
+	
+	// BFS
+	while (!que.empty()) {
+		int cur = que.front();
+		que.pop();
 
-//³Êºñ¿ì¼±Å½»ö
-void BFS(int n, int k) {
-	//Å¥ ¼±¾ð
-	queue<pair<int, int>> q;
-	//À§Ä¡ ¿Í °É¸° ½Ã°£ »ðÀÔ
-	q.push({ n,0 });
-	//¹æ¹®Ã³¸®
-	visited[n] = true;
-
-	//Å¥°¡ ºñ¾îÁú¶§±îÁö
-	while (!q.empty()) {
-		pair<int, int> cur = q.front();
-		q.pop();
-
-		//Å»Ãâ Á¶°Ç
-		if (cur.first == k) {
-			cout << cur.second << '\n';
-			return;
+		if (cur == k) {
+			answer = visited[cur] - 1;
+			break;
 		}
 
-		//°¢ Á¶°Çº° ºÐ±â·Î ³ª´®
-		//2¹èÀÎ °æ¿ì
-		if (cur.first * 2 <= 100001 && !visited[cur.first * 2]) {
-			visited[cur.first * 2] = true;
-			q.push({ cur.first * 2, cur.second + 1 });
-		}
-		
-		//+1ÀÎ °æ¿ì
-		if (cur.first + 1 <= 100001 && !visited[cur.first + 1]) {
-			visited[cur.first + 1] = true;
-			q.push({ cur.first + 1, cur.second + 1 });
-		}
-		
-		//-1ÀÎ °æ¿ì
-		if (cur.first - 1 >= 0 && !visited[cur.first - 1]) {
-			visited[cur.first - 1] = true;
-			q.push({ cur.first - 1, cur.second + 1 });
+		else {
+			if (cur + 1 < Max_Size && visited[cur + 1] == 0) {
+				visited[cur + 1] = visited[cur] + 1;
+				que.push(cur + 1);
+			}
+			
+			if (cur - 1 >= 0 && visited[cur - 1] == 0) {
+				visited[cur - 1] = visited[cur] + 1;
+				que.push(cur - 1);
+			}
+			
+			if (cur * 2 < Max_Size && visited[cur * 2] == 0) {
+				visited[cur * 2] = visited[cur] + 1;
+				que.push(cur * 2);
+			}
 		}
 	}
-	
-	return;
-}
 
-void simulation(void) {
-	int n, k;
-	cin >> n >> k;
-
-	BFS(n, k);
-	return;
+	return answer;
 }
 
 int main(void) {
-	//ÃÊ±âÈ­
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
+	int n, k;
 
-	simulation();
+	cin >> n >> k;
+	int ret = solution(n, k);
+	cout << ret;
+
 	return 0;
 }

@@ -1,43 +1,54 @@
 #include <iostream>
 #include <vector>
+
 using namespace std;
 
-vector<int> graph[101];
-bool visited[101];
-int result=-1;
+int result = -1;
+vector<int> adj[101];
 
-void DFS(int start, int target, int cnt) {
-	visited[start] = true;
-	if (start == target) {
-		result = cnt;
+void DFS(int n, vector<int>& visited, int cur, int end, int level) {
+	if (cur == end) {
+		result = level;
 		return;
 	}
-	for (int i = 0; i < graph[start].size(); i++) {
-		int next = graph[start][i];
-		if (!visited[next]) 
-			DFS(next, target, cnt+1);
+
+	for (int& next : adj[cur]) {
+		// 재방문 방지
+		if (visited[next] == 1)
+			continue;
+
+		visited[next] = 1;
+		DFS(n, visited, next, end, level + 1);
 	}
+	return;
+}
+
+int solution(int n, int m, int start, int end) {
+	int answer = 0;
+	vector<int> visited(n + 1, 0); // 방문리스트
+
+	visited[start] = 1;
+	DFS(n, visited, start, end, 0);
+	answer = result;
+	return answer;
 }
 
 int main(void) {
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
-	
-	int n,m;
-	int start, target;
+	int n, m, start, end;
 
 	cin >> n;
-	cin >> start >> target;
+	cin >> start >> end;
 	cin >> m;
-	for (int i = 0; i < m; i++) {
-		int x, y;
-		cin >> x >> y;
-		graph[x].push_back(y);
-		graph[y].push_back(x);
+
+	for (int i = 0; i < m; ++i) {
+		int a, b;
+
+		cin >> a >> b;
+		adj[a].push_back(b);
+		adj[b].push_back(a);
 	}
 
-	DFS(start, target, 0);
-	cout << result << '\n';
+	int ret = solution(n, m, start, end);
+	cout << ret;
 	return 0;
 }

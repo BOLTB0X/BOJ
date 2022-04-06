@@ -1,19 +1,19 @@
 #include <iostream>
-#include <string>
 #include <vector>
 #include <queue>
-#define INF 1e9 // 최대
+#define INF 1e9
 
 using namespace std;
 
 const int dy[4] = { 1,0,-1,0 };
 const int dx[4] = { 0,1,0,-1 };
 
-int BFS(int n, int m, vector<vector<int>>& board) {
-	vector<vector<int>> dist(n, vector<int>(m, INF)); // 거리
+int solution(int n, int m, vector<vector<int>>& board) {
+	int answer = 0;
+	vector<vector<int>> dist(n, vector<int>(m, INF));
 	queue<pair<int, int>> que;
 
-	que.push({ 0,0 });
+	que.push({0,0});
 	dist[0][0] = 0;
 
 	while (!que.empty()) {
@@ -25,17 +25,17 @@ int BFS(int n, int m, vector<vector<int>>& board) {
 			int ny = cy + dy[dir];
 			int nx = cx + dx[dir];
 
-			// 범위 초과
 			if (ny < 0 || nx < 0 || ny >= n || nx >= m)
 				continue;
 
+			// 踰쎌씤 寃쎌슦
 			if (board[ny][nx] == 1) {
 				if (dist[ny][nx] > dist[cy][cx] + 1) {
-					dist[ny][nx] = dist[cy][cx] + 1; // 벽을 부신 효과
+					dist[ny][nx] = dist[cy][cx] + 1;
 					que.push({ ny,nx });
 				}
 			}
-			
+
 			else if (board[ny][nx] == 0) {
 				if (dist[ny][nx] > dist[cy][cx]) {
 					dist[ny][nx] = dist[cy][cx];
@@ -45,32 +45,25 @@ int BFS(int n, int m, vector<vector<int>>& board) {
 		}
 	}
 
-	return dist[n - 1][m - 1];
-}
-
-int solution(int n, int m, vector<vector<int>> board) {
-	int answer = 0;
-
-	// 0 0과 n - 1, m - 1은  항상 뚫여있음
-	answer = BFS(n, m, board);
+	answer = dist[n - 1][m - 1];
 	return answer;
 }
 
 int main(void) {
-	int n, m;
-	vector<vector<int>> board;
+	int m, n;
 	string tmp;
+	vector<vector<int>> board;
 
-	cin >> n >> m;
-	board.resize(m, vector<int>(n, 0));
+	cin >> m >> n;
+	board.resize(n, vector<int>(m, 0));
 
-	for (int i = 0; i < m; ++i) {
+	for (int i = 0; i < n; ++i) {
 		cin >> tmp;
-		for (int j = 0; j < n; ++j)
+		for (int j = 0; j < m; ++j)
 			board[i][j] = tmp[j] - '0';
 	}
 
-	int ret = solution(m, n, board);
+	int ret = solution(n, m, board);
 	cout << ret;
 	return 0;
 }

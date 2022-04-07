@@ -7,15 +7,13 @@ using namespace std;
 int result = -1;
 vector<int> visited;
 
-int Max(int a, int b) {
-	return a > b ? a : b;
-}
-
-void DFS(string A, string B, string C, int level) {
+void DFS(string A, string B, string seq, int level) {
+	// 탈출조건
+	// 어차피 A와 B는 길이가 같음
 	if (level == A.length()) {
-		int number = stoi(C);
-		if (A !=C && number < stoi(B)) 
-			result = Max(result, number);
+		int number = stoi(seq);
+		if (seq != A && number < stoi(B)) 
+			result = number > result ? number : result;
 		return;
 	}
 
@@ -23,27 +21,30 @@ void DFS(string A, string B, string C, int level) {
 		if (visited[i] == 1)
 			continue;
 
-		if (C.length() == 0 && A[i] == '0')
+		if (seq.length() == 0 && A[i] == '0')
 			continue;
+
 		visited[i] = 1;
-		DFS(A, B, C + A[i], level + 1);
+		DFS(A, B, seq + A[i], level + 1);
 		visited[i] = 0;
 	}
 	return;
 }
 
-int solution(string A, string B) {
+int solution(int A, int B) {
 	int answer = -1;
+	string str_A = to_string(A);
+	string str_B = to_string(B);
+	visited.resize(str_A.length(), 0); // 방문리스트
 
-	visited.resize(A.length(), 0); // �湮����Ʈ �ʱ�ȭ
-	DFS(A, B, "", 0);
+	DFS(str_A, str_B, "", 0);
 	if (result != -1)
 		answer = result;
 	return answer;
 }
 
 int main(void) {
-	string A, B;
+	int A, B;
 
 	cin >> A >> B;
 	int ret = solution(A, B);

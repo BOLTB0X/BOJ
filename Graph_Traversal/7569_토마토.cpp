@@ -1,83 +1,98 @@
 #include <iostream>
 #include <queue>
+
 using namespace std;
 
-struct pos {
-    int x, y, z;
-};
+typedef struct {
+	int z, y, x;
+} Pos;
 
-int map[101][101][101];
-bool visited[101][101][101];
-queue<pos> q;
-int answer = -1;
+int board[100][100][100];
 
-void BFS(int m, int n, int h) {
-    const int dx[] = { -1,1,0,0,0,0 };
-    const int dy[] = { 0,0,0,0,-1,1 };
-    const int dz[] = { 0,0,-1,1,0,0 };
+int BFS(int m, int n, int h, queue<Pos>& que) {
+	int day = -1; // 한 번 더 돌기 때문
+	const int dy[6] = { 1, -1, 0, 0, 0, 0 };
+	const int dx[6] = { 0, 0, -1, 1, 0, 0 };
+	const int dz[6] = { 0, 0, 0, 0, 1, -1 };
 
-    //큐가 비어질때까지
-    while (!q.empty()) {
-        //각 위치에서 토마토가 익어가야하므로
-        int q_size = q.size();
-        ++answer;
-        while (q_size--) {
-            pos cur = q.front(); 
-            q.pop();
+	while (!que.empty()) {
+		int q_size = que.size();
 
-            for (int i = 0; i < 6; i++) {
-                int nx = cur.x + dx[i];
-                int ny = cur.y + dy[i];
-                int nz = cur.z + dz[i];
+		while (q_size--) {
+			int cz = que.front().z;
+			int cy = que.front().y;
+			int cx = que.front().x;
+			que.pop();
 
-                if (nx < 0 || nx >= m || ny < 0 || ny >= n || nz < 0 || nz >= h)
-                    continue;
-                if (!visited[nx][ny][nz] && map[nx][ny][nz] == 0) {
-                    visited[nx][ny][nz] = true;
-                    q.push({ nx, ny, nz });
-                }
-            }
-        }
-    }
+			for (int dir = 0; dir < 6; ++dir) {
+				int nz = cz + dz[dir];
+				int ny = cy + dy[dir];
+				int nx = cx + dx[dir];
+
+				if (ny < 0 || nx < 0 || nz < 0 || ny >= n || nx >= m || nz >= h)
+					continue;
+
+				// 안익은 토마토가 아니면
+				if (board[nz][ny][nx] == 0) {
+					board[nz][ny][nx] = 1;
+					que.push({ nz,ny,nx });
+				}
+			}
+		}
+		day++;
+	}
+
+	return day;
 }
 
-void last_check(int m, int n, int h) {
-    //안익은 토마토 탐색
-    for (int k = 0; k < h; k++) {
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                if (!visited[j][i][k]) {
-                    answer = -1;
-                    return;
-                }
-            }
-        }
-    }
-    return;
+int solution(int m, int n, int h) {
+	int answer = 0;
+	int flag = 0;
+	queue<Pos> que;
+
+	for (int i = 0; i < h; ++i) {
+		for (int j = 0; j < n; ++j) {
+			for (int k = 0; k < m; ++k) {
+				// 토마토 발견
+				if (board[i][j][k] == 1) 
+					que.push({ i,j,k });
+			}
+		}
+	}
+
+	answer = BFS(m, n, h, que);
+
+	for (int i = 0; i < h; ++i) {
+		for (int j = 0; j < n; ++j) {
+			for (int k = 0; k < m; ++k) {
+				// 안익은 토마토 발견
+				if (board[i][j][k] == 0) {
+					answer = -1;
+					flag = 1;
+					break;
+				}
+			}
+			if (flag == 1)
+				break;
+		}
+		if (flag == 1)
+			break;
+	}
+	return answer;
 }
 
-int main() {
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
+int main(void) {
+	int m, n, h;
 
-    int m, n, h;
-    cin >> m >> n >> h;
-    for (int k = 0; k < h; k++) {
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                cin >> map[j][i][k];
-                if (map[j][i][k] == 1) {
-                    q.push({ j,i,k });
-                    visited[j][i][k] = true;
-                }
-                else if (map[j][i][k] == -1)
-                    visited[j][i][k] = true;
-            }
-        }
-    }
-    BFS(m,n,h);
-    last_check(m,n,h);
-    cout << answer << '\n';
-    return 0;
+	cin >> m >> n >> h;
+	for (int i = 0; i < h; ++i) {
+		for (int j = 0; j < n; ++j) {
+			for (int k = 0; k < m; ++k)
+				cin >> board[i][j][k];
+		}
+	}
+
+	int ret = solution(m, n, h);
+	cout << ret;
+	return 0;
 }

@@ -5,36 +5,36 @@
 
 using namespace std;
 
-LL cnt = 0; // Ä«¿îÆ®
+LL cnt = 0;
 
-// ¹éÆ®·¡Å·
-void DFS(int n, int m, LL number) {
-	if (number > m)
+// ê¹Šì´ìš°ì„ íƒìƒ‰
+void DFS(LL A, LL B, LL number) {
+	if (B < number)
 		return;
 
-	if (n <= number && number <= m)
+	if (A <= number && B >= number) 
 		cnt++;
-
-	DFS(n, m, number * 10 + 4);
-	DFS(n, m, number * 10 + 7);
+	
+	DFS(A, B, number * 10 + 4);
+	DFS(A, B, number * 10 + 7);
 	return;
 }
 
-LL solution(int n, int m) {
+LL solution(LL A, LL B) {
 	LL answer = 0;
 
-	DFS(n, m, 4);
-	DFS(n, m, 7);
-	
+	DFS(A, B, 4);
+	DFS(A, B, 7);
+
 	answer = cnt;
 	return answer;
 }
 
 int main(void) {
-	int n, m;
+	LL A, B;
 
-	cin >> n >> m;
-	LL ret = solution(n, m);
+	cin >> A >> B;
+	LL ret = solution(A, B);
 	cout << ret;
 	return 0;
 }

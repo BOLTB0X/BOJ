@@ -6,6 +6,7 @@ using namespace std;
 int result = -1;
 vector<int> adj[101];
 
+// 깊이우선탐색
 void DFS(int n, vector<int>& visited, int cur, int end, int level) {
 	if (cur == end) {
 		result = level;
@@ -28,7 +29,7 @@ int solution(int n, int m, int start, int end) {
 	vector<int> visited(n + 1, 0); // 방문리스트
 
 	visited[start] = 1;
-	DFS(n, visited, start, end, 0);
+	DFS(n, visited, start, end, 0); // 촌수가 즉 탐색 깊이
 	answer = result;
 	return answer;
 }

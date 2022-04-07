@@ -1,37 +1,45 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
+#include <queue>
 
 using namespace std;
 
-void solution() {
-	int n;
-	cin >> n;
-	
-	//좌표벡터 선언
-	//열벡터를 2로 초기화
-	vector<vector<int>> points(n,vector<int>(2,0));
+struct Pos {
+	int x, y;
 
-	//입력
-	for (int i = 0; i < n; i++) 
-		cin >> points[i][0] >> points[i][1];
-	
-	//정렬
-	sort(points.begin(), points.end());
+	bool operator < (const Pos& p) const {
+		if (x == p.x)
+			return y > p.y;
+		return x > p.x;
+	}
+};
+ 
+vector<pair<int, int>> solution(int n, vector<vector<int>>& points) {
+	vector<pair<int, int>> answer;
+	priority_queue<Pos> pq;
 
-	//출력
-	for (int i = 0; i < n; i++) 
-		cout << points[i][0] << ' ' << points[i][1] << '\n';
+	for (vector<int>& point : points) 
+		pq.push({ point[0], point[1] });
 	
-	return;
+	while (!pq.empty()) {
+		answer.push_back({ pq.top().x, pq.top().y });
+		pq.pop();
+	}
+	
+	return answer;
 }
 
 int main() {
-	//초기화
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
+	int n;
+	cin >> n;
+	vector<vector<int>> points(n, vector<int>(2, 0));
 
-	solution();
+	//입력
+	for (int i = 0; i < n; i++)
+		cin >> points[i][0] >> points[i][1];
+
+	vector<pair<int,int>> ret = solution(n, points);
+	for (pair<int, int>& r : ret)
+		cout << r.first << ' ' << r.second << '\n';
 	return 0;
 }

@@ -4,34 +4,33 @@
 
 using namespace std;
 
-void solution(void) {
-	int n;
-	cin >> n;
+bool compare(pair<int, int>& a, pair<int, int>& b) {
+	if (a.second == b.second)
+		return a.first < b.first;
+	return a.second < b.second;
+}
 
-	//벡터 초기화
-	//2차원 벡터
-	vector<vector<int>> arr(n, vector<int>(2, 0));
-	
-	//입력
-	for (int i = 0; i < n; i++) 
-		cin >> arr[i][1] >> arr[i][0];
-
+void solution(int n, vector<pair<int,int>>& arr) {
 	//정렬
-	sort(arr.begin(), arr.end());
+	sort(arr.begin(), arr.end(), compare);
 
 	//출력만 바꿔서
 	for (int i = 0; i < n; i++) 
-		cout << arr[i][1] << ' ' << arr[i][0] << '\n';
+		cout << arr[i].first << ' ' << arr[i].second << '\n';
 	
 	return;
 }
 
 int main(void) {
-	//초기화
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
+	int n;
+	cin >> n;
 
-	solution();
+	// 벡터 초기화
+	vector<pair<int,int>> arr(n);
+	// 입력
+	for (int i = 0; i < n; i++) 
+		cin >> arr[i].first>> arr[i].second;
+
+	solution(n, arr);
 	return 0;
 }

@@ -6,24 +6,22 @@ string solution(int H, int M) {
 	string answer = "";
 	int ah = 0, am = 0;
 
-	if (45 <= M) {
+	if (M - 45 >= 0) {
 		am = M - 45;
 		ah = H;
 	}
-
 	else {
 		am = 60 + M - 45;
 		ah = H - 1;
-		if (ah < 0) 
+		if (ah < 0)
 			ah = 23;
 	}
-
 	answer += to_string(ah);
 	answer += ' ';
 	answer += to_string(am);
-
 	return answer;
 }
+
 int main(void) {
 	int H, M;
 

@@ -21,10 +21,10 @@ int main(void) {
 	*/
 	
 	for (int i = 0; i < str.length(); ++i) {
-		char tmp = (int)str[i] - 3;
+		char tmp = str[i] - 3;
 
 		if (tmp < 'A')
-			tmp += 26; // 90�� �ǹǷ�
+			tmp += 26; // 90ÀÌ µÇ¹Ç·Î
 		answer += tmp;
 	}
 	

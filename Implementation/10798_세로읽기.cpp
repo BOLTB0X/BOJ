@@ -5,21 +5,18 @@ using namespace std;
 
 string solution(string str[]) {
 	string answer = "";
-	vector<vector<char>> board(5, vector<char>(15, 0)); // 2차원 문자형
+	vector<vector<char>> board(5, vector<char>(15, 0));
 
-	// 보드로 넘겨줌
 	for (int i = 0; i < 5; ++i) {
-		for (int j = 0; j < str[i].length(); ++j) {
+		for (int j = 0; j < str[i].length(); ++j)
 			board[i][j] = str[i][j];
-		}
 	}
-	
+
 	for (int i = 0; i < 15; ++i) {
 		for (int j = 0; j < 5; ++j) {
 			if (board[j][i] == 0)
 				continue;
-
-			answer += str[j][i];
+			answer += board[j][i];
 		}
 	}
 

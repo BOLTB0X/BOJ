@@ -1,25 +1,23 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <algorithm>
 
 using namespace std;
 
 string solution(int n1, int n2, int T, string ant1, string ant2) {
-	string answer;
-	int size = n1 + n2;
-	// ant1 -> , ant2 <-
+	string answer = "";
 	vector<pair<char, bool>> v;
-	reverse(ant1.begin(), ant1.end());
 
-	for (int i = 0; i < n1; ++i) 
+	// -> 방향이므로 뒤집음
+	for (int i = n1 - 1; i >= 0; --i)
 		v.push_back({ ant1[i], 1 });
 	
-	for (int i=0; i < n2; ++i) 
-		v.push_back({ ant2[i], 0});
+	// <-
+	for (int i = 0; i < n2; ++i)
+		v.push_back({ ant2[i], 0 });
 
 	while (T--) {
-		for (int i = 0; i < size - 1; ++i) {
+		for (int i = 0; i < n1 + n2 - 1; ++i) {
 			if (v[i].second == 1 && v[i + 1].second == 0) {
 				swap(v[i], v[i + 1]);
 				i++;
@@ -27,9 +25,8 @@ string solution(int n1, int n2, int T, string ant1, string ant2) {
 		}
 	}
 
-	for (int i = 0; i < size; ++i)
+	for (int i = 0; i < n1 + n2; ++i)
 		answer += v[i].first;
-	
 	return answer;
 }
 

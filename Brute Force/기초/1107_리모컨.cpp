@@ -17,22 +17,21 @@ int Abs(int a) {
 	return a < 0 ? -a : a;
 }
 
-// 고장 판별
-int is_broken(int butten) {
-	if (butten == 0) {
+// 숫자중 고장난 버튼이 있는지 체크
+int is_broken(int b) {
+	// 0인 경우
+	if (b == 0) {
 		if (visited[0] == 0)
 			return 1;
 	}
 
-	// 각 자리수 체크
-	while (butten > 0) {
-		int mod = butten % 10;
+	while (b > 0) {
+		int r = b % 10;
 
-		// 고장난 버튼
-		if (visited[mod] == 0)
+		if (visited[r] == 0)
 			return 1;
 
-		butten /= 10;
+		b /= 10;
 	}
 
 	return 0;
@@ -41,12 +40,11 @@ int is_broken(int butten) {
 int solution(int n, int m) {
 	int answer = Abs(n - 100); // 수빈이는 100에서 시작하므로
 
+	// -까지 생각해야하므로
 	for (int i = 0; i < Max_Size; ++i) {
-		// i가 고장나지 않았다면
-		if (is_broken(i) == 0) {
-			int tmp = Abs(n - i) + to_string(i).length();
-			answer = Min(answer, tmp);
-		}
+		// 고장나지 않았다면
+		if (is_broken(i) == 0)
+			answer = Min(Abs(n - i) + to_string(i).length(), answer);
 	}
 
 	return answer;

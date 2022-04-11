@@ -4,18 +4,14 @@ using namespace std;
 
 int solution(int n) {
 	int answer = 1;
-	int new_tot, new_num, target;
 
-	new_num = n % 10;
-	new_tot = n / 10 + n % 10;
-	target = new_num * 10 + new_tot % 10;
+	int new_tot = (n / 10) + (n % 10);
+	int new_num = (n % 10) * 10 + new_tot % 10;
 
-	while (target != n) {
+	while (new_num != n) {
 		answer++;
-		
-		new_num = target % 10;
-		new_tot = target / 10 + target % 10;
-		target = new_num * 10 + new_tot % 10;
+		new_tot = (new_num / 10) + (new_num % 10);
+		new_num = (new_num % 10) * 10 + (new_tot % 10);
 	}
 
 	return answer;

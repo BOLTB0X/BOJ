@@ -6,103 +6,109 @@ using namespace std;
 
 char board[13][7];
 bool visited[13][7];
-vector<pair<int, int>> v; // ÅÍÁö´Â ³Ñµé È®ÀÎ
-vector<pair<int, int>> tmp; // ÅÍÁö´Â ³Ñµé ¿¹ºñ
+vector<pair<int, int>> v; // í„°ì§€ëŠ” ë„˜ë“¤ í™•ì¸
+vector<pair<int, int>> tmp; // í„°ì§€ëŠ” ë„˜ë“¤ ì˜ˆë¹„
 
-// »óÇÏÁÂ¿ì
+// ìƒí•˜ì¢Œìš°
 const int dy[4] = { 1,-1,0,0 };
 const int dx[4] = { 0,0,-1,1 };
 
-// ÀÏ¹İ DFS
+// ê¹Šì´ìš°ì„ íƒìƒ‰
 void DFS(int y, int x) {
 	for (int dir = 0; dir < 4; ++dir) {
 		int ny = y + dy[dir];
 		int nx = x + dx[dir];
 
-		// ¹üÀ§ ÃÊ°ú
 		if (ny < 0 || nx < 0 || ny >= 12 || nx >= 6)
 			continue;
 
-		// Àç¹æ¹® ¹× ´Ù¸¥ Á¾·ùÀÌ¸é
-		if (visited[ny][nx] == 1 || board[ny][nx] != board[y][x])
+		if (visited[ny][nx] == 1)
 			continue;
 
-		visited[ny][nx] = 1;
+		if (board[ny][nx] != board[y][x])
+			continue;
+
 		tmp.push_back({ ny, nx });
+		visited[ny][nx] = 1;
 		DFS(ny, nx);
 	}
 	return;
 }
 
 void board_update(void) {
-	// ÅÍÁø °Íµé ºó°ø°£ Ã³¸®
-	for (auto& p : v)
-		board[p.first][p.second] = '.';
+	// ë¹ˆê³µê°„ìœ¼ë¡œ ìˆ˜ì •
+	for (auto& pos : v)
+		board[pos.first][pos.second] = '.';
 
+	// row ê±°ê¾¸ë¡œ
 	for (int i = 10; i >= 0; --i) {
+		// colì€ ê·¸ëŒ€ë¡œ
 		for (int j = 0; j < 6; ++j) {
-			// ¿©¹é
+			// ì—¬ë°±
 			if (board[i][j] == '.')
 				continue;
 
+			// ë¸”ë¡ ë°œê²¬
 			int tmp_y = i;
 
+			// ì•„ë˜ë¡œ ë–¨ì–´ì§
 			while (1) {
-				// Å»Ãâ Á¶°Ç
+				// ë°”ë‹¥ ë˜ëŠ” ë¹ˆ ê³µê°„ì´ ì•„ë‹ˆë¼ë©´
 				if (tmp_y == 11 || board[tmp_y + 1][j] != '.')
 					break;
+
 				board[tmp_y + 1][j] = board[tmp_y][j];
 				board[tmp_y][j] = '.';
-				tmp_y++;
+				tmp_y++; // ë–¨ì–´ì§
 			}
 		}
 	}
-
 	return;
 }
 
 int solution(void) {
 	int flag;
 	int answer = 0;
-
+	
+	// ì‹œë®¬ë ˆì´ì…˜ ì‹œì‘
 	while (1) {
 		flag = 0;
-		v.clear(); // ÃÊ±âÈ­
-		memset(visited, 0, sizeof(visited)); // ÃÊ±âÈ­
+		v.clear(); // í„°ì¹˜ëŠ” ë¸”ë¡ë“¤ ì´ˆê¸°í™”
+		memset(visited, 0, sizeof(visited)); // ë°©ë¬¸ë¦¬ìŠ¤íŠ¸ ì´ˆê¸°í™”
 
-		// Å½»ö
+		// ë¸”ë¡ íƒìƒ‰ ì‹œì‘
 		for (int i = 0; i < 12; ++i) {
 			for (int j = 0; j < 6; ++j) {
-				// »Ñ¿ä»Ñ¿ä ¹ß°ß
 				if (board[i][j] != '.' && visited[i][j] == 0) {
-					tmp.push_back({ i,j });
-					visited[i][j] = 1;
-					// È£Ãâ
-					DFS(i, j);
+					tmp.push_back({ i,j }); // ì˜ˆë¹„ ì‚½ì…
 
-					// ÅÍÁú¼ö ÀÖ´Ù¸é
+					visited[i][j] = 1;
+					DFS(i, j);
+					
+					// í„°ì§ˆìˆ˜ ìˆë‹¤ë©´?
 					if (tmp.size() >= 4) {
 						flag = 1;
 						for (auto& t : tmp)
 							v.push_back(t);
 					}
-					tmp.clear(); //ÃÊ±âÈ­
+					tmp.clear(); // ì´ˆê¸°í™”
 				}
 			}
 		}
-
-		//¸Ê ¾÷µ¥¿¡Æ®
+		
+		// ë§µ ì—…ë°ì´íŠ¸
 		board_update();
 		if (flag == 1)
 			answer++;
-		else 
+		else
 			break;
 	}
-
+	
 	return answer;
 }
 
 int main(void) {
+	// ë§µ ì…ë ¥
 	for (int i = 0; i < 12; ++i) {
 		for (int j = 0; j < 6; ++j)
 			cin >> board[i][j];

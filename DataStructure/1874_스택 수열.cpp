@@ -6,28 +6,31 @@ using namespace std;
 
 vector<char> solution(int n, vector<int>& cmd) {
 	vector<char> answer;
-	stack<int> st; // 스택
+	stack<int> st;
 	int cur = 0, flag = 0;
-
-	st.push(cur++); // 먼저 0을 넣어줌
+	
+	st.push(cur++);
 	for (int i = 0; i < n; ++i) {
-		// 스택의 최상단이 작다면
+		// 원소가 크면 push
 		while (st.top() < cmd[i]) {
 			st.push(cur++);
 			answer.push_back('+');
 		}
 
+		// 발견
 		if (st.top() == cmd[i]) {
 			st.pop();
 			answer.push_back('-');
 		}
 
-		else { // 전체가 불가능한 경우
+		// 불가능한 경우
+		else {
 			flag = 1;
 			break;
 		}
 	}
 
+	// 불가능
 	if (flag == 1)
 		answer.clear();
 	return answer;

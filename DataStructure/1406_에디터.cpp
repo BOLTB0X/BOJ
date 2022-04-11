@@ -1,53 +1,71 @@
 #include <iostream>
 #include <string>
-#include <vector>
+#include <stack>
 
 using namespace std;
 
-char stack[1001];
-int top;
+string solution(string str) {
+	int T;
+	string answer;
+	stack<char> L; // 왼
+	stack<char> R; // 오
 
-void push(char data) {
-	stack[++top] = data;
-	return;
-}
+	for (int i = 0; i < str.length(); ++i)
+		L.push(str[i]);
+	
+	cin >> T;
+	while (T--) {
+		char ch;
+		cin >> ch;
 
-vector<string> solution(string str) {
-	vector<string> answer;
-	string tmp = "";
-	top = -1; // 스택 초기화
-	int size = str.length();
+		if (ch == 'P') {
+			char x;
+			cin >> x;
 
-	for (int i = 0; i < size; ++i) {
-		if (str[i] == ' ') {
-			while (top != -1)
-				tmp += stack[top--];
-			answer.push_back(tmp);
-			tmp = "";
+			L.push(x);
 		}
-		else
-			push(str[i]);
+
+		else if (ch == 'L') {
+			if (L.empty())
+				continue;
+			R.push(L.top());
+			L.pop();
+		}
+		
+		else if (ch == 'D') {
+			if (R.empty())
+				continue;
+			L.push(R.top());
+			R.pop();
+		}
+
+		else if (ch == 'B') {
+			if (L.empty())
+				continue;
+			L.pop();
+		}
 	}
-	while (top != -1)
-		tmp += stack[top--];
-	answer.push_back(tmp);
+
+	// L을 R로 옮겨줌
+	while (!L.empty()) {
+		R.push(L.top());
+		L.pop();
+	}
+
+	// 출력하기 위해 
+	while (!R.empty()) {
+		answer += R.top();
+		R.pop();
+	}
 
 	return answer;
 }
 
 int main(void) {
-	int T;
-	
-	cin >> T;
-	cin.ignore();
-	while (T--) {
-		string str;
-		getline(cin, str);
-		vector<string> ret = solution(str);
-		for (int i = 0; i < ret.size(); ++i)
-			cout << ret[i] << ' ';
-		cout << '\n';
-	}
+	string str;
 
+	cin >> str;
+	string ret = solution(str);
+	cout << ret;
 	return 0;
 }

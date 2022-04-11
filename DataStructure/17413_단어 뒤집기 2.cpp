@@ -4,46 +4,62 @@
 
 using namespace std;
 
-int main(void) {
-    string s = "";
+string solution(string str) {
+    string answer = "";
     stack<char> st;
-    bool flag = false;
+    int size = str.length(), flag = 0;
 
-    getline(cin, s);
-    s += '\n';
-    
-    for (int i = 0; i < s.size(); i++) {
-
-        //Á¤¹æÇâ ½ÃÀÛÇÏ´Â ±âÈ£
-        if (s[i] == '<') {
+    for (int i = 0; i < size; ++i) {
+        if (str[i] == '<') {
             while (!st.empty()) {
-                printf("%c", st.top());
+                answer += st.top();
                 st.pop();
             }
-            printf("<");
-            flag = true;
+            flag = 1; // ì •ë°©í–¥
+            answer += '<';
         }
 
-        //Á¤¹æÇâ ³¡³ª´Â ±âÈ£
-        else if (s[i] == '>') {
-            printf(">");
-            flag = false;
-        }
+        else if (flag == 1) {
+            answer += str[i];
 
-        //Á¤¹æÇâ
-        else if (flag) 
-            printf("%c", s[i]); 
-
-        //¿©¹é ¶Ç´Â ³¡³ª´Â 
-        else if (s[i] == ' ' || s[i] == '\n') {
+            // ì •ë°©í–¥ í•´ì œ ê¸°í˜¸ì´ë©´
+            if (str[i] == '>')
+                flag = 0;
             while (!st.empty()) {
-                printf("%c", st.top());
+                answer += st.top();
                 st.pop();
             }
-            printf(" ");
         }
-        else 
-            st.push(s[i]);
+
+        else {
+            if (str[i] == ' ') {
+                while (!st.empty()) {
+                    answer += st.top();
+                    st.pop();
+                }
+
+                answer += ' '; // ë›°ì–´ì“°ê¸° ì‚½ì…
+            }
+            else 
+                st.push(str[i]);
+        }
     }
+
+    // ìŠ¤íƒì´ ë¹„ì–´ìˆì§€ ì•Šë‹¤ë©´
+    while (!st.empty()) {
+        answer += st.top();
+        st.pop();
+    }
+
+    return answer;
+}
+
+int main(void) {
+    string str;
+
+    getline(cin, str);
+
+    string ret = solution(str);
+    cout << ret;
     return 0;
 }

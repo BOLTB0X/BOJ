@@ -2,47 +2,44 @@
 
 using namespace std;
 
-int result;
+int result = 0;
 
-//±íÀÌ ¿ì¼± Å½»ö
 void DFS(int n, int tot) {
-	//Å»ÃâÁ¶°Ç == ³Ñ±æ½Ã
+	// ì´ˆê³¼
 	if (tot > n)
 		return;
-	//µÈ´Ù¸é
-	if (tot == n)
+
+	// ì¹´ìš´íŠ¸
+	if (tot == n) {
 		result++;
-	for (int i = 1; i <= 3; ++i)
+		return;
+	}
+
+	for (int i = 1; i <= 3; ++i) 
 		DFS(n, tot + i);
 	return;
 }
 
-void solution(void) {
-	int T;
-	cin >> T;
+int solution(int n) {
+	int answer = 0;
 
-	while (T--) {
-		//ÀÔ·Â
-		int n;
-		cin >> n;
+	result = 0; // ì´ˆê¸°í™”
+	DFS(n, 0);
 
-		//DFSÀü ÃÊ±âÈ­ 
-		result = 0;
-		//DFS È£Ãâ
-		DFS(n, 0);
-
-		//Ãâ·Â
-		cout << result << '\n';
-	}
-	return;
+	answer = result;
+	return answer;
 }
 
 int main(void) {
-	//ÃÊ±âÈ­
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
+	int T;
 
-	solution();
+	cin >> T;
+	while (T--) {
+		int n;
+
+		cin >> n;
+		int ret = solution(n);
+		cout << ret << '\n';
+	}
 	return 0;
 }

@@ -16,15 +16,17 @@ int Count_Row(int n) {
 	for (int i = 0; i < n; ++i) {
 		int cnt = 1;
 		for (int j = 0; j < n - 1; ++j) {
+			// 바로 옆이 같다면
 			if (board[i][j] == board[i][j + 1])
 				cnt++;
 
 			else {
+				// 갯수 비교 및 초기화
 				max_cnt = Max(max_cnt, cnt);
 				cnt = 1; // 초기화
 			}
 		}
-		max_cnt = Max(max_cnt, cnt);
+		max_cnt = Max(max_cnt, cnt); // 갯수 비교
 	}
 
 	return max_cnt;
@@ -37,6 +39,7 @@ int Count_Col(int n) {
 	for (int i = 0; i < n; ++i) {
 		int cnt = 1;
 		for (int j = 0; j < n - 1; ++j) {
+			// 세로 비교, 인덱스 조심
 			if (board[j][i] == board[j + 1][i])
 				cnt++;
 

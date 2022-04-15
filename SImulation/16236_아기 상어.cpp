@@ -1,10 +1,10 @@
-#include <iostream>
-#include <queue>
+#include<iostream>
+#include<queue>
+#include<cstring>
 
 using namespace std;
 
-// ¾Æ±â»ó¾î
-struct Shark {
+struct Shark{
 	int y, x, dist;
 
 	bool operator < (const Shark& s) const {
@@ -17,26 +17,17 @@ struct Shark {
 	}
 };
 
-priority_queue<Shark> pq; // ¿ì¼±¼øÀ§ Å¥
-bool visited[21][21]; // ¹æ¹®¸®½ºÆ®
+int n;
+int board[20][20];
+bool visited[20][20]; // ë°©ë¬¸ë¦¬ìŠ¤íŠ¸
+priority_queue<Shark> pq; // ìš°ì„ ìˆœìœ„ í
 
-// »óÇÏÁÂ¿ì
+// ìƒí•˜ì¢Œìš°
 const int dy[4] = { 1,-1,0,0 };
 const int dx[4] = { 0,0,-1,1 };
 
-// ÃÊ±âÈ­
-void init(int n) {
-	while (!pq.empty())
-		pq.pop();
-
-	for (int i = 0; i < n; ++i)
-		for (int j = 0; j < n; ++j)
-			visited[i][j] = 0;
-	return;
-}
-
-int BFS(int n, vector<vector<int>>& board) {
-	int shark_size = 2; // ÃÊ±â
+int BFS(void) {
+	int shark_size = 2; // ì´ˆê¸°
 	int shark_move = 0;
 	int eating_cnt = 0;
 
@@ -46,73 +37,78 @@ int BFS(int n, vector<vector<int>>& board) {
 		int cd = pq.top().dist;
 		pq.pop();
 
-		// °İÀÚÆÇ¿¡ ¹°°í±â°¡ ÀÖ´Ù¸é
+		// í˜„ì¬ ë¬¼ê³ ê¸°ê°€ ìˆë‹¤ë©´
 		if (board[cy][cx] > 0) {
-			// Àâ¾Æ ¸ÔÀ» ¼ö ÀÖ´Ù¸é
+			// í¬ê¸° ë¹„êµ
 			if (shark_size > board[cy][cx]) {
 				eating_cnt++;
 				board[cy][cx] = 0;
-
-				// ¸öÁı Áõ°¡
+				
+				// ì‚¬ì´ì¦ˆ ì—…ê°€ëŠ¥ í•˜ë©´
 				if (eating_cnt == shark_size) {
 					shark_size++;
-					eating_cnt = 0;
+					eating_cnt = 0; // ì´ˆê¸°í™”
 				}
 
-				shark_move += cd; // ÇöÀç ÀÌµ¿°Å¸®¸¦ ³Ö¾îÁÜ
-				init(n); // ÃÊ±âÈ­
-				cd = 0;
+				shark_move += cd; // ì´ ì´ë™íšŸìˆ˜ ì¹´ìš´íŠ¸
+				memset(visited, 0, sizeof(visited)); // ì´ˆê¸°í™”
+				while (!pq.empty()) // í ë¹„ìš°ê¸°
+					pq.pop();
+				cd = 0; // ì´ë™ê±°ë¦¬ ì´ˆê¸°í™”
 			}
 		}
 
+		// ìˆœì°¨ì ìœ¼ë¡œ ìƒí•˜ì¢Œìš° í™•ì¸
 		for (int dir = 0; dir < 4; ++dir) {
 			int ny = cy + dy[dir];
 			int nx = cx + dx[dir];
 
-			// ¹üÀ§ ÃÊ°ú
+			// ë²”ìœ„ì´ˆê³¼
 			if (ny < 0 || nx < 0 || ny >= n || nx >= n)
 				continue;
 
-			// Àç¹æ¹® ¹× ¹°°í±â°¡ Å©´Ù¸é
-			if (visited[ny][nx] == 1 || board[ny][nx] > shark_size)
+			// ì¬ë°©ë¬¸
+			if (visited[ny][nx])
 				continue;
 
-			pq.push({ ny, nx, cd + 1 });
+			// ì‚¬ì´ì¦ˆê°€ í¬ë©´
+			if (board[ny][nx] > shark_size)
+				continue;
+
+			pq.push({ ny,nx,cd + 1 });
 			visited[ny][nx] = 1;
 		}
 	}
+
 	return shark_move;
 }
 
-int solution(int n, vector<vector<int>>& board) {
+int solution(void) {
 	int answer = 0;
+	memset(visited, 0, sizeof(visited)); // ë°©ë¬¸ë¦¬ìŠ¤íŠ¸ ì´ˆê¸°í™”
 
 	for (int i = 0; i < n; ++i) {
 		for (int j = 0; j < n; ++j) {
+			// ì•„ê¸° ìƒì–´ ë°œê²¬
 			if (board[i][j] == 9) {
 				pq.push({ i,j,0 });
-				board[i][j] = 0;
+				board[i][j] = 0; // ë¹ˆ ê³µê°„ì²˜ë¦¬
 			}
 		}
 	}
 
-	answer = BFS(n, board);
+	answer = BFS();
 	return answer;
 }
 
 int main(void) {
-	int n;
-	vector<vector<int>> board;
-
 	cin >> n;
-	board.resize(n, vector<int>(n, 0));
-
 	for (int i = 0; i < n; ++i) {
-		for (int j = 0; j < n; ++j) 
+		for (int j = 0; j < n; ++j)
 			cin >> board[i][j];
 	}
 
-	int ret = solution(n, board);
+	int ret = solution();
 	cout << ret;
 	return 0;
 }

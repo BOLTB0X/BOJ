@@ -6,7 +6,7 @@ typedef struct {
 	int y, x;
 } Pair;
 
-Pair que[10011];
+Pair que[100011]; // 큐 정의
 int fr = 0, re = 0;
 
 void push(Pair data) {
@@ -32,6 +32,7 @@ void BFS(int n, int m) {
 		int cx = que[fr].x;
 		fr++; // pop
 
+		// 순차적으로
 		for (int dir = 0; dir < 4; ++dir) {
 			int ny = cy + dy[dir];
 			int nx = cx + dx[dir];
@@ -43,7 +44,7 @@ void BFS(int n, int m) {
 			// 벽
 			if (board[ny][nx] == 0)
 				continue;
-			
+
 			// 재방문
 			if (dist[ny][nx] != 0)
 				continue;
@@ -52,13 +53,12 @@ void BFS(int n, int m) {
 			push({ ny, nx });
 		}
 	}
-
 	return;
 }
 
 int solution(int n, int m) {
 	int answer = 0;
-	
+
 	BFS(n, m); // 탐색
 	answer = dist[n - 1][m - 1];
 	return answer;

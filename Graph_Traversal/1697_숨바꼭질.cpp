@@ -2,6 +2,7 @@
 #include <vector>
 #include <queue>
 #define Max_Size 100001
+
 using namespace std;
 
 int solution(int n, int k) {
@@ -11,7 +12,7 @@ int solution(int n, int k) {
 	
 	que.push(n);
 	visited[n] = 1;
-	
+
 	// BFS
 	while (!que.empty()) {
 		int cur = que.front();
@@ -49,6 +50,5 @@ int main(void) {
 	cin >> n >> k;
 	int ret = solution(n, k);
 	cout << ret;
-
 	return 0;
 }

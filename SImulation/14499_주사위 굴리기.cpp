@@ -1,47 +1,52 @@
 #include <iostream>
 #include <vector>
+
 using namespace std;
 
 int board[21][21];
-int dice[7] = { 0,0,0,0,0,0,0 };
-// µø º≠ ≥≤ ∫œ
-const int dx[5] = {0, 0, 0, -1, 1};
-const int dy[5] = {0, 1, -1, 0, 0};
+int dice[7]; // Ï£ºÏÇ¨ÏúÑ
 
-void Roll_dice(int dir) {
-	int d1 = dice[1], d2 = dice[2], d3 = dice[3], d4 = dice[4],
-		d5 = dice[5], d6 = dice[6];
+// Îèô ÏÑú ÎÇ® Î∂Å
+const int dx[5] = { 0,0,0,-1,1 };
+const int dy[5] = { 0,1,-1,0,0 };
 
-	// µø
+bool is_rolling(int n, int m, int x, int y) {
+	return x >= 0 && y >= 0 && x < n && y < m;
+}
+
+void dice_rolling(int dir) {
+	int tmp = dice[1];
+	
+	// Îèô
 	if (dir == 1) {
-		dice[1] = d4;
-		dice[4] = d6;
-		dice[6] = d3;
-		dice[3] = d1;
+		dice[1] = dice[4];
+		dice[4] = dice[6];
+		dice[6] = dice[3];
+		dice[3] = tmp;
 	}
-	
-	// º≠
+
+	// ÏÑú
 	else if (dir == 2) {
-		dice[4] = d1;
-		dice[6] = d4;
-		dice[3] = d6;
-		dice[1] = d3;
+		dice[1] = dice[3];
+		dice[3] = dice[6];
+		dice[6] = dice[4];
+		dice[4] = tmp;
 	}
-	
-	// ≥≤
+
+	// ÎÇ®
 	else if (dir == 3) {
-		dice[1] = d5;
-		dice[2] = d1;
-		dice[6] = d2;
-		dice[5] = d6;
+		dice[1] = dice[2];
+		dice[2] = dice[6];
+		dice[6] = dice[5];
+		dice[5] = tmp;
 	}
-	
-	// ∫œ
+
+	// Î∂Å
 	else if (dir == 4) {
-		dice[5] = d1;
-		dice[1] = d2;
-		dice[2] = d6;
-		dice[6] = d5;
+		dice[1] = dice[5];
+		dice[5] = dice[6];
+		dice[6] = dice[2];
+		dice[2] = tmp;
 	}
 
 	return;
@@ -49,36 +54,34 @@ void Roll_dice(int dir) {
 
 vector<int> solution(int n, int m, int x, int y, int k, vector<int>& cmd) {
 	vector<int> answer;
-	int cx = x;
-	int cy = y;
+	int cx = x, cy = y;
 
-	for (int i = 0; i < cmd.size(); ++i) {
-		int nx = cx + dx[cmd[i]];
-		int ny = cy + dy[cmd[i]];
-		int dir = cmd[i];
+	for (int& c : cmd) {
+		int nx = cx + dx[c];
+		int ny = cy + dy[c];
 
-		if (nx < 0 || ny < 0 || nx >= n || ny >= m)
+		// Íµ¥Î¶¥Ïàò ÏóÜÎã§Î©¥
+		if (!is_rolling(n, m, nx, ny))
 			continue;
 
-		Roll_dice(dir);
-		// ¿Ãµø«— ƒ≠ø° æ≤ø© ¿÷¥¬ ºˆ∞° 0¿Ã∏È, 
-		// ¡÷ªÁ¿ß¿« πŸ¥⁄∏Èø° æ≤ø© ¿÷¥¬ ºˆ∞° ƒ≠ø° ∫πªÁµ»¥Ÿ.
+		dice_rolling(c); // Ï£ºÏÇ¨ÏúÑ Íµ¥Î¶º
+
+		// Ïù¥ÎèôÌïú Ïπ∏Ïóê Ïì∞Ïó¨ ÏûàÎäî ÏàòÍ∞Ä 0Ïù¥Î©¥, 
+		// Ï£ºÏÇ¨ÏúÑÏùò Î∞îÎã•Î©¥Ïóê Ïì∞Ïó¨ ÏûàÎäî ÏàòÍ∞Ä Ïπ∏Ïóê Î≥µÏÇ¨ÎêúÎã§.
 		if (board[nx][ny] == 0)
 			board[nx][ny] = dice[6];
-		
-		// 0¿Ã æ∆¥— ∞ÊøÏø°¥¬ ƒ≠ø° æ≤ø© ¿÷¥¬ ºˆ∞° 
-		// ¡÷ªÁ¿ß¿« πŸ¥⁄∏È¿∏∑Œ ∫πªÁµ«∏Á, ƒ≠ø° æ≤ø© ¿÷¥¬ ºˆ¥¬ 0¿Ã µ»¥Ÿ.
+
+		// 0Ïù¥ ÏïÑÎãå Í≤ΩÏö∞ÏóêÎäî Ïπ∏Ïóê Ïì∞Ïó¨ ÏûàÎäî ÏàòÍ∞Ä 
+		// Ï£ºÏÇ¨ÏúÑÏùò Î∞îÎã•Î©¥ÏúºÎ°ú Î≥µÏÇ¨ÎêòÎ©∞, Ïπ∏Ïóê Ïì∞Ïó¨ ÏûàÎäî ÏàòÎäî 0Ïù¥ ÎêúÎã§.
 		else {
 			dice[6] = board[nx][ny];
 			board[nx][ny] = 0;
 		}
 
-		// ªÛ¥‹ 
+		// ÏúóÎ©¥
 		answer.push_back(dice[1]);
-		// ±≥√º
 		cx = nx, cy = ny;
 	}
-
 	return answer;
 }
 
@@ -89,7 +92,7 @@ int main(void) {
 	cin >> n >> m >> x >> y >> k;
 	vector<int> cmd;
 
-	// µø 1 º≠ 2 ∫œ 3 ≥≤ 4 
+	// Îèô 1 ÏÑú 2 Î∂Å 3 ÎÇ® 4 
 	for (int i = 0; i < n; ++i) {
 		for (int j = 0; j < m; ++j)
 			cin >> board[i][j];

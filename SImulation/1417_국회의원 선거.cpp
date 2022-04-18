@@ -4,38 +4,29 @@
 
 using namespace std;
 
+bool compare(int& a, int& b) {
+	return a > b;
+}
+
 int solution(int n, int* arr) {
 	int answer = 0;
-	vector<int> votes;
 	if (n == 1)
-		return 0;
-
+		return answer;
+	vector<int> votes;
 	int dasom = arr[0];
+
 	for (int i = 1; i < n; ++i)
 		votes.push_back(arr[i]);
 
 	while (1) {
-		int max_value = 0;
-		int idx = 0;
-
-		// °¡Àå Å« ³ð Ã£±â
-		for (int i = 0; i < n - 1; ++i) {
-			if (max_value < votes[i]) {
-				max_value = votes[i];
-				idx = i;
-			}
-		}
-
-		// ´Ù¼ØÀÌ °íµæÇ¥ÀÚÀÌ¸é
-		if (dasom > max_value) 
+		sort(votes.begin(), votes.end(), compare); // ì˜¤ë¦„ì°¨ìˆœ
+		
+		if (dasom > votes[0])
 			break;
-
-		// ¸Å¼ö
 		dasom++;
-		votes[idx]--;
+		votes[0]--;
 		answer++;
 	}
-
 	return answer;
 }
 

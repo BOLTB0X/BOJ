@@ -1,51 +1,55 @@
-#define _CRT_SECURE_NO_WARNINGS
-#include <cstdio>
-#include <queue>
+#include<iostream>
+#include<vector>
+#include<queue>
+
 using namespace std;
 
-int solution(int arr[], int len, int target) {
-	queue<pair<int, int>> q;
+int solution(int n, int m, vector<int>& printer) {
+	int answer = 1;
+	queue<pair<int,int>> que;
 	priority_queue<int> pq;
 
-	for (int i = 0; i < len; i++) {
-		q.push({ i,arr[i] });
-		pq.push(arr[i]);
+	for (int i = 0; i < printer.size(); ++i) {
+		que.push({ i, printer[i] });
+		pq.push(printer[i]);
 	}
 
-	int order = 1;
-	while (!q.empty()) {
-		pair<int, int> cur = q.front();
+	while (!que.empty()) {
+		int cur = que.front().first;
+		int value = que.front().second;
+		que.pop();
 
-		if (cur.second >= pq.top()) {
-			if (cur.first == target) {
-				return order;
-			}
+		if (value >= pq.top()) {
+			// 원하는 번호가 출력될 때
+			if (cur == m)
+				break;
 			pq.pop();
-			q.pop();
-			order++;
+			answer++; // pq가 pop할 때마다
 		}
-		else {
-			q.push(cur);
-			q.pop();
-		}
+
+		else 
+			que.push({ cur,value });
 	}
+
+	return answer;
 }
 
 int main(void) {
 	int T;
 
-	scanf("%d", &T);
-	while (T>0) {
+	cin >> T;
+	while (T--) {
 		int n, m;
-		int arr[100];
+		vector<int> printer;
 
-		scanf("%d %d", &n, &m);
-		for (int i = 0; i < n; i++) {
-			scanf("%d", &arr[i]);
-		}
-		int ret = solution(arr,n,m);
-		printf("%d\n", ret);
-		T -= 1;
+		cin >> n >> m;
+		printer = vector<int>(n);
+		for (int i = 0; i < n; ++i)
+			cin >> printer[i];
+
+		int ret = solution(n, m, printer);
+		cout << ret << '\n';
 	}
+
 	return 0;
 }

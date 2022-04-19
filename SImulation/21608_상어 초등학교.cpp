@@ -1,150 +1,134 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
+#include<iostream>
+#include<vector>
+#include<cstring>
+#include<algorithm>
 
 using namespace std;
 
-typedef struct {
-	int student_idx;
-	int y, x;
+struct student {
+	int idx;
 	int love[4];
-} Shark;
+	int y, x;
+};
 
 struct Heap {
-	int y, x, blank_cnt, love_cnt;
+	int y, x, love, blank;
 
-	// ¹®Á¦Á¶°Ç
-	bool operator < (const Heap& h) const {
-		if (love_cnt == h.love_cnt) {
-			if (blank_cnt == h.blank_cnt) {
+	bool operator <(const Heap& h) const {
+		if (love == h.love) {
+			if (blank == h.blank) {
 				if (y == h.y)
-					return x > h.x;
-				return y > h.y;
+					return x < h.x;
+				return y < h.y;
 			}
-			return blank_cnt > h.blank_cnt;
+			return blank > h.blank;
 		}
-		return love_cnt > h.love_cnt;
+		return love > h.love;
 	}
 };
 
-int n, result;
-vector<Shark> student;
+int N;
 int board[21][21];
+vector<student> students;
 
-// »óÇÏÁÂ¿ì
-const int dy[4] = { 1, -1, 0, 0 };
-const int dx[4] = { 0, 0, -1, 1 };
-// ¸¸Á·µµ
-const int satisfy[5] = { 0, 1, 10, 100, 1000 };
+// ìƒí•˜ì¢Œìš°
+const int dy[4] = { -1,1,0,0 };
+const int dx[4] = { 0,0,-1,1 };
+// ë§Œì¡±ë„
+const int satisfy[5] = { 0,1,10,100,1000 };
 
-void setting_sit(void) {
-	// ¼øÈ¸
-	for (int i = 1; i <= n * n; ++i) {
-		vector<Heap> h;
+void sitting(void) {
+	for (int s = 0; s < N * N; ++s) {
+		vector<Heap> heap;
 
-		for (int y = 0; y < n; ++y) {
-			for (int x = 0; x < n; ++x) {
-				// ºó°ø°£ ¹ß°ß
-				if (board[y][x] == 0) {
-					int blank = 0, love = 0;
+		for (int i = 1; i <= N; ++i) {
+			for (int j = 1; j <= N; ++j) {
+				// ë¹ˆ ìë¦¬ ë°œê²¬
+				if (board[i][j] == 0) {
+					int love = 0, blank = 0;
 
-					// »óÇÏÁÂ¿ì È®ÀÎ
 					for (int dir = 0; dir < 4; ++dir) {
-						int ny = y + dy[dir];
-						int nx = x + dx[dir];
+						int ny = i + dy[dir];
+						int nx = j + dx[dir];
 
-						if (ny < 0 || nx < 0 || ny >= n || nx >= n)
+						// ë²”ìœ„ ì´ˆê³¼
+						if (ny < 1 || nx < 1 || ny > N || nx > N)
 							continue;
 
-						// ºó°ø°£ÀÌ¸é
+						// ë¹ˆìë¦¬ì¸ ê²½ìš°
 						if (board[ny][nx] == 0)
-							blank++; // Ä«¿îÆ®
+							blank++;
 
+						// í•™ìƒì´ ìˆë‹¤ë©´
 						else {
-							// ¼±È£µµ °Ë»ç
-							for (int l = 0; l < 4; ++l) {
-								if (board[ny][nx] == student[i].love[l]) {
+							for (int k = 0; k < 4; ++k) {
+								if (board[ny][nx] == students[s].love[k]) {
 									love++;
 									break;
 								}
 							}
 						}
 					}
-					h.push_back({ y,x,blank, love });
-					sort(h.begin(), h.end()); // Á¤·Ä
+
+					// ëŒ€ê¸°ì—´ì— ì‚½ì…
+					heap.push_back({ i,j,love, blank });
+					sort(heap.begin(), heap.end());
 				}
 			}
 		}
-		// ¸¸¾à h = ´ë±â¼®¿¡ ¹º°¡°¡ µé¾îÀÖ´ÙÃ
-		if (!h.empty()) {
-			Heap cur = h[0];
 
-			int cy = cur.y;
-			int cx = cur.x;
-
-			board[cy][cx] = student[i].student_idx;
-			student[i].y = cy;
-			student[i].x = cx;
+		if (!heap.empty()) {
+			board[heap[0].y][heap[0].x] = students[s].idx;
+			students[s].y = heap[0].y;
+			students[s].x = heap[0].x;
 		}
 	}
-
 	return;
 }
 
-// Á¡¼ö µæÁ¡
-int get_score(void) {
-	int score = 0;
-	for (int i = 1; i <= n * n; ++i) {
-		int cy = student[i].y;
-		int cx = student[i].x;
+// ë§Œì¡±ë„ ê³„ì‚°
+int get_satisfy_score(void) {
+	int tot = 0;
 
+	for (auto& st : students) {
 		int love = 0;
 		for (int dir = 0; dir < 4; ++dir) {
-			int ny = cy + dy[dir];
-			int nx = cx + dx[dir];
+			int ny = st.y + dy[dir];
+			int nx = st.x + dx[dir];
 
-			if (ny >= n || nx >= n || ny < 0 || nx < 0)
+			if (ny < 1 || nx < 1 || ny > N || nx > N)
 				continue;
 
-			// ÇĞ»ıÀÌ Á¸Àç ÇÑ´Ù¸é
 			if (board[ny][nx] != 0) {
-				for (int l = 0; l < 4; ++l) {
-					if (board[ny][nx] == student[i].love[l]) {
+				for (int k = 0; k < 4; ++k) {
+					if (board[ny][nx] == st.love[k]) {
 						love++;
 						break;
 					}
 				}
 			}
 		}
-		score += satisfy[love];
+		tot += satisfy[love];
 	}
 
-	return score;
+	return tot;
 }
 
 int solution(void) {
 	int answer = 0;
 
-	setting_sit(); // ÀÚ¸® ¹èÄ¡
-	answer = get_score(); // ¸¸Á·µµ °è»ê
+	sitting(); // ìë¦¬ ë°°ì¹˜
+	answer = get_satisfy_score();
 	return answer;
 }
-
 int main(void) {
-	cin >> n;
-	student.resize((n * n) + 1);
-	for (int i = 1; i <=  n * n; ++i) {
-		int a, b, c, d, e;
+	memset(board, 0, sizeof(board));
 
-		cin >> a >> b >> c >> d >> e;
-		
-		student[i].student_idx = a;
-		student[i].love[0] = b;
-		student[i].love[1] = c;
-		student[i].love[2] = d;
-		student[i].love[3] = e;
-	}
-
+	cin >> N;
+	students = vector<student>(N * N);
+	for (int i = 0; i < N * N; ++i) 
+		cin >> students[i].idx >> students[i].love[0] >> students[i].love[1] >> students[i].love[2] >> students[i].love[3];
+	
 	int ret = solution();
 	cout << ret;
 	return 0;

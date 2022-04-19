@@ -1,187 +1,179 @@
 #include <iostream>
-#include <algorithm>
 #include <vector>
 #include <cstring>
+
 using namespace std;
 
-int n, m, r;
-int a[100][100];
-int temp[100][100];
-int type[1000];
+int N, M, R;
+int board[100][100];
+int cboard[100][100];
+int cmd[1000];
 
-void copy(void) {
-	for (int i = 0; i < n; ++i)
-		for (int j = 0; j < m; ++j)
-			a[i][j] = temp[i][j];
-	return;
+void print_board(void) {
+	for (int i = 0; i < N; ++i) {
+		for (int j = 0; j < M; ++j)
+			cout << board[i][j] << ' ';
+		cout << '\n';
+	}
 }
 
+// ìƒí•˜ ë°˜ì „
 void one(void) {
-	memset(temp, 0, sizeof(temp));
+	memset(cboard, 0, sizeof(cboard)); // ë³µì‚¬
 
-	for (int i = 0; i < n; ++i) {
-		for (int j = 0; j < m; ++j)
-			temp[i][j] = a[n - 1 - i][j];
+	for (int i = 0; i < N; ++i) {
+		for (int j = 0; j < M; ++j)
+			cboard[i][j] = board[N - 1 - i][j];
 	}
 
-	copy();
+	memcpy(board, cboard, sizeof(cboard)); // ë³µì‚¬
 	return;
 }
 
+// ì¢Œìš° ë°˜ì „
 void two(void) {
-	memset(temp, 0, sizeof(temp));
+	memset(cboard, 0, sizeof(cboard)); // ë³µì‚¬
 
-	for (int i = 0; i < n; ++i) {
-		for (int j = 0; j < m; ++j)
-			temp[i][j] = a[i][m - 1 - j];
+	for (int i = 0; i < N; ++i) {
+		for (int j = 0; j < M; ++j)
+			cboard[i][j] = board[i][M - 1 - j];
 	}
 
-	copy();
+	memcpy(board, cboard, sizeof(cboard)); // ë³µì‚¬
 	return;
 }
 
+// ì˜¤ë¥¸ìª½ 90ë„ íšŒì „
 void three(void) {
-	memset(temp, 0, sizeof(temp));
+	memset(cboard, 0, sizeof(cboard)); // ë³µì‚¬
+	int h = N;
 
-	int h = n;
-
-	swap(n, m);
-
-	for (int i = 0; i < n; ++i) {
-		for (int j = 0; j < m; ++j)
-			temp[i][j] = a[h - 1 - j][i];
+	swap(N, M);
+	for (int i = 0; i < N; ++i) {
+		for (int j = 0; j < M; ++j)
+			cboard[i][j] = board[h - 1 - j][i];
 	}
 
-	copy();
+	memcpy(board, cboard, sizeof(cboard)); // ë³µì‚¬
 	return;
 }
 
+// ì™¼ìª½ 90ë„ íšŒì „
 void four(void) {
-	memset(temp, 0, sizeof(temp));
+	memset(cboard, 0, sizeof(cboard)); // ë³µì‚¬
+	int w = M;
 
-	int w = m;
-
-	swap(n, m);
-
-	for (int i = 0; i < n; ++i) {
-		for (int j = 0; j < m; ++j)
-			temp[i][j] = a[j][w - 1 - i];
+	swap(N, M);
+	for (int i = 0; i < N; ++i) {
+		for (int j = 0; j < M; ++j)
+			cboard[i][j] = board[j][w - 1 - i];
 	}
 
-	copy();
+	memcpy(board, cboard, sizeof(cboard)); // ë³µì‚¬
 	return;
 }
 
 void five(void) {
-	memset(temp, 0, sizeof(temp));
+	memset(cboard, 0, sizeof(cboard)); // ì´ˆê¸°í™”
 
-	int N = n / 2;
-	int M = m / 2;
+	int h = N / 2;
+	int w = M / 2;
 
-	for (int i = 0; i < N; ++i) {
-		for (int j = 0; j < M; ++j)
-			temp[i][j + M] = a[i][j];
+	// 1 -> 2
+	for (int i = 0; i < h; ++i) {
+		for (int j = 0; j < w; ++j)
+			cboard[i][j + w] = board[i][j];
 	}
 
-	for (int i = 0; i < N; ++i) {
-		for (int j = 0; j < M; ++j)
-			temp[i + N][j + M] = a[i][j + M];
+	// 2 -> 3
+	for (int i = 0; i < h; ++i) {
+		for (int j = 0; j < w; ++j)
+			cboard[i + h][j + w] = board[i][j + w];
 	}
 
-	for (int i = 0; i < N; ++i) {
-		for (int j = 0; j < M; ++j)
-			temp[i + N][j] = a[i + N][j + M];
+	// 3 -> 4
+	for (int i = 0; i < h; ++i) {
+		for (int j = 0; j < w; ++j)
+			cboard[i + h][j] = board[i + h][j + w];
 	}
 
-	for (int i = 0; i < N; ++i) {
-		for (int j = 0; j < M; ++j)
-			temp[i][j] = a[i + N][j];
+	// 4 -> 1
+	for (int i = 0; i < h; ++i) {
+		for (int j = 0; j < w; ++j)
+			cboard[i][j] = board[i + h][j];
 	}
 
-	copy();
+	memcpy(board, cboard, sizeof(cboard)); // ë³µì‚¬
 	return;
-
 }
+
 void six(void) {
-	memset(temp, 0, sizeof(temp));
+	memset(cboard, 0, sizeof(cboard)); // ì´ˆê¸°í™”
 
-	int N = n / 2;
-	int M = m / 2;
+	int h = N / 2;
+	int w = M / 2;
 
-	//4¹øÀ» 3¹øÀ¸·Î
-	for (int i = 0; i < N; ++i) {
-		for (int j = 0; j < M; ++j)
-			temp[i + N][j + M] = a[i + N][j];
+	// 4 -> 3
+	for (int i = 0; i < h; ++i) {
+		for (int j = 0; j < w; ++j)
+			cboard[i + h][j + w] = board[i + h][j];
 	}
 
-	// 3¹øÀ» 2¹øÀ¸·Î
-	for (int i = 0; i < N; ++i) {
-		for (int j = 0; j < M; ++j)
-			temp[i][j + M] = a[i + N][j + M];
+	// 3 -> 2
+	for (int i = 0; i < h; ++i) {
+		for (int j = 0; j < w; ++j)
+			cboard[i][j + w] = board[i + h][j + w];
 	}
 
-	// 1¹øÀ» 4¹øÀ¸·Î
-	for (int i = 0; i < N; ++i) {
-		for (int j = 0; j < M; ++j) 
-			temp[i + N][j] = a[i][j];
+	// 1 -> 4
+	for (int i = 0; i < h; ++i) {
+		for (int j = 0; j < w; ++j)
+			cboard[i + h][j] = board[i][j];
 	}
 
-	//2¹øÀ» 1¹øÀ¸·Î
-	for (int i = 0; i < N; ++i) {
-		for (int j = 0; j < M; ++j) 
-			temp[i][j] = a[i][j + M];
+	// 2 -> 1
+	for (int i = 0; i < h; ++i) {
+		for (int j = 0; j < w; ++j)
+			cboard[i][j] = board[i][j + w];
 	}
 
-	copy();
+	memcpy(board, cboard, sizeof(cboard)); // ë³µì‚¬
 	return;
 }
 
 void solution(void) {
-	for (int i = 0; i < r; ++i) {
-		int num = type[i];
+	for (int i = 0; i < R; ++i) {
+		int type = cmd[i];
 
-		if (num == 1)
+		if (type == 1) 
 			one();
-
-		else if (num == 2)
+		else if (type == 2) 
 			two();
-
-		else if (num == 3)
+		else if (type == 3) 
 			three();
-
-		else if (num == 4)
+		else if (type == 4) 
 			four();
-
-		else if (num == 5)
+		else if (type == 5) 
 			five();
-
-		else if (num == 6)
+		else if (type == 6) 
 			six();
-
 	}
-
 	return;
 }
 
 int main(void) {
-	cin >> n >> m >> r;
-
-	for (int i = 0; i < n; ++i) {
-		for (int j = 0; j < m; ++j) {
-			cin >> a[i][j];
-		}
+	cin >> N >> M >> R;
+	
+	for (int i = 0; i < N; ++i) {
+		for (int j = 0; j < M; ++j)
+			cin >> board[i][j];
 	}
 
-	for (int i = 0; i < r; ++i) 
-		cin >> type[i];
+	for (int i = 0; i < R; ++i)
+		cin >> cmd[i];
 
 	solution();
 
-	for (int i = 0; i < n; ++i) {
-		for (int j = 0; j < m; ++j)
-			cout << a[i][j] << " ";
-		cout << "\n";
-	}
-
+	print_board(); // ì¶œë ¥
 	return 0;
 }

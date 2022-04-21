@@ -30,6 +30,7 @@ void merge(int n, int* arr, int start, int end) {
 	return;
 }
 
+// ë³‘í•©ì •ë ¬
 void merge_Sort(int n, int* arr, int start, int end) {
 	if (start < end) {
 		int mid = (start + end) / 2;
@@ -44,14 +45,13 @@ void merge_Sort(int n, int* arr, int start, int end) {
 int solution(int n, int* arr) {
 	int answer = 0;
 
-	merge_Sort(n, arr, 0, n - 1); // ¿À¸§Â÷¼ø Á¤·Ä
+	merge_Sort(n, arr, 0, n - 1); // ì˜¤ë¦„ì°¨ìˆœ ì •ë ¬
 	
-								  // ±×¸®µğ
+	// ê·¸ë¦¬ë””
 	for (int i = 0; i < n; ++i) {
 		int tot = 0;
-		for (int j = i; j >= 0; --j) {
-			tot += arr[j];
-		}
+		for (int j = i; j >= 0; --j) 
+			tot += arr[j]; // ëˆ„ì í•©
 		answer += tot;
 	}
 

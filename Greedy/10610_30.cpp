@@ -10,16 +10,17 @@ bool compare(char& a, char& b) {
 
 string solution(string n) {
 	string answer;
-	// 30ÀÇ ¹è¼öÀÌ±â À§ÇØ¼­´Â
-	// 1. ³¡ÀÇ ÀÚ¸®¼ö°¡ 0.
-	// 2. °¢ ÀÚ¸®ÀÇ ¼öÀÇ ÇÕÀÌ 3ÀÇ ¹è¼ö.
+	// 30ì˜ ë°°ìˆ˜ì´ê¸° ìœ„í•´ì„œëŠ”
+	// 1. ëì˜ ìë¦¬ìˆ˜ê°€ 0.
+	// 2. ê° ìë¦¬ì˜ ìˆ˜ì˜ í•©ì´ 3ì˜ ë°°ìˆ˜.
 
 	int tot = 0;
 	for (int i = 0; i < n.length(); ++i) 
 		tot += (n[i] - '0');
 	
-	sort(n.begin(), n.end(), compare); // ³»¸²Â÷¼ø Á¤·Ä
-	// Á¶°Ç ÃæÁ· X
+	sort(n.begin(), n.end(), compare); // ë‚´ë¦¼ì°¨ìˆœ ì •ë ¬
+	
+	// ì¡°ê±´ ì¶©ì¡± X
 	if (tot % 3 != 0 || n[n.length() -1] != '0')
 		answer = "-1";
 	else 

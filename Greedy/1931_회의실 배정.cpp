@@ -14,18 +14,17 @@ bool compare(pair<int, int>& a, pair<int, int>& b) {
 int solution(int n) {
 	int answer = 1;
 	
-	// ³¡³ª´Â ½Ã°£ ±âÁØÀ¸·Î Á¤·Ä
+	// ëë‚˜ëŠ” ì‹œê°„ ê¸°ì¤€ìœ¼ë¡œ ì •ë ¬
 	sort(arr, arr + n, compare);
-	int end = arr[0].second;
+	int end = arr[0].second; // ëë‚˜ëŠ” ì‹œê°„
 
-	// ±×¸®µğ
 	for (int i = 1; i < n; ++i) {
-		if (arr[i].first >= end) {
+		if (end <= arr[i].first) {
 			answer++;
 			end = arr[i].second;
 		}
 	}
-	
+
 	return answer;
 }
 
